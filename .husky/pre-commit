@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Enable colors in Powershell (has scrolling issue?)
+export FORCE_COLOR=1
+
+npm run lint
+npm run test
