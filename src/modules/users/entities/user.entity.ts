@@ -29,7 +29,7 @@ export class User {
   })
   image: string;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'integer', nullable: true })
   phone: number;
 
   @Column({ type: 'integer', nullable: false })
@@ -37,6 +37,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
   email: string;
+
+  @Column({ name: 'google_account', type: 'boolean', default: false })
+  googleAccount: boolean;
 
   @Column({ type: 'bool', default: false })
   validate: boolean;
@@ -59,6 +62,6 @@ export class User {
   @Column({ name: 'last_login', nullable: false })
   lastLogin: Date;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'admin_modify', type: 'uuid', nullable: true })
   adminModify: string;
 }
