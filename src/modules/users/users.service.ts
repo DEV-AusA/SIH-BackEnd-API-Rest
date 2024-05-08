@@ -10,8 +10,8 @@ export class UsersService {
     private readonly userService: Repository<User>,
   ) {}
 
-  signUpUser() {
-    return;
+  async searchEmail(email: string) {
+    return await this.userService.findOne({ where: { email: email } });
   }
 
   signInUser() {
