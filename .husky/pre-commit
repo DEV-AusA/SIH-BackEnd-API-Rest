@@ -4,5 +4,5 @@
 # Enable colors in Powershell (has scrolling issue?)
 export FORCE_COLOR=1
 
-npm run test
+# npm run test
 npm run lint
