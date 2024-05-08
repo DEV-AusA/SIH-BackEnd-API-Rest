@@ -16,7 +16,7 @@ export class UsersService {
   async searchEmail(email: string) {
     return await this.userService.findOne({ where: { email: email } });
   }
-  
+
   async signUpUser(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10); // 10 nivel hash
     const userData = {
