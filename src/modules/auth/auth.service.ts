@@ -5,6 +5,8 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GoogleUserInfoDto } from './dto/google-auth.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -33,5 +35,26 @@ export class AuthService {
       if (!emailValidate) return new BadRequestException('Email no encontrado');
       return emailValidate;
     } catch (error) {}
+  }
+
+  async validateUser(userData: GoogleUserInfoDto) {
+    const { password } = userData;
+    const user = await this.userRepository.findOneBy({ email: userData.email });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    if (user) {
+      return user;
+    } else {
+      const newUser = this.userRepository.create({
+        ...userData,
+        password: hashedPassword,
+      });
+      return this.userRepository.save(newUser);
+    }
+  }
+
+  async findUser(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    return user;
   }
 }

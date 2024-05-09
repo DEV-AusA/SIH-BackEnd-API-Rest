@@ -4,6 +4,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeormConfig from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    PassportModule.register({ session: true }),
   ],
   controllers: [],
   providers: [],
