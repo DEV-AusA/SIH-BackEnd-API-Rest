@@ -14,7 +14,7 @@
         {
           "endOfLine": "auto"
         }
-      ],      
+      ],
       "eqeqeq": ["error", "always"],
       "no-empty-function": [
         "error",
