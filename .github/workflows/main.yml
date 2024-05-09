@@ -29,4 +29,4 @@ jobs:
           content: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/secureingresshome:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sih-back-project:latest
