@@ -4,6 +4,12 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../auth/dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
+import { EmailService } from '../email/email.service';
+import { emailBody } from '../utils/email-format';
+import { config as dotenvConfig } from 'dotenv';
+import { JwtService } from '@nestjs/jwt';
+
+dotenvConfig({ path: '.env' });
 
 @Injectable()
 export class UsersService {
@@ -11,6 +17,8 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userService: Repository<User>,
     private readonly dataSource: DataSource,
+    private readonly emailService: EmailService,
+    private jwtService: JwtService,
   ) {}
 
   async searchEmail(email: string) {
@@ -29,6 +37,12 @@ export class UsersService {
       lastLogin: new Date(),
     };
 
+    const emialPayload = {
+      email: createUserDto.email,
+    };
+    const tokenEmailVerify = this.jwtService.sign(emialPayload);
+    const urlValidate = `${process.env.HOST_NAME}/email/validate/${tokenEmailVerify}`;
+
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -36,6 +50,11 @@ export class UsersService {
     try {
       const newUser = await queryRunner.manager.create(User, userData);
       await queryRunner.manager.save(newUser);
+      await this.emailService.sendNewEmail({
+        to: userData.email,
+        subject: 'Bienvenido a SIH - Secure Ingress Home',
+        text: emailBody(`${newUser.name} ${newUser.lastName}`, urlValidate),
+      });
       await queryRunner.commitTransaction();
       const registerOkMessage = { message: `Usuario creado correctamente` };
 
