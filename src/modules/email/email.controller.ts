@@ -1,13 +1,14 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Param, Get, Res } from '@nestjs/common';
 import { EmailService } from './email.service';
-import { CreateEmailDto } from './dto/create-email.dto';
+import { Response } from 'express';
 
 @Controller('email')
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  @Post()
-  create(@Body() createEmailDto: CreateEmailDto) {
-    return this.emailService.sendNewEmail(createEmailDto);
+  @Get('validate/:id')
+  async verifyEmail(@Param('id') id: string, @Res() res: Response) {
+    await this.emailService.verifyEmail(id);
+    return res.redirect('/home');
   }
 }

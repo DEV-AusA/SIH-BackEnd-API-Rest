@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeormConfig from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailModule } from './modules/email/email.module';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtEmailConfig } from './config/jwt-email.config';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { EmailModule } from './modules/email/email.module';
         configService.get('typeorm'),
     }),
     EmailModule,
+    JwtModule.register(jwtEmailConfig), // jwt-email.config.ts
   ],
   controllers: [],
   providers: [],
