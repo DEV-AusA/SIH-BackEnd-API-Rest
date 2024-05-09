@@ -2,7 +2,7 @@ import { Controller, Post, Body, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-auth.dto';
 import { LoginUserDto } from './dto/login-auth.dto';
-import { GoogleAuthGuard } from './google-auth/GoogleGuard.guard';
+import { GoogleAuthGuard } from '../../guards/google-guard.guard';
 import { Request } from 'express';
 
 @Controller('auth')
@@ -24,16 +24,6 @@ export class AuthController {
   handleLogin() {
     return {
       msg: 'Google Authentication',
-    };
-  }
-
-  @Get('google/redirect')
-  @UseGuards(GoogleAuthGuard)
-  handleRedirect(@Req() request: Request) {
-    console.log(request.user);
-
-    return {
-      login: 'You are logined',
     };
   }
 

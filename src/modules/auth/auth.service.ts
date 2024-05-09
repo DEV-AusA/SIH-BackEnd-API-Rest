@@ -52,7 +52,7 @@ export class AuthService {
       userLogin.password,
       userValidated.password,
     );
-    
+
     if (!passwordValidate)
       return new BadRequestException('Algun dato ingresado es incorrecto');
 
