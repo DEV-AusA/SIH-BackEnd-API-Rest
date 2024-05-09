@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-auth.dto';
 import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
@@ -7,6 +12,7 @@ import { LoginUserDto } from './dto/login-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GoogleUserInfoDto } from './dto/google-auth.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +20,7 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly userService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signUpUser(createUserDto: CreateUserDto) {
@@ -30,11 +37,46 @@ export class AuthService {
   }
 
   async singInUser(userLogin: LoginUserDto) {
-    try {
-      const emailValidate = await this.userService.searchEmail(userLogin.user);
-      if (!emailValidate) return new BadRequestException('Email no encontrado');
-      return emailValidate;
-    } catch (error) {}
+    const emailValidate = await this.userService.searchEmail(userLogin.user);
+    const usernameValidate = await this.userService.searchUserName(
+      userLogin.user,
+    );
+    if (!emailValidate && !usernameValidate)
+      throw new HttpException(
+        'Algun dato ingresado es incorrecto',
+        HttpStatus.NOT_FOUND,
+      );
+
+    const userValidated = emailValidate ? emailValidate : usernameValidate;
+    const passwordValidate = bcrypt.compare(
+      userLogin.password,
+      userValidated.password,
+    );
+    
+    if (!passwordValidate)
+      return new BadRequestException('Algun dato ingresado es incorrecto');
+
+    const payload = {
+      id: userValidated.id,
+      email: userValidated.email,
+      rol: userValidated.rol,
+    };
+    const token = this.jwtService.sign(payload);
+    return {
+      token: token,
+      user: {
+        username: userValidated.username,
+        name: userValidated.name,
+        lastName: userValidated.lastName,
+        document: userValidated.document,
+        image: userValidated.image,
+        phone: userValidated.phone,
+        cellphone: userValidated.cellphone,
+        email: userValidated.email,
+        rol: userValidated.rol,
+        lastLogin: userValidated.lastLogin,
+      },
+    };
   }
 
   async validateUser(userData: GoogleUserInfoDto) {
