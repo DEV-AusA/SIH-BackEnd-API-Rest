@@ -4,6 +4,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeormConfig from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
@@ -19,6 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    PassportModule.register({ session: true }),
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
