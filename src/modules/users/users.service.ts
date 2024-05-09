@@ -4,6 +4,8 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../auth/dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
+import { EmailService } from '../email/email.service';
+import { emailBody } from '../utils/email-format';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +13,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userService: Repository<User>,
     private readonly dataSource: DataSource,
+    private readonly emailService: EmailService,
   ) {}
 
   async searchEmail(email: string) {
@@ -25,6 +28,8 @@ export class UsersService {
       lastLogin: new Date(),
     };
 
+    const linkTemp = 'http://localhost:3000/auth/google/redirect';
+
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -32,6 +37,13 @@ export class UsersService {
     try {
       const newUser = await queryRunner.manager.create(User, userData);
       await queryRunner.manager.save(newUser);
+      const emailSend = await this.emailService.sendNewEmail({
+        to: userData.email,
+        subject: 'Bienvenido a SIH - Secure Ingress Home',
+        text: emailBody(`${newUser.name} ${newUser.lastName}`, linkTemp),
+      });
+
+      console.log(emailSend);
       await queryRunner.commitTransaction();
       const registerOkMessage = { message: `Usuario creado correctamente` };
 
