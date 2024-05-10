@@ -10,7 +10,8 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-// import * as bcrypt from 'bcrypt';
+import { GoogleUserInfoDto } from './dto/google-auth.dto';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -42,20 +43,18 @@ export class AuthService {
     );
     if (!emailValidate && !usernameValidate)
       throw new HttpException(
-        'Email o Username no encontrado',
+        'Algun dato ingresado es incorrecto',
         HttpStatus.NOT_FOUND,
       );
 
     const userValidated = emailValidate ? emailValidate : usernameValidate;
-    // const passwordValidate = bcrypt.compare(
-    //   userLogin.password,
-    //   userValidated.password,
-    // );
-    if (!(userLogin.password === userValidated.password)) {
-      throw new HttpException('Contraseña incorrecta', HttpStatus.NOT_FOUND);
-    }
-    // if (!passwordValidate)
-    //   return new BadRequestException('Contraseña incorrecta');
+    const passwordValidate = bcrypt.compare(
+      userLogin.password,
+      userValidated.password,
+    );
+
+    if (!passwordValidate)
+      return new BadRequestException('Algun dato ingresado es incorrecto');
 
     const payload = {
       id: userValidated.id,
@@ -78,7 +77,26 @@ export class AuthService {
         lastLogin: userValidated.lastLogin,
       },
     };
-    // return userLogin;
-    // if (!emailValidate) return new BadRequestException('Email no encontrado');
+  }
+
+  async validateUser(userData: GoogleUserInfoDto) {
+    const { password } = userData;
+    const user = await this.userRepository.findOneBy({ email: userData.email });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    if (user) {
+      return user;
+    } else {
+      const newUser = this.userRepository.create({
+        ...userData,
+        password: hashedPassword,
+      });
+      return this.userRepository.save(newUser);
+    }
+  }
+
+  async findUser(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    return user;
   }
 }

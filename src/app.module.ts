@@ -4,7 +4,10 @@ import { UsersModule } from './modules/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeormConfig from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmailModule } from './modules/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
+import { jwtEmailConfig } from './config/jwt-email.config';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -19,11 +22,9 @@ import { JwtModule } from '@nestjs/jwt';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60m' },
-    }),
+    EmailModule,
+    JwtModule.register(jwtEmailConfig), // jwt-email.config.ts
+    PassportModule.register({ session: true }),
   ],
   controllers: [],
   providers: [],

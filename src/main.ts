@@ -3,10 +3,23 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { loggerGlobal } from './middlewares/logger.middleware';
+import * as session from 'express-session';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.use(
+    session({
+      secret: process.env.SESSION_PASSPORT,
+      saveUninitialized: false,
+      resave: false,
+      cookie: {
+        maxAge: 60000,
+      },
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
   const swaggerConfig = new DocumentBuilder()
     .setTitle('SIH - API Rest')
     .setDescription(
