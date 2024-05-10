@@ -1,0 +1,43 @@
+# # version de docker
+version: '3.8'
+
+services:
+  nestapp:
+    depends_on:
+      - postgresdb
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: app-docker
+    container_name: SIH-app-docker
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+
+  postgresdb:
+    image: postgres
+    container_name: SIH-db-docker
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      DATABASE_HOST: ${DB_HOST}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-docker
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "80:80"
+    depends_on:
+      - postgresdb
+
+volumes:
+  pgdata:
