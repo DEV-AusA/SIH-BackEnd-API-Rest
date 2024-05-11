@@ -14,6 +14,7 @@ import { emailBody } from '../utils/email-format';
 import { config as dotenvConfig } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import { Property } from '../properties/entities/property.entity';
+import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
 
 dotenvConfig({ path: '.env' });
 
@@ -22,11 +23,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userService: Repository<User>,
-    // @InjectRepository(Property)
-    // private readonly propertyRepository: Repository<Property>,
     private readonly dataSource: DataSource,
     private readonly emailService: EmailService,
     private jwtService: JwtService,
+    private readonly filesCloudinaryService: FilesCloudinaryService,
   ) {}
 
   async getUsers(page: number, limit: number) {
@@ -49,6 +49,7 @@ export class UsersService {
         'rol',
         'createdAt',
         'lastLogin',
+        'validate',
       ],
       relations: { properties: true },
     });
@@ -58,6 +59,7 @@ export class UsersService {
     const userExists = await this.userService.find({
       where: { id: id },
       select: [
+        'id',
         'username',
         'name',
         'lastName',
@@ -77,45 +79,46 @@ export class UsersService {
     return userExists;
   }
 
-  async updateUser(id: string, updateUserDto: Partial<User>) {
+  async updateUser(
+    id: string,
+    updateUserDto: Partial<User>,
+    file: Express.Multer.File,
+  ) {
     const userExists = await this.userService.findOneBy({ id: id });
     if (!userExists) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
-    // console.log(userExists);
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      userExists.password = updateUserDto?.password
+      if (file?.buffer) {
+        if (
+          userExists.image !==
+          'https://res.cloudinary.com/dcqdilhek/image/upload/fl_preserve_transparency/v1715136207/zmuncvwsnlws77vegwxq.jpg'
+        ) {
+          const publicId = await this.filesCloudinaryService.obtainPublicId(
+            userExists.image,
+          );
+          await this.filesCloudinaryService.deleteFile(publicId);
+        }
+      }
+      const uploadedImage = file?.buffer
+        ? await this.filesCloudinaryService.createFile(file)
+        : null;
+      updateUserDto.image = file?.buffer
+        ? uploadedImage?.secure_url
+        : userExists.image;
+      updateUserDto.password = updateUserDto?.password
         ? await bcrypt.hash(updateUserDto.password, 10)
         : userExists.password;
-      // userExists.email = updateUserDto.email;
-      userExists.username = updateUserDto?.username
-        ? updateUserDto?.username
-        : userExists.username;
-      userExists.name = updateUserDto?.name
-        ? updateUserDto?.name
-        : userExists.name;
-      userExists.lastName = updateUserDto?.lastName
-        ? updateUserDto?.lastName
-        : userExists.lastName;
-      userExists.document = updateUserDto?.document
-        ? updateUserDto?.document
-        : userExists.document;
-      userExists.phone = updateUserDto?.phone
-        ? updateUserDto?.phone
-        : userExists.phone;
-      userExists.cellphone = updateUserDto?.cellphone
-        ? updateUserDto?.cellphone
-        : userExists.cellphone;
-      // userExists.image = updateUserDto?.image;
-      userExists.email = updateUserDto?.email
-        ? updateUserDto?.email
-        : userExists.email;
-      console.log(userExists);
-      const userModified = await queryRunner.manager.save(userExists);
+
+      const user = await queryRunner.manager.preload(User, {
+        id,
+        ...updateUserDto,
+      });
+      const userModified = await queryRunner.manager.save(user);
       await queryRunner.manager.save(userModified);
       await queryRunner.commitTransaction();
       const registerOkMessage = {

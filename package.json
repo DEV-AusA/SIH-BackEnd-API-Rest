@@ -26,6 +26,7 @@
     "migration:show": "npm run typeorm -- -d ./config/typeorm.config.ts migration:show"
   },
   "dependencies": {
+    "@types/multer": "^1.4.11",
     "@google/generative-ai": "^0.6.0",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
@@ -63,7 +64,6 @@
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.18.0",
     "@types/jest": "^29.5.2",
-    "@types/multer": "^1.4.11",
     "@types/node": "^20.3.1",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/supertest": "^6.0.0",
