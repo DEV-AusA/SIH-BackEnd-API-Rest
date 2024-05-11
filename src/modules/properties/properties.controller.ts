@@ -38,7 +38,10 @@ export class PropertiesController {
   }
 
   @Delete(':id')
-  deleteProperty(@Param('id') id: string) {
-    return this.propertiesService.deleteProperty(Number(id));
+  deleteProperty(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() number: number,
+  ) {
+    return this.propertiesService.deleteProperty(id, number);
   }
 }

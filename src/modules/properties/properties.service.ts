@@ -81,7 +81,9 @@ export class PropertiesService {
     return `This action updates a #${id} property`;
   }
 
-  deleteProperty(id: number) {
+  deleteProperty(id: string, number: number) {
+    console.log(number);
+
     return `This action removes a #${id} property`;
   }
 }
