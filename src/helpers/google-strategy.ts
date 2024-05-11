@@ -2,9 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import { AuthService } from '../modules/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private jwtService: JwtService,
+  ) {
     super({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
@@ -42,7 +47,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         token: accessToken,
       };
 
-      return dataUser;
+      const dataUserPayload = {
+        dataUser,
+      };
+      const tokenDataUser = this.jwtService.sign(dataUserPayload);
+
+      return tokenDataUser;
     } catch (error) {
       throw new BadRequestException(error);
     }

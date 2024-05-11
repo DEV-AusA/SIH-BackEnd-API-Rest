@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
@@ -7,28 +16,31 @@ import { UpdatePropertyDto } from './dto/update-property.dto';
 export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
-  @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertiesService.create(createPropertyDto);
+  @Post('create')
+  createNewProperty(@Body() createPropertyDto: CreatePropertyDto) {
+    return this.propertiesService.createProperty(createPropertyDto);
   }
 
   @Get()
-  findAll() {
-    return this.propertiesService.findAll();
+  findAllProperties() {
+    return this.propertiesService.findAllProperties();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.propertiesService.findOne(+id);
+  @Get()
+  findOneProperty(@Query('name') number: string) {
+    return this.propertiesService.findOneProperty(Number(number));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePropertyDto: UpdatePropertyDto) {
-    return this.propertiesService.update(+id, updatePropertyDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePropertyDto: UpdatePropertyDto,
+  ) {
+    return this.propertiesService.update(Number(id), updatePropertyDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.propertiesService.remove(+id);
+    return this.propertiesService.remove(Number(id));
   }
 }

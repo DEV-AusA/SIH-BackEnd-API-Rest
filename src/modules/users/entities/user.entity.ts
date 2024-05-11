@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Property } from '../../properties/entities/property.entity';
 
 @Entity({
   name: 'users',
@@ -7,7 +14,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: false }) // maximo 50 chars y no puede ser nulo
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false }) // maximo 50 chars y no puede ser nulo
   username: string;
 
   @Column({ type: 'text', nullable: false })
@@ -19,7 +26,7 @@ export class User {
   @Column({ name: 'last_name', type: 'varchar', length: 50, nullable: false }) // maximo 50 chars y no puede ser nulo
   lastName: string;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'integer', unique: true, nullable: false })
   document: number;
 
   @Column({
@@ -64,4 +71,8 @@ export class User {
 
   @Column({ name: 'admin_modify', type: 'uuid', nullable: true })
   adminModify: string;
+
+  @OneToMany(() => Property, (prop) => prop.user, { eager: true })
+  @JoinColumn()
+  properties: Property[];
 }
