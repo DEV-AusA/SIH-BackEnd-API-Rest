@@ -78,7 +78,7 @@ export class CreateUserDto {
    */
   @IsNotEmpty()
   @IsNumber()
-  readonly phone: number;
+  readonly phone?: number;
 
   /**
    * Número de teléfono personal del usuario.
