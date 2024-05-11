@@ -7,6 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { EmailService } from '../email/email.service';
 import { GoogleStrategy } from '../../helpers/google-strategy';
 import { SessionSerializer } from '../../helpers/serializer';
+import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -17,6 +18,7 @@ import { SessionSerializer } from '../../helpers/serializer';
     GoogleStrategy,
     SessionSerializer,
     EmailService,
+    FilesCloudinaryService,
   ],
 })
 export class AuthModule {}

@@ -16,6 +16,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+
+    "resolveJsonModule": true, //permite importar archivos json
+    "types": ["multer"] //integrar el tipo de dato multer para la carga de archivos
   }
 }
