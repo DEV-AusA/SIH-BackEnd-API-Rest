@@ -27,6 +27,7 @@ export class UsersController {
   getUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUser(id);
   }
+
   @Put('update/:id')
   @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
   updateUser(

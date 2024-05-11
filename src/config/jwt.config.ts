@@ -2,7 +2,7 @@ import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig({ path: '.development.env' });
 
-export const jwtEmailConfig = {
+export const jwtConfig = {
   global: true,
   secret: process.env.JWT_SECRET,
   signOptions: {

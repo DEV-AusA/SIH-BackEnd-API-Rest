@@ -6,8 +6,9 @@ import typeormConfig from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailModule } from './modules/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtEmailConfig } from './config/jwt-email.config';
+import { jwtConfig } from './config/jwt.config';
 import { PassportModule } from '@nestjs/passport';
+import { PropertiesModule } from './modules/properties/properties.module';
 import { FilesCloudinaryModule } from './modules/files-cloudinary/files-cloudinary.module';
 
 @Module({
@@ -24,8 +25,9 @@ import { FilesCloudinaryModule } from './modules/files-cloudinary/files-cloudina
         configService.get('typeorm'),
     }),
     EmailModule,
-    JwtModule.register(jwtEmailConfig), // jwt-email.config.ts
+    JwtModule.register(jwtConfig), // jwt-email.config.ts
     PassportModule.register({ session: true }),
+    PropertiesModule,
     FilesCloudinaryModule,
   ],
   controllers: [],

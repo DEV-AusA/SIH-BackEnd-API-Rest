@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +13,7 @@ import { EmailService } from '../email/email.service';
 import { emailBody } from '../utils/email-format';
 import { config as dotenvConfig } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
+import { Property } from '../properties/entities/property.entity';
 import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
 
 dotenvConfig({ path: '.env' });
@@ -45,6 +51,7 @@ export class UsersService {
         'lastLogin',
         'validate',
       ],
+      relations: { properties: true },
     });
   }
 
@@ -155,7 +162,9 @@ export class UsersService {
     const emialPayload = {
       email: createUserDto.email,
     };
-    const tokenEmailVerify = this.jwtService.sign(emialPayload);
+    const tokenEmailVerify = this.jwtService.sign(emialPayload, {
+      expiresIn: '24h',
+    });
     const urlValidate = `${process.env.HOST_NAME}/email/validate/${tokenEmailVerify}`;
 
     const queryRunner = await this.dataSource.createQueryRunner();
@@ -164,12 +173,27 @@ export class UsersService {
 
     try {
       const newUser = await queryRunner.manager.create(User, userData);
-      await queryRunner.manager.save(newUser);
+      const newUserSaved = await queryRunner.manager.save(newUser);
+
+      const propFinded = await queryRunner.manager.findOneBy(Property, {
+        code: userData.code,
+      });
+      if (!propFinded)
+        throw new NotFoundException(
+          'No existe una propiedad con ese Numero de identificacion.',
+        );
+      const propReg = await queryRunner.manager.preload(Property, {
+        id: propFinded.id,
+        user: newUserSaved,
+      });
+      await queryRunner.manager.save(propReg);
+
       await this.emailService.sendNewEmail({
         to: userData.email,
         subject: 'Bienvenido a SIH - Secure Ingress Home',
         text: emailBody(`${newUser.name} ${newUser.lastName}`, urlValidate),
       });
+
       await queryRunner.commitTransaction();
       const registerOkMessage = { message: `Usuario creado correctamente` };
 
