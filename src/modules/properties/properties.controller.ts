@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
@@ -22,25 +23,22 @@ export class PropertiesController {
   }
 
   @Get()
-  findAllProperties() {
-    return this.propertiesService.findAllProperties();
-  }
-
-  @Get()
-  findOneProperty(@Query('name') number: string) {
-    return this.propertiesService.findOneProperty(Number(number));
+  findAllProperties(@Query('number') number: number) {
+    return number
+      ? this.propertiesService.findOneProperty(Number(number))
+      : this.propertiesService.findAllProperties();
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  updateProperty(
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePropertyDto: UpdatePropertyDto,
   ) {
-    return this.propertiesService.update(Number(id), updatePropertyDto);
+    return this.propertiesService.updateProperty(Number(id), updatePropertyDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.propertiesService.remove(Number(id));
+  deleteProperty(@Param('id') id: string) {
+    return this.propertiesService.deleteProperty(Number(id));
   }
 }

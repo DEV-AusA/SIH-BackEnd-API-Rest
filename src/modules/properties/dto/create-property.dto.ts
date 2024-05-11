@@ -1,6 +1,7 @@
 import {
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
   Matches,
@@ -55,10 +56,10 @@ export class CreatePropertyDto {
    * @description Debe ser una cadena alfanumerica no vacía.
    * @example 'E3T56YU'
    */
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @MinLength(5)
+  @MinLength(6)
   @MaxLength(10)
   @Matches(/^[a-zA-Z0-9]+$/)
-  readonly code: string;
+  readonly code?: string;
 }

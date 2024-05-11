@@ -36,6 +36,7 @@ export class UsersService {
       skip: start,
       take: end,
       select: [
+        'id',
         'username',
         'name',
         'lastName',
@@ -49,6 +50,7 @@ export class UsersService {
         'createdAt',
         'lastLogin',
       ],
+      relations: { properties: true },
     });
   }
 

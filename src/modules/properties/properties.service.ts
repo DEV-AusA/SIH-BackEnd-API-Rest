@@ -8,6 +8,7 @@ import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Repository } from 'typeorm';
 import { Property } from './entities/property.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { customAlphabet } from 'nanoid';
 
 @Injectable()
 export class PropertiesService {
@@ -20,14 +21,25 @@ export class PropertiesService {
     const propFinded = await this.propertyRepository.findOne({
       where: { number: createPropertyDto.number },
     });
-    const propCode = await this.propertyRepository.findOneBy({
-      code: createPropertyDto.code,
-    });
-    if (propFinded || propCode)
+    if (propFinded)
       throw new BadRequestException(
-        'Ya existe una propiedad con ese numero o el codigo ingresado pertenece a otra propiedad',
+        'Ya existe una propiedad con ese numero de identificacion',
       );
-    const newProp = await this.propertyRepository.create(createPropertyDto);
+
+    // code unique?
+    const codeGen = customAlphabet('01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
+    const code = codeGen();
+
+    const propCode = await this.propertyRepository.findOneBy({ code });
+    if (propCode)
+      throw new BadRequestException(
+        'Ya existe una propiedad con ese codigo de identificacion',
+      );
+
+    const newProp = await this.propertyRepository.create({
+      ...createPropertyDto,
+      code,
+    });
     const newPropSaved = await this.propertyRepository.save(newProp);
 
     return newPropSaved;
@@ -44,6 +56,7 @@ export class PropertiesService {
       });
       if (!propFinded)
         throw new NotFoundException('No existe una propiedad con ese numero.');
+
       return propFinded;
     } catch (error) {
       throw error;
@@ -63,12 +76,12 @@ export class PropertiesService {
     }
   }
 
-  update(id: number, updatePropertyDto: UpdatePropertyDto) {
+  updateProperty(id: number, updatePropertyDto: UpdatePropertyDto) {
     console.log(updatePropertyDto);
     return `This action updates a #${id} property`;
   }
 
-  remove(id: number) {
+  deleteProperty(id: number) {
     return `This action removes a #${id} property`;
   }
 }

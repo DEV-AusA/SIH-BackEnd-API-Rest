@@ -23,6 +23,7 @@ export class UsersController {
   getUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUser(id);
   }
+
   @Put('update/:id')
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
