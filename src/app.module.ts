@@ -8,6 +8,7 @@ import { EmailModule } from './modules/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtEmailConfig } from './config/jwt-email.config';
 import { PassportModule } from '@nestjs/passport';
+import { FilesCloudinaryModule } from './modules/files-cloudinary/files-cloudinary.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PassportModule } from '@nestjs/passport';
     EmailModule,
     JwtModule.register(jwtEmailConfig), // jwt-email.config.ts
     PassportModule.register({ session: true }),
+    FilesCloudinaryModule,
   ],
   controllers: [],
   providers: [],

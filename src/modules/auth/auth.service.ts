@@ -48,11 +48,20 @@ export class AuthService {
       );
 
     const userValidated = emailValidate ? emailValidate : usernameValidate;
-    const passwordValidate = bcrypt.compare(
+    if (!userValidated.state)
+      throw new HttpException('Cuenta Dada de Baja', HttpStatus.NOT_FOUND);
+
+    if (!userValidated.validate)
+      throw new HttpException(
+        'Cuenta Inactiva. Verifique su correo',
+        HttpStatus.NOT_FOUND,
+      );
+
+    const passwordValidate = await bcrypt.compare(
       userLogin.password,
       userValidated.password,
     );
-
+    console.log(passwordValidate);
     if (!passwordValidate)
       return new BadRequestException('Algun dato ingresado es incorrecto');
 

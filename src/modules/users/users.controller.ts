@@ -6,9 +6,13 @@ import {
   ParseUUIDPipe,
   Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../auth/dto/create-auth.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { OptionalFileInterceptorIMG } from 'src/interceptors/fileValidation.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -24,12 +28,14 @@ export class UsersController {
     return this.usersService.getUser(id);
   }
   @Put('update/:id')
+  @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateUserDto: Partial<CreateUserDto>,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile()
+    file: Express.Multer.File,
   ) {
-    console.log(id, updateUserDto);
-    return this.usersService.updateUser(id, updateUserDto);
+    return this.usersService.updateUser(id, updateUserDto, file);
   }
 
   @Put('unsubscribe/:id')
