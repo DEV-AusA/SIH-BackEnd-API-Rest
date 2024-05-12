@@ -36,10 +36,10 @@ export class User {
   })
   image: string;
 
-  @Column({ type: 'integer', nullable: true })
+  @Column({ type: 'bigint', nullable: true })
   phone: number;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'bigint', nullable: false })
   cellphone: number;
 
   @Column({ type: 'varchar', length: 50, nullable: false, unique: true })

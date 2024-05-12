@@ -205,12 +205,4 @@ export class UsersService {
       await queryRunner.release();
     }
   }
-
-  signInUser() {
-    return;
-  }
-
-  signInUpUserGoogle() {
-    return;
-  }
 }

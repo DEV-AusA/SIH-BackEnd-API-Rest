@@ -32,15 +32,25 @@ export class AuthService {
     const emailUser = await this.userRepository.findOneBy({
       email: createUserDto.email,
     });
+    if (emailUser)
+      throw new BadRequestException(
+        `Ya existe un usuario registrado con ese email.`,
+      );
+
     const dniUser = await this.userRepository.findOneBy({
       document: createUserDto.document,
     });
+    if (dniUser)
+      throw new BadRequestException(
+        `Ya existe un usuario registrado con ese documento.`,
+      );
+
     const username = await this.userRepository.findOneBy({
       username: createUserDto.username,
     });
-    if (emailUser || dniUser || username)
+    if (username)
       throw new BadRequestException(
-        `Ya existe un usuario registrado con ese username, documento o email.`,
+        `Ya existe un usuario registrado con ese username.`,
       );
 
     const propLinked = await this.propertyRepository.findOne({

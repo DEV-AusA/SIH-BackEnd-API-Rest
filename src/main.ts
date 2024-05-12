@@ -5,7 +5,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { loggerGlobal } from './middlewares/logger.middleware';
 import * as session from 'express-session';
 import * as passport from 'passport';
-import { DataLoaderService } from './helpers/preload-data.helper';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -39,17 +38,12 @@ Para obtener un token JWT, inicia sesión utilizando el endpoint /auth/signin.
   SwaggerModule.setup('api', app, document);
 
   app.use(loggerGlobal); // midd-loginLog global
-  // app.use(auth(configAuth0)); // auth0
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // validar DTO
       forbidNonWhitelisted: true,
     }),
   );
-
-  // // preload data
-  // const dataLoaderService = app.get(DataLoaderService);
-  // await dataLoaderService.loadUsersFromJson();
 
   await app.listen(3000);
 }
