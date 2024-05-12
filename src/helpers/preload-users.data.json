@@ -1,0 +1,38 @@
+[
+  {
+    "username": "tester1",
+    "password": "Tester123.",
+    "name": "Probador",
+    "lastName": "Tester",
+    "document": 50123457,
+    "cellphone": 1122334455,
+    "email": "tester1@gmail.com"
+  },
+  {
+    "username": "tester2",
+    "password": "Tester123.",
+    "name": "Probador 2",
+    "lastName": "Tester 2",
+    "document": 50123458,
+    "cellphone": 1122334456,
+    "email": "tester2@gmail.com"
+  },
+  {
+    "username": "nicoausa829",
+    "password": "Hol@1234",
+    "name": "Nicolas",
+    "lastName": "Ausa",
+    "document": 50123459,
+    "cellphone": 1122334457,
+    "email": "nicolasausa@gmail.com"
+  },
+  {
+    "username": "leo830",
+    "password": "Hol@1234",
+    "name": "Leonardo",
+    "lastName": "Ausa",
+    "document": 50123460,
+    "cellphone": 1122334458,
+    "email": "leonardoausa@gmail.com"
+  }  
+]

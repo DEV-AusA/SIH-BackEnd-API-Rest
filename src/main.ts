@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { loggerGlobal } from './middlewares/logger.middleware';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { DataLoaderService } from './helpers/preload-data.helper';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -45,6 +46,11 @@ Para obtener un token JWT, inicia sesión utilizando el endpoint /auth/signin.
       forbidNonWhitelisted: true,
     }),
   );
+
+  // // preload data
+  // const dataLoaderService = app.get(DataLoaderService);
+  // await dataLoaderService.loadUsersFromJson();
+
   await app.listen(3000);
 }
 bootstrap();

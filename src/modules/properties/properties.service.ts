@@ -1,20 +1,23 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Property } from './entities/property.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { customAlphabet } from 'nanoid';
+import { DeletePropertyDto } from './dto/delete-property.dto';
 
 @Injectable()
 export class PropertiesService {
   constructor(
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async createProperty(createPropertyDto: CreatePropertyDto) {
@@ -49,13 +52,13 @@ export class PropertiesService {
     return await this.propertyRepository.find();
   }
 
-  async findOneProperty(number: number) {
+  async findOneById(id: string) {
     try {
       const propFinded = await this.propertyRepository.findOne({
-        where: { number },
+        where: { id },
       });
       if (!propFinded)
-        throw new NotFoundException('No existe una propiedad con ese numero.');
+        throw new NotFoundException('No existe una propiedad con ese id.');
 
       return propFinded;
     } catch (error) {
@@ -63,7 +66,7 @@ export class PropertiesService {
     }
   }
 
-  async finOneByNumber(number: number) {
+  async findOneByNumber(number: number) {
     try {
       const propByNumber = await this.propertyRepository.findOneBy({ number });
       if (!propByNumber)
@@ -76,12 +79,45 @@ export class PropertiesService {
     }
   }
 
-  updateProperty(id: number, updatePropertyDto: UpdatePropertyDto) {
-    console.log(updatePropertyDto);
-    return `This action updates a #${id} property`;
+  async updateProperty(id: string, updatePropertyDto: UpdatePropertyDto) {
+    await this.findOneById(id);
+    const queryRunner = await this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const preloadData = await queryRunner.manager.preload(Property, {
+        id,
+        ...updatePropertyDto,
+      });
+      const propUpdated = await queryRunner.manager.save(preloadData);
+      await queryRunner.commitTransaction();
+
+      return {
+        message: `Datos de la propiedad ${propUpdated.number} actualizados correctamente`,
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
-  deleteProperty(id: number) {
-    return `This action removes a #${id} property`;
+  async deleteProperty(id: string, deleteProperty: DeletePropertyDto) {
+    try {
+      const propById = await this.findOneById(id);
+      if (propById.number !== deleteProperty.number)
+        throw new ConflictException(
+          `El id ingresado no pertenece a la propiedad con el numero ${deleteProperty.number}`,
+        );
+      await this.propertyRepository.delete(id);
+
+      return {
+        message: `Propiedad ${deleteProperty.number} eliminada con exito`,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }

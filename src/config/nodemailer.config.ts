@@ -17,7 +17,7 @@ export const mailerConfig: MailerOptions = {
   defaults: {
     from: '"No responder" <no-reply@localhost>',
   },
-  preview: true,
+  preview: false,
   template: {
     dir: process.cwd() + '/template/',
     adapter: new HandlebarsAdapter(),
