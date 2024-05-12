@@ -10,6 +10,9 @@ import { jwtConfig } from './config/jwt.config';
 import { PassportModule } from '@nestjs/passport';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { FilesCloudinaryModule } from './modules/files-cloudinary/files-cloudinary.module';
+import { DataLoaderService } from './helpers/preload-data.helper';
+import { User } from './modules/users/entities/user.entity';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -29,8 +32,10 @@ import { FilesCloudinaryModule } from './modules/files-cloudinary/files-cloudina
     PassportModule.register({ session: true }),
     PropertiesModule,
     FilesCloudinaryModule,
+    TypeOrmModule.forFeature([User]), // preload data categories
+    SeedModule, //sed module
   ],
   controllers: [],
-  providers: [],
+  providers: [DataLoaderService],
 })
 export class AppModule {}

@@ -42,7 +42,7 @@ export class AuthController {
     console.log(request.user);
 
     const encodedData = encodeURIComponent(JSON.stringify(request.user));
-    res.redirect(`http://localhost:3000/google?data=${encodedData}`);
+    res.redirect(`${process.env.HOST_NAME}?data=${encodedData}`);
   }
 
   @Get('status')
