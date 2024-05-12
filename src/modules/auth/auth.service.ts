@@ -1,8 +1,10 @@
 import {
   BadRequestException,
+  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-auth.dto';
 import { Repository } from 'typeorm';
@@ -13,12 +15,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GoogleUserInfoDto } from './dto/google-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Property } from '../properties/entities/property.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Property)
+    private readonly propertyRepository: Repository<Property>,
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
@@ -36,6 +41,21 @@ export class AuthService {
     if (emailUser || dniUser || username)
       throw new BadRequestException(
         `Ya existe un usuario registrado con ese username, documento o email.`,
+      );
+
+    const propLinked = await this.propertyRepository.findOne({
+      where: {
+        code: createUserDto.code,
+      },
+      relations: ['user'],
+    });
+    if (!propLinked)
+      throw new NotFoundException(
+        'No existe una propiedad con ese codigo ingresado',
+      );
+    if (propLinked.user)
+      throw new ConflictException(
+        'El codigo de propiedad ya está vinculado a otro usuario',
       );
 
     const registerOk = await this.userService.signUpUser(createUserDto);
@@ -69,7 +89,7 @@ export class AuthService {
     );
     console.log(passwordValidate);
     if (!passwordValidate)
-      return new BadRequestException('Algun dato ingresado es incorrecto');
+      throw new BadRequestException('Algun dato ingresado es incorrecto');
 
     const payload = {
       id: userValidated.id,

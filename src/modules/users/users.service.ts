@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../auth/dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
-import { emailBody } from '../utils/email-format';
+import { emailBody } from '../../utils/email-format';
 import { config as dotenvConfig } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import { Property } from '../properties/entities/property.entity';

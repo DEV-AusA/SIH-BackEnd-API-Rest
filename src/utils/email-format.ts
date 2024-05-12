@@ -113,7 +113,7 @@ export const emailBody = (name: string, link: string) => {
                         <td align="center" valign="top" style="padding:0;Margin:0;width:520px">
                         <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                             <tr>
-                            <td align="left" class="es-m-txt-c" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="https://viewstripo.email" style="mso-line-height-rule:exactly;text-decoration:underline;color:#2D3142;font-size:18px"><img src="https://ehpbxyt.stripocdn.email/content/guids/CABINET_ee77850a5a9f3068d9355050e69c76d26d58c3ea2927fa145f0d7a894e624758/images/group_4076323.png" alt="" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none;border-radius:100px" width="100" title="Email de confirmacion"></a></td>
+                            <td align="left" class="es-m-txt-c" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="" style="mso-line-height-rule:exactly;text-decoration:underline;color:#2D3142;font-size:18px"><img src="https://ehpbxyt.stripocdn.email/content/guids/CABINET_ee77850a5a9f3068d9355050e69c76d26d58c3ea2927fa145f0d7a894e624758/images/group_4076323.png" alt="" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none;border-radius:100px" width="100" title="Email de confirmacion"></a></td>
                             </tr>
                         </table></td>
                         </tr>
@@ -196,7 +196,7 @@ export const emailBody = (name: string, link: string) => {
                             <td align="center" valign="top" style="padding:0;Margin:0;width:47px">
                             <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                 <tr>
-                                <td align="center" class="es-m-txt-l" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="https://viewstripo.email" style="mso-line-height-rule:exactly;text-decoration:underline;color:#2D3142;font-size:18px"><img src="https://ehpbxyt.stripocdn.email/content/guids/CABINET_ee77850a5a9f3068d9355050e69c76d26d58c3ea2927fa145f0d7a894e624758/images/group_4076325.png" alt="Demo" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none" width="47" title="Demo"></a></td>
+                                <td align="center" class="es-m-txt-l" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="" style="mso-line-height-rule:exactly;text-decoration:underline;color:#2D3142;font-size:18px"><img src="https://ehpbxyt.stripocdn.email/content/guids/CABINET_ee77850a5a9f3068d9355050e69c76d26d58c3ea2927fa145f0d7a894e624758/images/group_4076325.png" alt="Demo" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none" width="47" title="Demo"></a></td>
                                 </tr>
                             </table></td>
                             </tr>

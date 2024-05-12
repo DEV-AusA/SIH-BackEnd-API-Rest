@@ -72,7 +72,7 @@ export class CreateUserDto {
   readonly document: number;
 
   /**
-   * Número de teléfono fijo del usuario.
+   * Número de teléfono fijo del usuario, es opcional.
    * @description Debe ser un número no vacío.
    * @example 1234567890
    */

@@ -8,9 +8,10 @@ import { EmailService } from '../email/email.service';
 import { GoogleStrategy } from '../../helpers/google-strategy';
 import { SessionSerializer } from '../../helpers/serializer';
 import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
+import { Property } from '../properties/entities/property.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, Property])],
   controllers: [AuthController],
   providers: [
     AuthService,

@@ -3,15 +3,16 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
   ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { DeletePropertyDto } from './dto/delete-property.dto';
 
 @Controller('properties')
 export class PropertiesController {
@@ -25,20 +26,28 @@ export class PropertiesController {
   @Get()
   findAllProperties(@Query('number') number: number) {
     return number
-      ? this.propertiesService.findOneProperty(Number(number))
+      ? this.propertiesService.findOneByNumber(Number(number))
       : this.propertiesService.findAllProperties();
   }
 
-  @Patch(':id')
+  @Get(':id')
+  findOnePropertyById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.propertiesService.findOneById(id);
+  }
+
+  @Put(':id')
   updateProperty(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePropertyDto: UpdatePropertyDto,
   ) {
-    return this.propertiesService.updateProperty(Number(id), updatePropertyDto);
+    return this.propertiesService.updateProperty(id, updatePropertyDto);
   }
 
   @Delete(':id')
-  deleteProperty(@Param('id') id: string) {
-    return this.propertiesService.deleteProperty(Number(id));
+  deleteProperty(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() deleteProperty: DeletePropertyDto,
+  ) {
+    return this.propertiesService.deleteProperty(id, deleteProperty);
   }
 }
