@@ -56,7 +56,7 @@ export class UsersService {
   }
 
   async getUser(id: string) {
-    const userExists = await this.userService.find({
+    const userExists = await this.userService.findOne({
       where: { id: id },
       select: [
         'id',
@@ -68,6 +68,7 @@ export class UsersService {
         'cellphone',
         'email',
         'image',
+        'state',
         'rol',
         'createdAt',
         'lastLogin',
@@ -76,6 +77,7 @@ export class UsersService {
     if (!userExists) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
+    console.log(userExists);
     return userExists;
   }
 
@@ -141,7 +143,7 @@ export class UsersService {
     }
     userExists.state = false;
     await this.userService.save(userExists);
-    return 'El usuario fue dado de baja';
+    return { message: 'El usuario fue dado de baja' };
   }
   async searchEmail(email: string) {
     return await this.userService.findOne({ where: { email: email } });
