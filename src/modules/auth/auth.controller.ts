@@ -6,6 +6,7 @@ import {
   Req,
   UseGuards,
   Res,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-auth.dto';
@@ -23,6 +24,7 @@ export class AuthController {
     return this.authService.signUpUser(createUserDto);
   }
 
+  @HttpCode(200)
   @Post('signin')
   signInUser(@Body() userLogin: LoginUserDto) {
     return this.authService.singInUser(userLogin);
