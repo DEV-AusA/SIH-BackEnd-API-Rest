@@ -32,8 +32,8 @@ export class AuthorizationsController {
     return this.authorizationsService.findAllAuthorizations();
   }
 
-  @Get(':id')
-  findOneAuthorization(@Param('id') id: string) {
+  @Get(':number')
+  findOneAuthorization(@Param('number') id: string) {
     return this.authorizationsService.findOneAuthorization(Number(id));
   }
 

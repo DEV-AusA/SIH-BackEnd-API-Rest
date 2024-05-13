@@ -59,7 +59,14 @@ export class AuthorizationsService {
   }
 
   async findOneAuthorization(number: number) {
-    return;
+    const authorization = await this.authorizationRepository.findOneBy({
+      number,
+    });
+    if (!authorization)
+      throw new NotFoundException(
+        'No se encuentra una autorizacion con es numero ingresado.',
+      );
+    return authorization;
   }
 
   update(id: number, updateAuthorizationDto: UpdateAuthorizationDto) {
