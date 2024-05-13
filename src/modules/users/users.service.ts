@@ -167,7 +167,7 @@ export class UsersService {
     const tokenEmailVerify = this.jwtService.sign(emialPayload, {
       expiresIn: '24h',
     });
-    const urlValidate = `${process.env.HOST_NAME}/email/validate/${tokenEmailVerify}`;
+    const urlValidate = `${process.env.BACK_HOST_NAME}/email/validate/${tokenEmailVerify}`;
 
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();

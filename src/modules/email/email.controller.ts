@@ -9,6 +9,6 @@ export class EmailController {
   @Get('validate/:id')
   async verifyEmail(@Param('id') id: string, @Res() res: Response) {
     await this.emailService.verifyEmail(id);
-    return res.redirect('/home');
+    return res.redirect(`${process.env.FRONT_HOST_NAME}/acciones`);
   }
 }
