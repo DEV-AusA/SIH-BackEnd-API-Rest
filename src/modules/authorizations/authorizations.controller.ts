@@ -3,10 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { AuthorizationsService } from './authorizations.service';
 import { CreateAuthorizationDto } from './dto/create-authorization.dto';
@@ -37,19 +37,19 @@ export class AuthorizationsController {
     return this.authorizationsService.findOneAuthorization(Number(id));
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @Put(':id')
+  validateAuthorization(
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAuthorizationDto: UpdateAuthorizationDto,
   ) {
-    return this.authorizationsService.update(
-      Number(id),
+    return this.authorizationsService.validateAuthorization(
+      id,
       updateAuthorizationDto,
     );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authorizationsService.remove(Number(id));
+  deleteAuthorization(@Param('id', ParseUUIDPipe) id: string, number: number) {
+    return this.authorizationsService.deleteAuthorization(id, number);
   }
 }

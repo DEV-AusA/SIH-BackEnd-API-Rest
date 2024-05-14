@@ -34,8 +34,11 @@ export class Authorization {
   })
   shipmentNumber: string;
 
-  @Column({ type: 'text', nullable: false })
-  token: string;
+  @Column({ name: 'access_code', type: 'integer', nullable: false })
+  accessCode: string;
+
+  @Column({ name: 'expiration_time', type: 'timestamp' })
+  expirationTime: Date;
 
   @Column({ name: 'date_generated', type: 'timestamp', nullable: false })
   dateGenerated: Date;

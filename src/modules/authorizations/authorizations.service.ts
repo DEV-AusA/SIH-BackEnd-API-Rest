@@ -5,11 +5,12 @@ import {
 } from '@nestjs/common';
 import { CreateAuthorizationDto } from './dto/create-authorization.dto';
 import { UpdateAuthorizationDto } from './dto/update-authorization.dto';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Authorization } from './entities/authorization.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
-import { JwtService } from '@nestjs/jwt';
+import * as otpGenerator from 'otp-generator';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthorizationsService {
@@ -18,40 +19,56 @@ export class AuthorizationsService {
     private readonly authorizationRepository: Repository<Authorization>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly jwtService: JwtService,
+    private readonly userService: UsersService,
+    private readonly datasource: DataSource,
   ) {}
 
   async createAuthorization(
     id: string,
     createAuthorizationDto: CreateAuthorizationDto,
   ) {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) throw new NotFoundException('No existe un usuario con ese id');
-
     if (
       createAuthorizationDto.type !== 'delivery' &&
       createAuthorizationDto.type !== 'guest'
     )
       throw new BadRequestException(
-        'El tipo de autorizacion ingresado es el incorrecto',
+        'El tipo de autorizacion ingresado no es correcto',
       );
 
-    const payload = {
-      id,
-      email: user.email,
-    };
-    const token = this.jwtService.sign(payload, { expiresIn: '2h' }); //2 horas?
+    await this.userService.findUserById(id);
 
-    const authorization = await this.authorizationRepository.create({
-      ...createAuthorizationDto,
-      user: id,
-      token,
-      dateGenerated: new Date(),
+    const accessCode = otpGenerator.generate(4, {
+      digits: true,
+      lowerCaseAlphabets: false,
+      upperCaseAlphabets: false,
+      specialChars: false,
     });
-    const authorizationSaved =
-      await this.authorizationRepository.save(authorization);
 
-    return authorizationSaved;
+    const expirationTime = new Date(Date.now() + 120 * 60 * 1000); // 2h
+
+    const queryRunner = await this.datasource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const authorization = await queryRunner.manager.create(Authorization, {
+        ...createAuthorizationDto,
+        user: id,
+        accessCode,
+        expirationTime,
+        dateGenerated: new Date(),
+      });
+      const authorizationSaved = await queryRunner.manager.save(authorization);
+
+      await queryRunner.commitTransaction();
+
+      return authorizationSaved;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findAllAuthorizations() {
@@ -69,11 +86,38 @@ export class AuthorizationsService {
     return authorization;
   }
 
-  update(id: number, updateAuthorizationDto: UpdateAuthorizationDto) {
-    return `This action updates a #${id} authorization`;
-  }
+  // only security rol
+  async validateAuthorization(
+    id: string,
+    updateAuthorizationDto: UpdateAuthorizationDto,
+  ) {
+    const security = await this.userService.findUserById(id);
+    const authorization = await this.findOneAuthorization(
+      updateAuthorizationDto.number,
+    );
+    // validation time
+    const expirationTimeUtc = new Date(authorization.expirationTime);
+    if (expirationTimeUtc < new Date()) {
+      return `El código de autorization ha expirado, por favor genere otro.`;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} authorization`;
+    const authorizationValidate = await this.authorizationRepository.preload({
+      id: authorization.id,
+      guardId: security.id,
+      dateUsed: new Date(),
+    });
+
+    await this.authorizationRepository.save(authorizationValidate);
+
+    return { message: `Autorización validada con exito` };
+  }
+  // only rol admin?
+  async deleteAuthorization(id: string, number: number) {
+    await this.userService.findUserById(id);
+    const authorization = await this.findOneAuthorization(number);
+    await this.authorizationRepository.delete(authorization.id);
+    return {
+      message: `Autorización numero ${authorization.number} eliminada con éxito.`,
+    };
   }
 }
