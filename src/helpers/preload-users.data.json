@@ -34,5 +34,45 @@
     "document": 50123460,
     "cellphone": 1122334458,
     "email": "leonardoausa@gmail.com"
-  }  
+  },
+  {
+    "username": "manuadmin",
+    "password": "Admin123.",
+    "name": "Manu",
+    "lastName": "Admin",
+    "document": 50123461,
+    "cellphone": 1122334458,
+    "email": "manuadmin@gmail.com",
+    "rol": "admin"
+  },
+  {
+    "username": "alexadmin",
+    "password": "Admin123.",
+    "name": "Alex",
+    "lastName": "Admin",
+    "document": 50123462,
+    "cellphone": 1122334458,
+    "email": "alexadmin@gmail.com",
+    "rol": "admin"
+  },
+  {
+    "username": "securitytest",
+    "password": "Prueba123.",
+    "name": "Security",
+    "lastName": "Tester",
+    "document": 50123463,
+    "cellphone": 1122334458,
+    "email": "security1@gmail.com",
+    "rol": "security"
+  },
+  {
+    "username": "googleuser1",
+    "password": "Prueba123.",
+    "name": "Google Account",
+    "lastName": "Tester",
+    "document": 50123464,
+    "cellphone": 1122334458,
+    "email": "googleaccounttester1@gmail.com",
+    "rol": "googletemp"
+  }
 ]
