@@ -153,6 +153,12 @@ export class UsersService {
     return await this.userService.findOne({ where: { username: username } });
   }
 
+  async findUserById(id: string) {
+    const user = await this.userService.findOneBy({ id });
+    if (!user) throw new NotFoundException('No existe un usuario con ese id');
+    return user;
+  }
+
   async signUpUser(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10); // 10 nivel hash
     const userData = {

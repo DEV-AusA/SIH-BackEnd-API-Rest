@@ -126,7 +126,6 @@ export class AuthService {
   }
 
   async validateUser(userData: GoogleUserInfoDto) {
-    console.log(userData);
     const { password } = userData;
     const user = await this.userRepository.findOneBy({ email: userData.email });
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -140,10 +139,5 @@ export class AuthService {
       });
       return this.userRepository.save(newUser);
     }
-  }
-
-  async findUser(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
-    return user;
   }
 }
