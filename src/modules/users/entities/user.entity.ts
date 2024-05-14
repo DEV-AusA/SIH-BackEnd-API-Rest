@@ -54,7 +54,7 @@ export class User {
   @Column({ type: 'bool', default: true })
   state: boolean;
 
-  @Column({ type: 'varchar', default: 'user' })
+  @Column({ type: 'varchar', default: 'owner' })
   rol: string;
 
   @Column({
