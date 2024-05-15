@@ -74,5 +74,15 @@
     "cellphone": 1122334458,
     "email": "googleaccounttester1@gmail.com",
     "rol": "googletemp"
+  },
+  {
+    "username": "superadmin10",
+    "password": "Super123.",
+    "name": "Super Admin",
+    "lastName": "Sayayin",
+    "document": 99999999,
+    "cellphone": 1138065126,
+    "email": "cesarausaprog@gmail.com",
+    "rol": "superadmin"
   }
 ]
