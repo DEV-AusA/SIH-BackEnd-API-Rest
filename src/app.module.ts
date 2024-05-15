@@ -34,7 +34,8 @@ import { AuthorizationsModule } from './modules/authorizations/authorizations.mo
     PropertiesModule,
     FilesCloudinaryModule,
     TypeOrmModule.forFeature([User]), // preload data categories
-    SeedModule, AuthorizationsModule, //sed module
+    SeedModule, //sed module
+    AuthorizationsModule,
   ],
   controllers: [],
   providers: [DataLoaderService],
