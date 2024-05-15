@@ -51,7 +51,7 @@ export class UsersController {
   }
 
   @Put('unsubscribe/:id')
-  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
   unsubscribeUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.unsubscribeUser(id);

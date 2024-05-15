@@ -33,26 +33,25 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         lastLogin: new Date(),
       });
       const dataUser = {
-        username: user.username,
-        name: user.name,
-        lastName: user.lastName,
-        document: user.document,
-        image: user.image,
-        phone: user.phone,
-        cellphone: user.cellphone,
-        email: user.email,
-        googleAccount: user.googleAccount,
-        rol: 'user',
-        lastLogin: user.lastLogin,
         token: accessToken,
+        dataUser: {
+          username: user.username,
+          name: user.name,
+          lastName: user.lastName,
+          document: user.document,
+          image: user.image,
+          phone: user.phone,
+          cellphone: user.cellphone,
+          email: user.email,
+          googleAccount: user.googleAccount,
+          rol: 'googletemp',
+          lastLogin: user.lastLogin,
+          token: accessToken,
+        },
       };
 
-      const dataUserPayload = {
-        dataUser,
-      };
-      const tokenDataUser = this.jwtService.sign(dataUserPayload);
-
-      return tokenDataUser;
+      // const tokenDataUser = this.jwtService.sign(dataUser);
+      return dataUser;
     } catch (error) {
       throw new BadRequestException(error);
     }
