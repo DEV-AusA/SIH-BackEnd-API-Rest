@@ -24,18 +24,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
   getUsers(@Query('page') page: number = 1, @Query('limit') limit: number = 3) {
     return this.usersService.getUsers(Number(page), Number(limit));
   }
 
   @Get(':id')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   getUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUser(id);
   }
 
   @Put('update/:id')
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
@@ -47,6 +51,8 @@ export class UsersController {
   }
 
   @Put('unsubscribe/:id')
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   unsubscribeUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.unsubscribeUser(id);
   }

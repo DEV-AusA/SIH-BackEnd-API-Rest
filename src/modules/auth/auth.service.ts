@@ -110,6 +110,7 @@ export class AuthService {
     return {
       token: token,
       user: {
+        id: userValidated.id,
         username: userValidated.username,
         name: userValidated.name,
         lastName: userValidated.lastName,

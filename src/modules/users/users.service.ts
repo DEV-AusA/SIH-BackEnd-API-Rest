@@ -3,8 +3,9 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../auth/dto/create-auth.dto';
@@ -15,6 +16,7 @@ import { config as dotenvConfig } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import { Property } from '../properties/entities/property.entity';
 import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
+import { Role } from '../../helpers/roles.enum';
 
 dotenvConfig({ path: '.env' });
 
@@ -35,6 +37,7 @@ export class UsersService {
     return await this.userService.find({
       skip: start,
       take: end,
+      where: { rol: Not(Role.SuperAdmin) },
       select: [
         'id',
         'username',
@@ -77,7 +80,10 @@ export class UsersService {
     if (!userExists) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
-    console.log(userExists);
+    if (userExists.rol === 'superadmin')
+      throw new UnauthorizedException(
+        'No se puede obtener datos de ese usuario',
+      );
     return userExists;
   }
 
@@ -90,6 +96,9 @@ export class UsersService {
     if (!userExists) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
+    if (userExists.rol === 'superadmin')
+      throw new UnauthorizedException('No se puede modificar ese usuario');
+
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -141,6 +150,8 @@ export class UsersService {
     if (!userExists) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
+    if (userExists.rol === 'superadmin')
+      throw new UnauthorizedException('No se puede dar de baja ese usuario');
     userExists.state = false;
     await this.userService.save(userExists);
     return { message: 'El usuario fue dado de baja' };
@@ -169,6 +180,7 @@ export class UsersService {
 
     const emialPayload = {
       email: createUserDto.email,
+      rol: 'owner',
     };
     const tokenEmailVerify = this.jwtService.sign(emialPayload, {
       expiresIn: '24h',
