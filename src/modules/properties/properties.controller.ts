@@ -44,7 +44,7 @@ export class PropertiesController {
   }
 
   @Get(':id')
-  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
   findOnePropertyById(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertiesService.findOneById(id);
