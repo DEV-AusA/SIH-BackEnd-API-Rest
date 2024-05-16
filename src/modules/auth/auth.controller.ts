@@ -41,8 +41,13 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async loginOk(@Req() request: Request, @Res() res: Response) {
-    res.redirect(`${process.env.FRONT_HOST_NAME}/auth/google/redirect`);
-    console.log(res.req.user);
+    console.log(request.user);
+
+    const encodedData = encodeURIComponent(JSON.stringify(request.user));
+    res.redirect(
+      `${process.env.FRONT_HOST_NAME}/auth/google/redirect?state=${encodedData}`,
+    );
+    return 'Redirigiendo';
   }
 
   @Get('status')
