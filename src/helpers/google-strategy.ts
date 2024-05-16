@@ -35,9 +35,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         validate: profile._json.email_verified,
         lastLogin: new Date(),
       });
+
+      const payload = {
+        id: user.id,
+        email: user.email,
+        rol: user.rol,
+      };
+      const token = this.jwtService.sign(payload);
+
       const dataUser = {
-        token: accessToken,
+        token,
         dataUser: {
+          id: user.id,
           username: user.username,
           name: user.name,
           lastName: user.lastName,
@@ -53,6 +62,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       };
 
       // const tokenDataUser = this.jwtService.sign(dataUser);
+
       return dataUser;
     } catch (error) {
       throw new BadRequestException(error);
