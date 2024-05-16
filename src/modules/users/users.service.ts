@@ -32,7 +32,7 @@ export class UsersService {
   async getUsers(page: number, limit: number) {
     const start = (page - 1) * limit;
     const end = start + limit;
-    return await this.userService.find({
+    const users = await this.userService.find({
       skip: start,
       take: end,
       select: [
@@ -53,6 +53,9 @@ export class UsersService {
       ],
       relations: { properties: true },
     });
+
+    if (!users) throw new NotFoundException('No se encontraron usuarios');
+    return users;
   }
 
   async getUser(id: string) {

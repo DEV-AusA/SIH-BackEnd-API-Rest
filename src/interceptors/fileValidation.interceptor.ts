@@ -45,7 +45,7 @@ export class OptionalFileInterceptorIMG implements NestInterceptor {
       const maxSize = 200 * 1024; // 200KB
       if (file.size > maxSize) {
         throw new BadRequestException(
-          'El tamaño del archivo debe ser menor a 2MB',
+          'El tamaño del archivo debe ser menor a 200KB',
         );
       }
     }

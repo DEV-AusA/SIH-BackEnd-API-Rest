@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Expence } from 'src/modules/expenses/entities/expense.entity';
 
 @Entity({
   name: 'properties',
@@ -30,4 +38,8 @@ export class Property {
 
   @ManyToOne(() => User, (user) => user.properties)
   user: User;
+
+  @OneToMany(() => Expence, (expence) => expence.property)
+  @JoinColumn()
+  expences: Expence[];
 }
