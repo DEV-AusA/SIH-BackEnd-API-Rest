@@ -45,6 +45,6 @@ Para obtener un token JWT, inicia sesión utilizando el endpoint /auth/signin.
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
