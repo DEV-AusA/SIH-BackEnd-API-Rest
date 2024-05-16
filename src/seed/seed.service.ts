@@ -6,7 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePropertyDto } from '../modules/properties/dto/create-property.dto';
 import { Property } from '../modules/properties/entities/property.entity';
 import { User } from '../modules/users/entities/user.entity';
-import { CreateUserDto } from '../modules/auth/dto/create-auth.dto';
 import { customAlphabet } from 'nanoid';
 import * as bcrypt from 'bcrypt';
 
@@ -33,10 +32,7 @@ export class SeedService implements OnModuleInit {
 
     try {
       for await (const property of properties) {
-        const codeGen = customAlphabet(
-          '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-          6,
-        );
+        const codeGen = customAlphabet('01234567890ABCDEFGHIJ', 6);
         const code = codeGen();
         const newProp = await this.propertyRepository.create({
           ...property,
@@ -69,7 +65,7 @@ export class SeedService implements OnModuleInit {
   }
 
   private async executeSeedUsers() {
-    const users = usersData as CreateUserDto[];
+    const users = usersData;
 
     try {
       for await (const user of users) {

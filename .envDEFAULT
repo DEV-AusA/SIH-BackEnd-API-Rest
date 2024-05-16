@@ -32,7 +32,8 @@ NODE_MAILER_USER=
 NODE_MAILER_PASSWORD=
 
 #deploy
-HOST_NAME=http://localhost:3000
+BACK_HOST_NAME=http://localhost:3000
+FRONT_HOST_NAME=http://localhost:3000
 
 #Express
 SESSION_PASSPORT=

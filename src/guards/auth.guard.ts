@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -11,32 +10,41 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization?.split(' ')[1];
-    if (!token) {
-      throw new UnauthorizedException('Token not found');
+    const isToken = request.headers['authorization'];
+    if (!isToken) {
+      throw new UnauthorizedException(
+        'Necesitas loguearte para acceder a esta seccion.',
+      );
     }
+
+    const token = request.headers['authorization'].split(' ')[1] ?? '';
     const secret = process.env.JWT_SECRET;
 
     try {
-      const user = this.jwtService.verify(token, { secret });
-      user.iat = new Date(user.iat * 1000); // emitido
-      user.exp = new Date(user.exp * 1000); // expiracion
-      console.log(user);
+      const payload = this.jwtService.verify(token, { secret });
+      payload.iat = new Date(payload.iat * 1000); // emitido
+      payload.exp = new Date(payload.exp * 1000); // expiracion
+      payload.rol =
+        payload.rol === 'superadmin'
+          ? ['superadmin']
+          : payload.rol === 'admin'
+            ? ['admin']
+            : payload.rol === 'security'
+              ? ['security']
+              : payload.rol === 'googletemp'
+                ? ['googletemp']
+                : ['owner'];
 
-      user.isSuperAdmin
-        ? (user.rol = ['user'])
-        : user.isAdmin
-          ? (user.rol = ['admin'])
-          : (user.rol = ['security']);
+      request.user = payload;
 
-      request.user = user;
       return true;
     } catch (error) {
-      throw new BadRequestException('Invalid token');
+      throw new UnauthorizedException('Token invalido');
     }
   }
 }

@@ -41,10 +41,8 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async loginOk(@Req() request: Request, @Res() res: Response) {
-    console.log(request.user);
-
-    const encodedData = encodeURIComponent(JSON.stringify(request.user));
-    res.redirect(`${process.env.HOST_NAME}?data=${encodedData}`);
+    res.redirect(`${process.env.FRONT_HOST_NAME}/api/auth/callback/google`);
+    console.log(res.req.user);
   }
 
   @Get('status')

@@ -11,6 +11,7 @@ import { Property } from './entities/property.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { customAlphabet } from 'nanoid';
 import { DeletePropertyDto } from './dto/delete-property.dto';
+import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
 
 @Injectable()
 export class PropertiesService {
@@ -18,6 +19,7 @@ export class PropertiesService {
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
     private readonly dataSource: DataSource,
+    private readonly filesCloudinaryService: FilesCloudinaryService,
   ) {}
 
   async createProperty(createPropertyDto: CreatePropertyDto) {
@@ -30,7 +32,7 @@ export class PropertiesService {
       );
 
     // code unique?
-    const codeGen = customAlphabet('01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
+    const codeGen = customAlphabet('01234567890ABCDEFGHIJ', 6);
     const code = codeGen();
 
     const propCode = await this.propertyRepository.findOneBy({ code });
@@ -79,16 +81,22 @@ export class PropertiesService {
     }
   }
 
-  async updateProperty(id: string, updatePropertyDto: UpdatePropertyDto) {
+  async updateProperty(
+    id: string,
+    updatePropertyDto: UpdatePropertyDto,
+    file: Express.Multer.File,
+  ) {
     await this.findOneById(id);
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
+      const uploadedImage = await this.filesCloudinaryService.createFile(file);
       const preloadData = await queryRunner.manager.preload(Property, {
         id,
         ...updatePropertyDto,
+        image: uploadedImage.secure_url,
       });
       const propUpdated = await queryRunner.manager.save(preloadData);
       await queryRunner.commitTransaction();

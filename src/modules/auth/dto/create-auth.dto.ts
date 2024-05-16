@@ -45,7 +45,7 @@ export class CreateUserDto {
   @IsString()
   @MinLength(2)
   @MaxLength(30)
-  @Matches(/^[a-zA-Z0-9]+$/)
+  @Matches(/^[a-zA-Z0-9 ]+$/)
   readonly name: string;
 
   /**
@@ -57,7 +57,7 @@ export class CreateUserDto {
   @IsString()
   @MinLength(2)
   @MaxLength(30)
-  @Matches(/^[a-zA-Z0-9]+$/)
+  @Matches(/^[a-zA-Z0-9 ]+$/)
   readonly lastName: string;
 
   /**
