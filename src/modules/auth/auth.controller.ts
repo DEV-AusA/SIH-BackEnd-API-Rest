@@ -41,7 +41,7 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async loginOk(@Req() request: Request, @Res() res: Response) {
-    res.redirect(`${process.env.FRONT_HOST_NAME}/api/auth/callback/google`);
+    res.redirect(`${process.env.FRONT_HOST_NAME}/auth/google/redirect`);
     console.log(res.req.user);
   }
 
