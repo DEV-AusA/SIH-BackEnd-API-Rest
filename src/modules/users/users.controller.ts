@@ -18,6 +18,7 @@ import { Role } from '../../helpers/roles.enum';
 import { Roles } from '../../decorators/roles.decorator';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
+import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
 
 @Controller('users')
 export class UsersController {
@@ -48,6 +49,19 @@ export class UsersController {
     file: Express.Multer.File,
   ) {
     return this.usersService.updateUser(id, updateUserDto, file);
+  }
+
+  @Put('update/google/:id')
+  @Roles(Role.Admin, Role.GoogleTemp, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
+  updateGoogleUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserGoogleDto: UpdateUserGoogleDto,
+    @UploadedFile()
+    file: Express.Multer.File,
+  ) {
+    return this.usersService.updateUserGoogle(id, updateUserGoogleDto, file);
   }
 
   @Put('unsubscribe/:id')
