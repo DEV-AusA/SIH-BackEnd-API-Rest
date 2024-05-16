@@ -32,6 +32,10 @@ export class SeedService implements OnModuleInit {
 
     try {
       for await (const property of properties) {
+        const propFinded = await this.propertyRepository.findOneBy({
+          number: property.number,
+        });
+        if (propFinded) continue;
         const codeGen = customAlphabet('01234567890ABCDEFGHIJ', 6);
         const code = codeGen();
         const newProp = await this.propertyRepository.create({
@@ -70,6 +74,10 @@ export class SeedService implements OnModuleInit {
     try {
       for await (const user of users) {
         if (user.email === 'cesarausaprog@gmail.com') {
+          const userSA = await this.userRepository.findOneBy({
+            email: user.email,
+          });
+          if (userSA) continue;
           const hashedPassword = await bcrypt.hash(user.password, 10);
           const newUser = await this.userRepository.create({
             ...user,
@@ -80,6 +88,10 @@ export class SeedService implements OnModuleInit {
           });
           await this.userRepository.save(newUser);
         } else {
+          const userFinded = await this.userRepository.findOneBy({
+            email: user.email,
+          });
+          if (userFinded) continue;
           const hashedPassword = await bcrypt.hash(user.password, 10);
           const newUser = await this.userRepository.create({
             ...user,
