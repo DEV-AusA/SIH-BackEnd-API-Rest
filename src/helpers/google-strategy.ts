@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import { AuthService } from '../modules/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
+import { customAlphabet } from 'nanoid';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
@@ -18,6 +19,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(accessToken: string, refreshToken: string, profile: Profile) {
+    const codeGen = customAlphabet('01234567890', 8);
+    const document = codeGen();
     try {
       const user = await this.authService.validateUser({
         email: profile._json.email,
@@ -25,9 +28,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         username: profile._json.email.split('@')[0],
         password: profile._json.sub,
         lastName: profile._json.family_name,
-        document: 1234,
+        document: Number(document),
         image: profile._json.picture,
-        cellphone: 1234,
+        cellphone: 6000000613,
         googleAccount: true,
         validate: profile._json.email_verified,
         lastLogin: new Date(),
