@@ -37,3 +37,6 @@ FRONT_HOST_NAME=http://localhost:3000
 
 #Express
 SESSION_PASSPORT=
+
+#MercadoPago
+MERCADO_PAGO_ACCESS_TOKEN=

@@ -13,6 +13,7 @@ import { FilesCloudinaryModule } from './modules/files-cloudinary/files-cloudina
 import { DataLoaderService } from './helpers/preload-data.helper';
 import { User } from './modules/users/entities/user.entity';
 import { SeedModule } from './seed/seed.module';
+import { ExpensesModule } from './modules/expenses/expenses.module';
 import { AuthorizationsModule } from './modules/authorizations/authorizations.module';
 
 @Module({
@@ -34,6 +35,7 @@ import { AuthorizationsModule } from './modules/authorizations/authorizations.mo
     PropertiesModule,
     FilesCloudinaryModule,
     TypeOrmModule.forFeature([User]), // preload data categories
+    ExpensesModule, //sed module
     SeedModule, //sed module
     AuthorizationsModule,
   ],
