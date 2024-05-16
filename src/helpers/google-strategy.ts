@@ -49,7 +49,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
           googleAccount: user.googleAccount,
           rol: 'googletemp',
           lastLogin: user.lastLogin,
-          token: accessToken,
         },
       };
 

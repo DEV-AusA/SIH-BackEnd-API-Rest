@@ -47,6 +47,8 @@
     "express": "^4.19.2",
     "express-openid-connect": "^2.17.1",
     "express-session": "^1.18.0",
+    "mercadopago": "^2.0.9",
+    "moment": "^2.30.1",
     "nanoid": "^3.3.4",
     "nodemailer": "^6.9.13",
     "otp-generator": "^4.0.1",

@@ -27,7 +27,7 @@ export class PropertiesService {
       where: { number: createPropertyDto.number },
     });
     if (propFinded)
-      throw new BadRequestException(
+      throw new ConflictException(
         'Ya existe una propiedad con ese numero de identificacion',
       );
 
