@@ -52,7 +52,6 @@ export class ExpensesService {
       const payment = await new Payment(mercadopagoConfig.client).get({
         id: id,
       });
-      console.log(payment);
       const infoPayment = payment.additional_info.items[0];
       const expenceValidated = await this.expenceRepository.findOne({
         where: { id: infoPayment.id },
@@ -98,23 +97,15 @@ export class ExpensesService {
     if (!userActive.length) {
       throw new NotFoundException('No hay propietarios activos');
     }
-    const otrafecha = new Date('2022-01-01');
-    const anoLast1 = otrafecha.getFullYear();
-    const mesLast1 = otrafecha.getMonth() + 1;
-    console.log(anoLast1, mesLast1);
     const fechaActual = moment();
-    console.log(fechaActual);
     const anoAct = fechaActual.year();
     const mesAct = fechaActual.month() + 1;
-    console.log(anoAct, mesAct);
     const lastExpense = await this.expenceRepository
       .createQueryBuilder('expense')
       .select('expense.dateGenerated')
       .orderBy('expense.dateGenerated', 'DESC')
       .getOne();
-    console.log(!lastExpense);
     if (!lastExpense === false) {
-      console.log(lastExpense.dateGenerated);
       const lastFtc = moment(lastExpense.dateGenerated);
 
       const anoLast = lastFtc.year();
@@ -133,7 +124,6 @@ export class ExpensesService {
           where: { property: propertie },
           order: { dateGenerated: 'DESC' },
         });
-        console.log(lastExpenseProperty);
         const ticketInc = { num: 1 };
         if (lastExpenseProperty?.ticket) {
           const yearGenerated = moment(
