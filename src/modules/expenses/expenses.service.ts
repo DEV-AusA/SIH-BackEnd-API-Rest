@@ -90,6 +90,23 @@ export class ExpensesService {
 
     return expencesProperties;
   }
+
+  async getExpensesUserId(id: string) {
+    const expences = await this.userRepository.findOne({
+      where: { id: id },
+      relations: ['properties', 'properties.expences'],
+    });
+
+    if (!expences) throw new NotFoundException('No se encontro Expensas');
+    const propertysExpences = [];
+    console.log(expences.properties);
+    for (const propertie of expences.properties) {
+      propertysExpences.push(propertie);
+    }
+    if (!propertysExpences.length)
+      throw new NotFoundException('No se encontro Propiedades');
+    return propertysExpences;
+  }
   async createAllExpenses(createExpenseDto: CreateExpenseDto) {
     const userActive = await this.userRepository.find({
       where: { state: true, validate: true },
