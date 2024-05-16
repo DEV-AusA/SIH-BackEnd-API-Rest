@@ -23,7 +23,7 @@ export class User {
   @Column({ type: 'varchar', length: 50, nullable: false }) // maximo 50 chars y no puede ser nulo
   name: string;
 
-  @Column({ name: 'last_name', type: 'varchar', length: 50, nullable: false }) // maximo 50 chars y no puede ser nulo
+  @Column({ name: 'last_name', type: 'varchar', length: 50, nullable: true }) // maximo 50 chars y no puede ser nulo
   lastName: string;
 
   @Column({ type: 'integer', unique: true, nullable: false })
