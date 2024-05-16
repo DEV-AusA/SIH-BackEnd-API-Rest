@@ -136,6 +136,7 @@ export class AuthService {
       const newUser = this.userRepository.create({
         ...userData,
         password: hashedPassword,
+        rol: 'googletemp',
       });
       return this.userRepository.save(newUser);
     }

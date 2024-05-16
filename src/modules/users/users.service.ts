@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -17,6 +18,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Property } from '../properties/entities/property.entity';
 import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
 import { Role } from '../../helpers/roles.enum';
+import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
 
 dotenvConfig({ path: '.env' });
 
@@ -88,6 +90,83 @@ export class UsersService {
         'No se puede obtener datos de ese usuario',
       );
     return userExists;
+  }
+
+  async updateUserGoogle(
+    id: string,
+    updateUserGoogleDto: UpdateUserGoogleDto,
+    file: Express.Multer.File,
+  ) {
+    const userExists = await this.userService.findOneBy({ id });
+    if (!userExists) {
+      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+    }
+    if (updateUserGoogleDto.lastName === 'Google')
+      throw new BadRequestException('Por favor ingresa un Apellido correcto');
+
+    if (updateUserGoogleDto.cellphone === 6000000613)
+      throw new BadRequestException('Por favor ingresa un telefono valido');
+
+    const queryRunner = await this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const propFinded = await queryRunner.manager.findOneBy(Property, {
+        code: updateUserGoogleDto.code,
+      });
+      if (!propFinded)
+        throw new NotFoundException(
+          'No existe una propiedad con ese Numero de identificacion.',
+        );
+      const propReg = await queryRunner.manager.preload(Property, {
+        id: propFinded.id,
+        user: userExists,
+      });
+      await queryRunner.manager.save(propReg);
+
+      if (file?.buffer) {
+        if (
+          userExists.image !==
+          'https://res.cloudinary.com/dcqdilhek/image/upload/fl_preserve_transparency/v1715136207/zmuncvwsnlws77vegwxq.jpg'
+        ) {
+          const publicId = await this.filesCloudinaryService.obtainPublicId(
+            userExists.image,
+          );
+          await this.filesCloudinaryService.deleteFile(publicId);
+        }
+      }
+      const uploadedImage = file?.buffer
+        ? await this.filesCloudinaryService.createFile(file)
+        : null;
+
+      const image = file?.buffer ? uploadedImage?.secure_url : userExists.image;
+
+      const password = updateUserGoogleDto?.password
+        ? await bcrypt.hash(updateUserGoogleDto.password, 10)
+        : userExists.password;
+
+      const user = await queryRunner.manager.preload(User, {
+        id,
+        ...updateUserGoogleDto,
+        rol: 'owner',
+        password,
+        image,
+      });
+      const userModified = await queryRunner.manager.save(user);
+      await queryRunner.manager.save(userModified);
+      await queryRunner.commitTransaction();
+      const registerOkMessage = {
+        message: `Usuario de Google actualizado correctamente`,
+      };
+
+      return registerOkMessage;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async updateUser(
