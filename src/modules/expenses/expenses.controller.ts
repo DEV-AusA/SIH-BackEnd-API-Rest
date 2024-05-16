@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { Request } from 'express';
 import { CreateExpenseDto } from './dto/create-expense.dto';
@@ -30,6 +38,11 @@ export class ExpensesController {
   @Get('properties')
   getExpensesProperties() {
     return this.expensesService.getExpensesProperties();
+  }
+
+  @Get(':id')
+  getExpencesUserId(@Param('id', ParseUUIDPipe) id: string) {
+    return this.expensesService.getExpensesUserId(id);
   }
 
   @Post('createAllExpenses')
