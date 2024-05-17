@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateExpenseDto {
   /**
@@ -15,8 +15,8 @@ export class CreateExpenseDto {
    * @description Debe ser un string con formato UUID.
    * @example 532
    * **/
-  @IsNotEmpty()
-  @IsUUID()
-  @IsOptional()
-  userProperty: string;
+  // @IsNotEmpty()
+  // @IsUUID()
+  // @IsOptional()
+  // userProperty: string;
 }
