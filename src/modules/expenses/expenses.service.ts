@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Expence } from './entities/expense.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Payment, Preference } from 'mercadopago';
 import { User } from '../users/entities/user.entity';
 import * as moment from 'moment';
@@ -9,6 +9,7 @@ import { Property } from '../properties/entities/property.entity';
 import { mercadopagoConfig } from 'src/config/mercadoPago.config';
 import { CreatePayDto } from './dto/create-pay.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
+import { UpdateExpenceDto } from './dto/update-expense.dto';
 
 @Injectable()
 export class ExpensesService {
@@ -19,6 +20,7 @@ export class ExpensesService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async createPay(createPayDto: CreatePayDto) {
@@ -65,7 +67,7 @@ export class ExpensesService {
         throw new NotFoundException('Pago de expensa rechazado');
 
       expenceValidated.state = true;
-      expenceValidated.userProperty = expenceValidated.property.user.id;
+      // expenceValidated.userProperty = expenceValidated.property.user.id;
       expenceValidated.datePaid = new Date();
       expenceValidated.numberOperation = payment.id.toString();
 
@@ -97,9 +99,8 @@ export class ExpensesService {
       relations: ['properties', 'properties.expences'],
     });
 
-    if (!expences) throw new NotFoundException('No se encontro Expensas');
+    if (!expences) throw new NotFoundException('No se encontro Usuario');
     const propertysExpences = [];
-    console.log(expences.properties);
     for (const propertie of expences.properties) {
       propertysExpences.push(propertie);
     }
@@ -107,6 +108,7 @@ export class ExpensesService {
       throw new NotFoundException('No se encontro Propiedades');
     return propertysExpences;
   }
+
   async createAllExpenses(createExpenseDto: CreateExpenseDto) {
     const userActive = await this.userRepository.find({
       where: { state: true, validate: true },
@@ -170,5 +172,65 @@ export class ExpensesService {
     return {
       message: 'Expensas creadas para todos los propietarios',
     };
+  }
+
+  async createExpense(createExpenseDto: CreateExpenseDto, id: string) {
+    const property = await this.propertyRepository.findOne({
+      where: { id: id },
+      relations: ['user'],
+    });
+    if (!property) throw new NotFoundException('La Propiedad no existe');
+
+    const lastExpenseProperty = await this.expenceRepository.findOne({
+      where: { property: property },
+      order: { dateGenerated: 'DESC' },
+    });
+    const ticketInc = { num: 1 };
+    if (lastExpenseProperty?.ticket) {
+      const yearGenerated = moment(lastExpenseProperty.dateGenerated).year();
+      const yearAct = moment().year();
+      if (yearGenerated === yearAct) {
+        ticketInc.num = Number(lastExpenseProperty.ticket) + 1;
+      }
+    }
+    const expence = this.expenceRepository.create({
+      amount: createExpenseDto.amount,
+      property: property,
+      dateGenerated: new Date(),
+      userProperty: property.user.id,
+      ticket: ticketInc.num,
+    });
+    await this.expenceRepository.save(expence);
+    return {
+      message: 'Expensa Creada',
+    };
+  }
+
+  async updateExpence(updateExpenceDto: UpdateExpenceDto, id: string) {
+    const expenceValidated = await this.expenceRepository.findOne({
+      where: { id: id },
+    });
+    if (!expenceValidated) throw new NotFoundException('La expensa no existe');
+
+    const queryRunner = await this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const expenceUpdated = await queryRunner.manager.preload(Expence, {
+        id: id,
+        ...updateExpenceDto,
+      });
+      await queryRunner.manager.save(expenceUpdated);
+      await queryRunner.commitTransaction();
+      return {
+        message: 'Expensa actualizada',
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
