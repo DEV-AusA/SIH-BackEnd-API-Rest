@@ -7,14 +7,16 @@ import {
   Post,
   Put,
   Req,
+  Res,
   UseInterceptors,
 } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { CreatePayDto } from './dto/create-pay.dto';
 import { IsNotEmpty } from 'class-validator';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
+import { geteratePdfPuppeteer } from '../../helpers/pdf.helper';
 
 @Controller('expenses')
 export class ExpensesController {
@@ -42,6 +44,18 @@ export class ExpensesController {
   @Get('properties')
   getExpensesProperties() {
     return this.expensesService.getExpensesProperties();
+  }
+
+  @Get('generatePdf')
+  async generatePdf(@Res() res: Response) {
+    const pdfBuffer = await geteratePdfPuppeteer();
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename=hello-world.pdf',
+      'Content-Length': pdfBuffer.length,
+    });
+    res.end(pdfBuffer);
   }
 
   @Get(':id')

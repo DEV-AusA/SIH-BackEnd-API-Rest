@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Expence } from 'src/modules/expenses/entities/expense.entity';
+import { Expense } from 'src/modules/expenses/entities/expense.entity';
 
 @Entity({
   name: 'properties',
@@ -39,7 +39,7 @@ export class Property {
   @ManyToOne(() => User, (user) => user.properties)
   user: User;
 
-  @OneToMany(() => Expence, (expence) => expence.property)
+  @OneToMany(() => Expense, (expense) => expense.property)
   @JoinColumn()
-  expences: Expence[];
+  expences: Expense[];
 }
