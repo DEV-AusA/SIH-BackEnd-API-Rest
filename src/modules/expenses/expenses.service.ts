@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Expence } from './entities/expense.entity';
+import { Expense } from './entities/expense.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Payment, Preference } from 'mercadopago';
 import { User } from '../users/entities/user.entity';
@@ -14,8 +14,8 @@ import { UpdateExpenceDto } from './dto/update-expense.dto';
 @Injectable()
 export class ExpensesService {
   constructor(
-    @InjectRepository(Expence)
-    private readonly expenceRepository: Repository<Expence>,
+    @InjectRepository(Expense)
+    private readonly expenceRepository: Repository<Expense>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Property)
@@ -54,6 +54,7 @@ export class ExpensesService {
       const payment = await new Payment(mercadopagoConfig.client).get({
         id: id,
       });
+      console.log(payment);
       const infoPayment = payment.additional_info.items[0];
       const expenceValidated = await this.expenceRepository.findOne({
         where: { id: infoPayment.id },
@@ -217,7 +218,7 @@ export class ExpensesService {
     await queryRunner.startTransaction();
 
     try {
-      const expenceUpdated = await queryRunner.manager.preload(Expence, {
+      const expenceUpdated = await queryRunner.manager.preload(Expense, {
         id: id,
         ...updateExpenceDto,
       });
