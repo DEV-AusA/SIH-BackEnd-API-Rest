@@ -19,6 +19,7 @@ import { Roles } from '../../decorators/roles.decorator';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
 import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
+import { UserIdInterceptor } from 'src/interceptors/validateId.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -41,7 +42,11 @@ export class UsersController {
   @Put('update/:id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
+  @UseInterceptors(
+    UserIdInterceptor,
+    FileInterceptor('file'),
+    OptionalFileInterceptorIMG,
+  )
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -54,7 +59,11 @@ export class UsersController {
   @Put('update/google/:id')
   @Roles(Role.Admin, Role.GoogleTemp, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
+  @UseInterceptors(
+    UserIdInterceptor,
+    FileInterceptor('file'),
+    OptionalFileInterceptorIMG,
+  )
   updateGoogleUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserGoogleDto: UpdateUserGoogleDto,
