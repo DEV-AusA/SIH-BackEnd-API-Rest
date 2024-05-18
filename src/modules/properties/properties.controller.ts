@@ -22,6 +22,7 @@ import { Roles } from '../../decorators/roles.decorator';
 import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../helpers/roles.enum';
 import { AuthGuard } from '../../guards/auth.guard';
+import { UserIdInterceptor } from 'src/interceptors/validateId.interceptor';
 
 @Controller('properties')
 export class PropertiesController {
@@ -53,7 +54,11 @@ export class PropertiesController {
   @Put(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  @UseInterceptors(FileInterceptor('file'), OptionalFileInterceptorIMG)
+  @UseInterceptors(
+    UserIdInterceptor,
+    FileInterceptor('file'),
+    OptionalFileInterceptorIMG,
+  )
   updateProperty(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePropertyDto: UpdatePropertyDto,
