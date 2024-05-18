@@ -19,7 +19,7 @@ import { Roles } from '../../decorators/roles.decorator';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
 import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
-import { UserIdInterceptor } from 'src/interceptors/validateId.interceptor';
+import { UserIdInterceptor } from 'src/interceptors/validate-user-operations';
 
 @Controller('users')
 export class UsersController {

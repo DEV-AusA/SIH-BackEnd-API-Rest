@@ -22,7 +22,7 @@ import { Roles } from '../../decorators/roles.decorator';
 import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../helpers/roles.enum';
 import { AuthGuard } from '../../guards/auth.guard';
-import { UserIdInterceptor } from 'src/interceptors/validateId.interceptor';
+import { UserIdInterceptor } from 'src/interceptors/validate-user-operations';
 
 @Controller('properties')
 export class PropertiesController {
