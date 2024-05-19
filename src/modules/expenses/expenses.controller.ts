@@ -16,11 +16,8 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { CreatePayDto } from './dto/create-pay.dto';
 import { IsNotEmpty } from 'class-validator';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
-<<<<<<< HEAD
 import { geteratePdfPuppeteer } from '../../helpers/pdf.helper';
-=======
 import { ApiTags } from '@nestjs/swagger';
->>>>>>> feature/documentacion
 
 @ApiTags('Expensas')
 @Controller('expenses')
