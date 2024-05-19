@@ -102,10 +102,12 @@ export class UsersService {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
     if (updateUserGoogleDto.lastName === 'Google')
-      throw new BadRequestException('Por favor ingresa un Apellido correcto');
+      throw new BadRequestException('Por favor actualiza el Apellido');
 
     if (updateUserGoogleDto.cellphone === 6000000613)
-      throw new BadRequestException('Por favor ingresa un telefono valido');
+      throw new BadRequestException(
+        'Por favor actualiza el número telefono celular',
+      );
 
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();

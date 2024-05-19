@@ -15,6 +15,9 @@ import { User } from './modules/users/entities/user.entity';
 import { SeedModule } from './seed/seed.module';
 import { ExpensesModule } from './modules/expenses/expenses.module';
 import { AuthorizationsModule } from './modules/authorizations/authorizations.module';
+import { ChatModule } from './modules/chat/chat.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -38,6 +41,10 @@ import { AuthorizationsModule } from './modules/authorizations/authorizations.mo
     ExpensesModule, //sed module
     SeedModule, //sed module
     AuthorizationsModule,
+    ChatModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'), // chat
+    }),
   ],
   controllers: [],
   providers: [DataLoaderService],
