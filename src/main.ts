@@ -8,12 +8,6 @@ import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  // Configurar CORS para aceptar solicitudes desde cualquier origen
-  app.enableCors({
-    origin: ['http://localhost:3000', 'https://sih-back.onrender.com'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-  });
   app.use(
     session({
       secret: process.env.SESSION_PASSPORT,
