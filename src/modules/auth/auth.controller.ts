@@ -43,7 +43,7 @@ export class AuthController {
   async loginOk(@Req() request: Request, @Res() res: Response) {
     const encodedData = encodeURIComponent(JSON.stringify(request.user));
     res.redirect(
-      `${process.env.FRONT_HOST_NAME}/auth/google/redirect?state=${encodedData}`,
+      `${process.env.FRONT_HOST_NAME}/api/google?state=${encodedData}`,
     );
     return 'Redirigiendo';
   }
