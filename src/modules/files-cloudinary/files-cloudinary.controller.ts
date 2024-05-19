@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
 import { FilesCloudinaryService } from './files-cloudinary.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Files')
 @Controller('files-cloudinary')
 export class FilesCloudinaryController {
   constructor(

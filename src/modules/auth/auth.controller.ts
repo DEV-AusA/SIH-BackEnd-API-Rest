@@ -14,7 +14,9 @@ import { LoginUserDto } from './dto/login-auth.dto';
 import { GoogleAuthGuard } from '../../guards/google-guard.guard';
 import { Request } from 'express';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentications')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

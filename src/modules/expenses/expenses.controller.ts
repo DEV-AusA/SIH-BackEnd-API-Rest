@@ -15,7 +15,9 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { CreatePayDto } from './dto/create-pay.dto';
 import { IsNotEmpty } from 'class-validator';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Expensas')
 @Controller('expenses')
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}

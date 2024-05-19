@@ -20,11 +20,14 @@ import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
 import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
 import { UserIdInterceptor } from 'src/interceptors/validate-user-operations';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiBearerAuth()
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -32,6 +35,7 @@ export class UsersController {
     return this.usersService.getUsers(Number(page), Number(limit));
   }
 
+  @ApiBearerAuth()
   @Get(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -39,6 +43,7 @@ export class UsersController {
     return this.usersService.getUser(id);
   }
 
+  @ApiBearerAuth()
   @Put('update/:id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -56,6 +61,7 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto, file);
   }
 
+  @ApiBearerAuth()
   @Put('update/google/:id')
   @Roles(Role.Admin, Role.GoogleTemp, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -73,6 +79,7 @@ export class UsersController {
     return this.usersService.updateUserGoogle(id, updateUserGoogleDto, file);
   }
 
+  @ApiBearerAuth()
   @Put('unsubscribe/:id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
