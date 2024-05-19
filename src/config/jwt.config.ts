@@ -1,6 +1,6 @@
 import { config as dotenvConfig } from 'dotenv';
 
-dotenvConfig({ path: '.development.env' });
+dotenvConfig({ path: '.env' });
 
 export const jwtConfig = {
   global: true,
