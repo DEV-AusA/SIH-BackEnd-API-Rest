@@ -23,11 +23,14 @@ import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../helpers/roles.enum';
 import { AuthGuard } from '../../guards/auth.guard';
 import { UserIdInterceptor } from 'src/interceptors/validate-user-operations';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Properties')
 @Controller('properties')
 export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
+  @ApiBearerAuth()
   @Post('create')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -35,6 +38,7 @@ export class PropertiesController {
     return this.propertiesService.createProperty(createPropertyDto);
   }
 
+  @ApiBearerAuth()
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -44,6 +48,7 @@ export class PropertiesController {
       : this.propertiesService.findAllProperties();
   }
 
+  @ApiBearerAuth()
   @Get(':id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -51,6 +56,7 @@ export class PropertiesController {
     return this.propertiesService.findOneById(id);
   }
 
+  @ApiBearerAuth()
   @Put(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -68,6 +74,7 @@ export class PropertiesController {
     return this.propertiesService.updateProperty(id, updatePropertyDto, file);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)

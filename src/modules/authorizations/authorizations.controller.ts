@@ -16,11 +16,14 @@ import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../helpers/roles.enum';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authorizations')
 @Controller('authorizations')
 export class AuthorizationsController {
   constructor(private readonly authorizationsService: AuthorizationsService) {}
 
+  @ApiBearerAuth()
   @Post(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -33,7 +36,7 @@ export class AuthorizationsController {
       createAuthorizationDto,
     );
   }
-
+  @ApiBearerAuth()
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -41,6 +44,7 @@ export class AuthorizationsController {
     return this.authorizationsService.findAllAuthorizations();
   }
 
+  @ApiBearerAuth()
   @Get(':number')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -48,6 +52,7 @@ export class AuthorizationsController {
     return this.authorizationsService.findOneAuthorization(Number(id));
   }
 
+  @ApiBearerAuth()
   @Put(':id')
   @Roles(Role.Admin, Role.Security, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -61,6 +66,7 @@ export class AuthorizationsController {
     );
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
