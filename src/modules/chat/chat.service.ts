@@ -1,6 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
 import { Repository } from 'typeorm';
 import { Chat } from './entities/chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -46,7 +45,7 @@ export class ChatService {
     return `This action returns a #${id} chat`;
   }
 
-  update(id: number, updateChatDto: UpdateChatDto) {
+  update(id: number) {
     return `This action updates a #${id} chat`;
   }
 

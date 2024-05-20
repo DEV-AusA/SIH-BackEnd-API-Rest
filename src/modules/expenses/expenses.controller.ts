@@ -16,7 +16,6 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { CreatePayDto } from './dto/create-pay.dto';
 import { IsNotEmpty } from 'class-validator';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
-import { geteratePdfPuppeteer } from '../../helpers/pdf.helper';
 
 @Controller('expenses')
 export class ExpensesController {
@@ -31,7 +30,6 @@ export class ExpensesController {
 
   @Post('state')
   async statu(@Req() request: Request) {
-    console.log(request.body);
     const resul = this.expensesService.statu(request.body.data.id);
     return resul;
   }
@@ -46,10 +44,16 @@ export class ExpensesController {
     return this.expensesService.getExpensesProperties();
   }
 
-  @Get('generatePdf')
-  async generatePdf(@Res() res: Response) {
-    const pdfBuffer = await geteratePdfPuppeteer();
+  @Get('generatePdf/:id')
+  async generatePdf(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() res: Response,
+  ) {
+    // const pdfBuffer = await new PdfInvoiceHelper().geteratePdfPuppeteer();
+    // const pdfBuffer = await new PdfInvoiceHelper().generatePdfJsPDF();
+    // const pdfBuffer = await new PdfInvoiceHelper().generatePdfPDFKit();
 
+    const pdfBuffer = await this.expensesService.generatePdf(id);
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'attachment; filename=hello-world.pdf',
