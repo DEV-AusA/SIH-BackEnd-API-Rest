@@ -59,7 +59,7 @@ export class UserIdInterceptor implements NestInterceptor {
         );
       }
     } catch (error) {
-      throw new BadRequestException('ID invalida para la operacion solicitada');
+      throw error;
     }
 
     return next.handle();

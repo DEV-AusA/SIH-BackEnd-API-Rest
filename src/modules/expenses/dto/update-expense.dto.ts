@@ -1,3 +1,4 @@
+import { IsString } from 'class-validator';
 import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateExpenceDto {
@@ -36,4 +37,13 @@ export class UpdateExpenceDto {
   @IsOptional()
   @IsBoolean()
   state: boolean;
+
+  /**
+   * Descripción de la expensa.
+   * @description Puede ser una cadena de texto
+   * @example 'Expensa de prueba'
+   */
+  @IsOptional()
+  @IsString()
+  description: string;
 }
