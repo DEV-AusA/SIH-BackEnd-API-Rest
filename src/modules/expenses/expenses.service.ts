@@ -10,6 +10,7 @@ import { mercadopagoConfig } from 'src/config/mercadoPago.config';
 import { CreatePayDto } from './dto/create-pay.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
+import { PdfInvoiceHelper } from 'src/helpers/pdf-invoice.helper';
 
 @Injectable()
 export class ExpensesService {
@@ -26,6 +27,11 @@ export class ExpensesService {
   async createPay(createPayDto: CreatePayDto) {
     //Expence
     //comprobar expence
+    const expenseValidate = await this.expenceRepository.findOne({
+      where: { id: createPayDto.id },
+    });
+    if (!expenseValidate) throw new NotFoundException('La expensa no existe');
+
     const preference = await new Preference(mercadopagoConfig.client).create({
       body: {
         items: [
@@ -54,7 +60,6 @@ export class ExpensesService {
       const payment = await new Payment(mercadopagoConfig.client).get({
         id: id,
       });
-      console.log(payment);
       const infoPayment = payment.additional_info.items[0];
       const expenceValidated = await this.expenceRepository.findOne({
         where: { id: infoPayment.id },
@@ -160,6 +165,8 @@ export class ExpensesService {
           property: propertie,
           dateGenerated: new Date(),
           ticket: ticketInc.num,
+          typeExpenses: 'Expensa Mensual',
+          description: 'Seguridad - Limpieza - Mantenimento',
         });
         await this.expenceRepository.save(expence);
       }
@@ -200,6 +207,7 @@ export class ExpensesService {
       dateGenerated: new Date(),
       userProperty: property.user.id,
       ticket: ticketInc.num,
+      typeExpenses: 'Expensa Extraordinaria',
     });
     await this.expenceRepository.save(expence);
     return {
@@ -233,5 +241,17 @@ export class ExpensesService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async generatePdf(id: string): Promise<Buffer> {
+    const expence = await this.expenceRepository.findOne({
+      where: { id: id },
+      relations: ['property', 'property.user'],
+    });
+
+    if (!expence) throw new NotFoundException('La expensa no existe');
+
+    const pdfBuffer = await new PdfInvoiceHelper().generatePdfPDFKit(expence);
+    return pdfBuffer;
   }
 }

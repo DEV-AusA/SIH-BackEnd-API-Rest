@@ -1,7 +1,9 @@
 import { Controller, Param, Get, Res } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Email Verification')
 @Controller('email')
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
