@@ -3,6 +3,7 @@ import { CreateChatDto } from './dto/create-chat.dto';
 import { Repository } from 'typeorm';
 import { Chat } from './entities/chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 
 interface Client {
   id: string;
@@ -13,6 +14,8 @@ interface Client {
 export class ChatService {
   @InjectRepository(Chat)
   private readonly chatRepository: Repository<Chat>;
+  @InjectRepository(User)
+  private readonly userRepository: Repository<User>;
   private clients: Record<string, Client> = {};
 
   onClientConnected(client: Client) {
@@ -30,6 +33,15 @@ export class ChatService {
     const clients = Object.values(this.clients);
 
     return clients;
+  }
+  async getSecurityPersonal() {
+    //retornar el listado de clientes conectados [Clien, Client, Client]
+    const personal = await this.userRepository.find({
+      where: { rol: 'security' },
+      select: ['id', 'name'],
+    });
+
+    return personal;
   }
 
   async createChat(createChatDto: CreateChatDto) {
