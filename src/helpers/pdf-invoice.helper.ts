@@ -45,12 +45,7 @@ export class PdfInvoiceHelper {
       });
       // Encabezado =>
       doc
-        .image(
-          '../SIH-BackEnd-API-Rest/src/helpers/sih_icono_vQv.png',
-          50,
-          55,
-          { width: 120 },
-        )
+        .image('src/helpers/sih_icono_vQv.png', 50, 55, { width: 120 })
         .fillColor('#444444')
         .fontSize(20)
         .text('Secure Ingress Home', 205, 55, { align: 'right' })

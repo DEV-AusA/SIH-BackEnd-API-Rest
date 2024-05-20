@@ -139,7 +139,7 @@ export class ChatGateway implements OnModuleInit {
 
   @SubscribeMessage('updateChat')
   update(@MessageBody() updateChatDto: UpdateChatDto) {
-    return this.chatService.update(updateChatDto.id, updateChatDto);
+    return this.chatService.update(updateChatDto.id);
   }
 
   @SubscribeMessage('removeChat')
