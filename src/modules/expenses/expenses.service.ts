@@ -27,6 +27,11 @@ export class ExpensesService {
   async createPay(createPayDto: CreatePayDto) {
     //Expence
     //comprobar expence
+    const expenseValidate = await this.expenceRepository.findOne({
+      where: { id: createPayDto.id },
+    });
+    if (!expenseValidate) throw new NotFoundException('La expensa no existe');
+
     const preference = await new Preference(mercadopagoConfig.client).create({
       body: {
         items: [
