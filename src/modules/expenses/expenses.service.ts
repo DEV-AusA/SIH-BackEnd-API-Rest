@@ -46,9 +46,9 @@ export class ExpensesService {
           },
         ],
         back_urls: {
-          success: 'https://cessi.org.ar/',
-          failure: 'https://cessi.org.ar/',
-          pending: 'https://cessi.org.ar/',
+          success: 'https://secureingresshome.vercel.app/acciones/expensas',
+          failure: 'https://secureingresshome.vercel.app/acciones/expensas',
+          pending: 'https://secureingresshome.vercel.app/acciones/expensas',
         },
       },
     });
