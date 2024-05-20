@@ -56,13 +56,43 @@
     "rol": "admin"
   },
   {
-    "username": "securitytest",
+    "username": "security1",
     "password": "Prueba123.",
-    "name": "Security",
-    "lastName": "Tester",
+    "name": "Security1",
+    "lastName": "Tester 1",
     "document": 50123463,
     "cellphone": 1122334458,
     "email": "security1@gmail.com",
+    "rol": "security"
+  },
+  {
+    "username": "security2",
+    "password": "Prueba123.",
+    "name": "Security2",
+    "lastName": "Tester 2",
+    "document": 50123464,
+    "cellphone": 1122334458,
+    "email": "security2@gmail.com",
+    "rol": "security"
+  },
+  {
+    "username": "security3",
+    "password": "Prueba123.",
+    "name": "Security3",
+    "lastName": "Tester 3",
+    "document": 50123465,
+    "cellphone": 1122334458,
+    "email": "security3@gmail.com",
+    "rol": "security"
+  },
+  {
+    "username": "security4",
+    "password": "Prueba123.",
+    "name": "Security4",
+    "lastName": "Tester 4",
+    "document": 50123466,
+    "cellphone": 1122334458,
+    "email": "security4@gmail.com",
     "rol": "security"
   },
   {
@@ -70,7 +100,7 @@
     "password": "Prueba123.",
     "name": "Google Account",
     "lastName": "Tester",
-    "document": 50123464,
+    "document": 50123467,
     "cellphone": 1122334458,
     "email": "googleaccounttester1@gmail.com",
     "rol": "googletemp"

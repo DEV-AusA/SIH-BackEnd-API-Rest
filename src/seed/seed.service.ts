@@ -26,7 +26,9 @@ export class SeedService implements OnModuleInit {
 
   private async executeSeedProperties() {
     const properties = propertiesData as CreatePropertyDto[];
-    const users: User[] = await this.userRepository.find();
+    const users: User[] = await this.userRepository.find({
+      where: { rol: 'owner' },
+    });
     // eslint-disable-next-line prefer-const
     let userIndex = 0;
 
