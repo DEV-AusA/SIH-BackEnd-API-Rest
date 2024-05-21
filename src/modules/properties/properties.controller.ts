@@ -52,7 +52,7 @@ export class PropertiesController {
     @UploadedFile()
     file: Express.Multer.File,
   ) {
-    return this.propertiesService.createProperty(createPropertyDto, file);
+    return this.propertiesService.createProperty(createPropertyDto);
   }
 
   @ApiBearerAuth()
