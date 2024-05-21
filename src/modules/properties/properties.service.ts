@@ -22,7 +22,10 @@ export class PropertiesService {
     private readonly filesCloudinaryService: FilesCloudinaryService,
   ) {}
 
-  async createProperty(createPropertyDto: CreatePropertyDto) {
+  async createProperty(
+    createPropertyDto: CreatePropertyDto,
+    file: Express.Multer.File,
+  ) {
     const propFinded = await this.propertyRepository.findOne({
       where: { number: createPropertyDto.number },
     });
@@ -40,14 +43,39 @@ export class PropertiesService {
       throw new BadRequestException(
         'Ya existe una propiedad con ese codigo de identificacion',
       );
+    if (!file)
+      throw new BadRequestException(
+        'Debes cargar alguna imagen para la propiedad.',
+      );
 
-    const newProp = await this.propertyRepository.create({
-      ...createPropertyDto,
-      code,
-    });
-    const newPropSaved = await this.propertyRepository.save(newProp);
+    const queryRunner = await this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    return newPropSaved;
+    try {
+      const createUrlImage = await this.filesCloudinaryService.createFile(file);
+      const preloadData = await queryRunner.manager.create(Property, {
+        ...createPropertyDto,
+        image: createUrlImage.secure_url,
+      });
+      const propCreated = await queryRunner.manager.save(preloadData);
+      await queryRunner.commitTransaction();
+
+      return propCreated;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+
+    // const newProp = await this.propertyRepository.create({
+    //   ...createPropertyDto,
+    //   code,
+    // });
+    // const newPropSaved = await this.propertyRepository.save(newProp);
+
+    // return newPropSaved;
   }
 
   async findAllProperties() {
