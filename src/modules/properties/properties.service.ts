@@ -43,10 +43,8 @@ export class PropertiesService {
       throw new BadRequestException(
         'Ya existe una propiedad con ese codigo de identificacion',
       );
-    if (!file)
-      throw new BadRequestException(
-        'Debes cargar alguna imagen para la propiedad.',
-      );
+
+    if (!file) throw new BadRequestException('Carga una imagen');
 
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -54,8 +52,11 @@ export class PropertiesService {
 
     try {
       const createUrlImage = await this.filesCloudinaryService.createFile(file);
+      console.log(createUrlImage);
+
       const preloadData = await queryRunner.manager.create(Property, {
         ...createPropertyDto,
+        code,
         image: createUrlImage.secure_url,
       });
       const propCreated = await queryRunner.manager.save(preloadData);
