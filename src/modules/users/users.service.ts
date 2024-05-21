@@ -6,7 +6,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { DataSource, Not, Repository } from 'typeorm';
+import { DataSource, In, Not, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../auth/dto/create-auth.dto';
@@ -33,13 +33,14 @@ export class UsersService {
     private readonly filesCloudinaryService: FilesCloudinaryService,
   ) {}
 
-  async getUsers(page: number, limit: number) {
+  async getUsersProps(page: number, limit: number) {
     const start = (page - 1) * limit;
     const end = start + limit;
+
     const users = await this.userService.find({
       skip: start,
       take: end,
-      where: { rol: Not(Role.SuperAdmin) },
+      where: { rol: Not(In([Role.SuperAdmin, Role.Admin, Role.Security])) },
       select: [
         'id',
         'username',
@@ -61,6 +62,33 @@ export class UsersService {
 
     if (!users) throw new NotFoundException('No se encontraron usuarios');
     return users;
+  }
+
+  async getUsersSecurity() {
+    const usersSecurity = await this.userService.find({
+      where: { rol: 'security' },
+      select: [
+        'id',
+        'username',
+        'name',
+        'lastName',
+        'document',
+        'phone',
+        'cellphone',
+        'email',
+        'image',
+        'state',
+        'rol',
+        'createdAt',
+        'lastLogin',
+        'validate',
+      ],
+      relations: { properties: true },
+    });
+
+    if (!usersSecurity)
+      throw new NotFoundException('No se encontraron usuarios');
+    return usersSecurity;
   }
 
   async getUser(id: string) {
@@ -308,5 +336,15 @@ export class UsersService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async findUsersProps() {
+    const excludedRoles = ['security', 'admin', 'superadmin'];
+    const users = await this.userService.find({
+      where: { rol: Not(In(excludedRoles)) },
+      select: ['id', 'name'],
+    });
+
+    return users;
   }
 }
