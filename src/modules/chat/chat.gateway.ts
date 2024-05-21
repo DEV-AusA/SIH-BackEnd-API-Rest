@@ -106,6 +106,13 @@ export class ChatGateway implements OnModuleInit {
         this.server.emit('on-clients-changed', this.chatService.getClients());
       });
 
+      // Manejador de join-room
+      socket.on('join-room', (room: string) => {
+        socket.join(room);
+        console.log(`Cliente ${socket.id} se unió a la sala ${room}`);
+        socket.emit('joined-room', room); // Emitir un evento de confirmación si es necesario
+      });
+
       // // Recibir y reenviar mensajes a una sala específica
       // socket.on('send-message', ({ roomId, message }) => {
       //   if (roomId && message) {

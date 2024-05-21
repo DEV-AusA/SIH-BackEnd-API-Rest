@@ -3,7 +3,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
   Matches,
   MaxLength,
   MinLength,
@@ -18,16 +17,6 @@ export class CreatePropertyDto {
   @IsNotEmpty()
   @IsNumber()
   readonly number: number;
-
-  /**
-   * URL de la imagen de la propíedad.
-   * @description Debe ser una cadena URL válida.
-   * @example 'https://example.com/propiedad145.jpg'
-   */
-  @IsNotEmpty()
-  @IsString()
-  @IsUrl()
-  readonly image: string;
 
   /**
    * Direccion de la propiedad.
