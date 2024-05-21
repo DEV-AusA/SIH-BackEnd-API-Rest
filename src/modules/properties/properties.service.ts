@@ -33,7 +33,7 @@ export class PropertiesService {
 
     // code unique?
     const codeGen = customAlphabet('01234567890ABCDEFGHIJ', 6);
-    const code = codeGen();
+    const code = createPropertyDto.code ? createPropertyDto.code : codeGen();
 
     const propCode = await this.propertyRepository.findOneBy({ code });
     if (propCode)

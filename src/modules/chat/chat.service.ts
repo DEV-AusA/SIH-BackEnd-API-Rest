@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChatDto } from './dto/create-chat.dto';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Chat } from './entities/chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
@@ -38,10 +38,19 @@ export class ChatService {
     //retornar el listado de clientes conectados [Clien, Client, Client]
     const personal = await this.userRepository.find({
       where: { rol: 'security' },
-      select: ['id', 'name'],
     });
 
     return personal;
+  }
+
+  async getUsersProp() {
+    const excludedRoles = ['security', 'admin', 'superadmin'];
+    const users = await this.userRepository.find({
+      where: { rol: Not(In(excludedRoles)) },
+      select: ['id', 'name'],
+    });
+
+    return users;
   }
 
   async createChat(createChatDto: CreateChatDto) {
