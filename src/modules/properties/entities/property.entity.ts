@@ -30,9 +30,6 @@ export class Property {
   @Column({ type: 'varchar', length: 50, nullable: false })
   address: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  ubication: string;
-
   @Column({ type: 'varchar', unique: true, nullable: true })
   code: string;
 
