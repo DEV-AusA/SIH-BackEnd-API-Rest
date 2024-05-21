@@ -19,14 +19,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(accessToken: string, refreshToken: string, profile: Profile) {
+    const passwordTemp = customAlphabet('ABCDabcd01234', 13);
+    const password = passwordTemp();
+
     const codeGen = customAlphabet('01234567890', 8);
-    const document = codeGen();
+    const document: string = codeGen();
+
     try {
       const user = await this.authService.validateUser({
         email: profile._json.email,
-        name: profile._json.name,
+        name: profile._json.given_name,
         username: profile._json.email.split('@')[0],
-        password: profile._json.sub,
+        password,
         lastName: profile._json.family_name,
         document: Number(document),
         image: profile._json.picture,
