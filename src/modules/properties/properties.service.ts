@@ -52,6 +52,7 @@ export class PropertiesService {
       // const createUrlImage = await this.filesCloudinaryService.createFile(file);
       const preloadData = await queryRunner.manager.create(Property, {
         ...createPropertyDto,
+        code,
         // image: createUrlImage.secure_url,
       });
       const propCreated = await queryRunner.manager.save(preloadData);
