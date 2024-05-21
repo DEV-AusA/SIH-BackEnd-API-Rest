@@ -3,7 +3,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
   Matches,
   MaxLength,
   MinLength,
@@ -15,21 +14,21 @@ export class CreatePropertyDto {
    * @description Debe ser un número no vacío.
    * @example 532
    */
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
-  readonly number: number;
+  readonly number?: number;
 
   /**
    * Direccion de la propiedad.
    * @description Debe ser una cadena alfanumerica no vacía.
    * @example '9 de Julio 1234'
    */
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @MinLength(4)
   @MaxLength(50)
   @Matches(/^[a-zA-Z0-9 ]+$/)
-  readonly address: string;
+  readonly address?: string;
 
   /**
    * codigo de vinculo de la propiedad.
