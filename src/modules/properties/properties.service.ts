@@ -43,10 +43,6 @@ export class PropertiesService {
       throw new BadRequestException(
         'Ya existe una propiedad con ese codigo de identificacion',
       );
-    if (!file)
-      throw new BadRequestException(
-        'Debes cargar alguna imagen para la propiedad.',
-      );
 
     const queryRunner = await this.dataSource.createQueryRunner();
     await queryRunner.connect();
