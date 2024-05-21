@@ -42,8 +42,17 @@ export class PropertiesController {
   @Post('create')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  createNewProperty(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertiesService.createProperty(createPropertyDto);
+  @UseInterceptors(
+    UserIdInterceptor,
+    FileInterceptor('file'),
+    OptionalFileInterceptorIMG,
+  )
+  createNewProperty(
+    @Body() createPropertyDto: CreatePropertyDto,
+    @UploadedFile()
+    file: Express.Multer.File,
+  ) {
+    return this.propertiesService.createProperty(createPropertyDto, file);
   }
 
   @ApiBearerAuth()
