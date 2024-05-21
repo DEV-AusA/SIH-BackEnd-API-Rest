@@ -43,8 +43,11 @@ export class ChatGateway implements OnModuleInit {
       }
       //personal de seguridad
       const personalSecurity = await this.chatService.getSecurityPersonal();
-      // console.log(personalSecurity);
+      // usuarios, menos admin y superadmin
+      const users = await this.chatService.getUsersProp();
+
       this.server.emit('security-personal', personalSecurity);
+      this.server.emit('users-list', users);
 
       try {
         // todo: aca añadir logica para validar el token  START

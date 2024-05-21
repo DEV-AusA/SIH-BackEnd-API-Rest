@@ -2,25 +2,21 @@
   {
     "number" : 100,
     "image": "https://static.tokkobroker.com/pictures/54875686735059677368693141545969812663641450316300492212526170802494178142272.jpg",
-    "address": "Calle 1 - 10",
-    "ubication": "https://maps.app.goo.gl/dosYom2qmP2Y3YBu7"
+    "address": "Calle 1 10"
   },
   {
     "number" : 101,
     "image": "https://static.tokkobroker.com/pictures/77887018768743634186372733558918842141817144857098180195480223189260552937506.jpg",
-    "address": "Calle 1 - 11",
-    "ubication": "https://maps.app.goo.gl/dosYom2qmP2Y3YBu7"
+    "address": "Calle 1 11"
   },
   {
     "number" : 102,
     "image": "https://www.arquimaster.com.ar/web/wp-content/uploads/2021/06/casa_grava_slide.jpg",
-    "address": "Calle 2 - 20",
-    "ubication": "https://maps.app.goo.gl/dosYom2qmP2Y3YBu7"
+    "address": "Calle 2 20"
   },
   {
     "number" : 103,
     "image": "https://www.arquimaster.com.ar/web/wp-content/uploads/2022/06/casa_islas_ii_slide.jpg",
-    "address": "Calle 2 - 21",
-    "ubication": "https://maps.app.goo.gl/dosYom2qmP2Y3YBu7"
+    "address": "Calle 2 21"
   }
 ]
