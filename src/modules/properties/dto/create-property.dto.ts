@@ -20,16 +20,6 @@ export class CreatePropertyDto {
   readonly number: number;
 
   /**
-   * URL de la imagen de la propíedad.
-   * @description Debe ser una cadena URL válida.
-   * @example 'https://example.com/propiedad145.jpg'
-   */
-  @IsNotEmpty()
-  @IsString()
-  @IsUrl()
-  readonly image: string;
-
-  /**
    * Direccion de la propiedad.
    * @description Debe ser una cadena alfanumerica no vacía.
    * @example '9 de Julio 1234'
