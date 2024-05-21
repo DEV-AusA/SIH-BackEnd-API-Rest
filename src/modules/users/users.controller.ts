@@ -20,7 +20,7 @@ import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
 import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
 import { UserIdInterceptor } from 'src/interceptors/validate-user-operations';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -28,6 +28,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiBearerAuth()
+  @ApiResponse({ status: 404, description: 'No se encontraron usuarios' })
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -36,6 +37,11 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  @ApiResponse({
+    status: 401,
+    description: 'No se puede obtener datos de ese usuario',
+  })
   @Get(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -44,6 +50,14 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Usuario actualizado correctamente',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'No se puede actualizar este usuario',
+  })
   @Put('update/:id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -62,6 +76,14 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Usuario de Google actualizado correctamente',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'No se puede actualizar este usuario',
+  })
   @Put('update/google/:id')
   @Roles(Role.Admin, Role.GoogleTemp, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -80,6 +102,18 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'El usuario fue dado de baja',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'No se puede dar de baja este usuario',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuario no encontrado',
+  })
   @Put('unsubscribe/:id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)

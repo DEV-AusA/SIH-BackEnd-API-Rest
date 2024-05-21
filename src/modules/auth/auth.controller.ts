@@ -78,6 +78,9 @@ export class AuthController {
     return this.authService.singInUser(userLogin);
   }
 
+  @ApiResponse({
+    description: 'Este es el que ejecuta el OAuth2.0 de Google',
+  })
   @Get('google/login')
   @UseGuards(GoogleAuthGuard)
   handleLogin() {
@@ -86,6 +89,35 @@ export class AuthController {
     };
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'Esta es la data que regresa en el login con Google',
+    schema: {
+      example: {
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiN…Dc3fQ.n9kY8nZzlkN9eer8mNV5WeXdHt8GEeoskErCureRHe8',
+        user: {
+          id: 'bb6b482e-a7a3-4e72-962b-a87f3015b746',
+          username: 'tester1',
+          name: 'Tester',
+          lastName: 'Si tiene se le va el apellido sino va Google',
+          document: 50123457,
+          image:
+            'https://res.cloudinary.com/dcqdilhek/image/upload/fl_preserve_transparency/v1715136207/zmuncvwsnlws77vegwxq.jpg',
+          phone: null,
+          cellphone: '1122334455',
+          email: 'tester1@gmail.com',
+          googleAccount: true,
+          rol: 'inicialmente es googletemp => hasta que actualice los datos',
+          lastLogin: '2024-05-21T00:01:56.767Z',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'No se pudo iniciar sesion con Google',
+  })
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async loginOk(@Req() request: Request, @Res() res: Response) {
@@ -94,15 +126,5 @@ export class AuthController {
       `${process.env.FRONT_HOST_NAME}/api/google?state=${encodedData}`,
     );
     return 'Redirigiendo';
-  }
-
-  @Get('status')
-  userStatus(@Req() request: Request) {
-    if (request) {
-      console.log(request.user);
-      return { msg: request.user, status: 'Authenticated' };
-    } else {
-      return { msg: 'Not Authenticated' };
-    }
   }
 }
