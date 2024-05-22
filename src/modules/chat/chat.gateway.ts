@@ -16,6 +16,7 @@ import { UsersService } from '../users/users.service';
 export class ChatGateway {
   @WebSocketServer()
   public server: Server;
+  private connectedUsers: Map<string, boolean> = new Map();
 
   constructor(
     private readonly chatService: ChatService,
@@ -59,11 +60,18 @@ export class ChatGateway {
           return;
         }
 
+        // Registrar usuario como conectado
+        this.connectedUsers.set(id, true);
+        this.updateConnectedUsers();
+
         this.chatService.onClientConnected({ id: socket.id, name: name });
+        this.server.emit('user-connect', id);
         this.server.emit('on-clients-changed', this.chatService.getClients());
 
         socket.on('disconnect', () => {
           this.chatService.onClientDisconnected(socket.id);
+          this.server.emit('user-disconnect', id);
+          this.connectedUsers.set(id, false);
           this.server.emit('on-clients-changed', this.chatService.getClients());
         });
       } catch (error) {
@@ -71,6 +79,16 @@ export class ChatGateway {
         socket.disconnect();
       }
     });
+  }
+
+  private updateConnectedUsers() {
+    const connectedUsersArray = Array.from(this.connectedUsers.entries()).map(
+      ([userId, isOnline]) => ({
+        userId,
+        isOnline,
+      }),
+    );
+    this.server.emit('user-list', connectedUsersArray);
   }
 
   @SubscribeMessage('send-message')

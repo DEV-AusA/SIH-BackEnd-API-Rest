@@ -98,7 +98,9 @@ export class AuthorizationsService {
     // validation time
     const expirationTimeUtc = new Date(authorization.expirationTime);
     if (expirationTimeUtc < new Date()) {
-      return `El código de autorization ha expirado, por favor genere otro.`;
+      throw new BadRequestException(
+        'El código de autorization ha expirado, por favor genere otro',
+      );
     }
 
     const authorizationValidate = await this.authorizationRepository.preload({
@@ -109,7 +111,7 @@ export class AuthorizationsService {
 
     await this.authorizationRepository.save(authorizationValidate);
 
-    return { message: `Autorización validada con exito` };
+    return { message: `Autorización validada con éxito` };
   }
   // only rol admin?
   async deleteAuthorization(id: string, number: number) {
