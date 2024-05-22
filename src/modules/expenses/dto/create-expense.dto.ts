@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsInt, IsString, IsUUID } from 'class-validator';
 import { IsOptional } from 'class-validator';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
@@ -20,13 +20,33 @@ export class CreateExpenseDto {
   @IsOptional()
   @IsString()
   description: string;
+
   /**
-   * Es el id del propietario que debe pagar el importe ingresado a pagar por mes.
+   * Dias de limite de expensa.
+   * @description Debe ser un número Entero.
+   * @example 30
+   */
+  @IsOptional()
+  @IsNumber()
+  @IsInt()
+  dayLimit: number;
+
+  /**
+   * Interes de expensa en porcentaje.
+   * @description Debe ser un número Entero.
+   * @example 5
+   */
+  @IsOptional()
+  @IsNumber()
+  interests: number;
+
+  /**
+   * Es el id de la propiedad, en la cual se va a registrar la expensa.
    * @description Debe ser un string con formato UUID.
    * @example 532
    * **/
-  // @IsNotEmpty()
-  // @IsUUID()
-  // @IsOptional()
-  // userProperty: string;
+  @IsNotEmpty()
+  @IsUUID()
+  @IsOptional()
+  id: string;
 }
