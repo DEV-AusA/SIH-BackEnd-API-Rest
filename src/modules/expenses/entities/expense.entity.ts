@@ -6,7 +6,7 @@ export class Expense {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ type: 'integer', nullable: true })
   ticket: number;
 
   @Column({
@@ -45,7 +45,11 @@ export class Expense {
   @Column({ name: 'date_paid', type: 'date', nullable: true })
   datePaid: Date;
 
-  // @Column({ type: 'varchar', length: 20, nullable: true })
+  @Column({ name: 'day_limit', type: 'integer', nullable: true })
+  dayLimit: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  interests: number;
 
   @Column({ type: 'boolean', default: false })
   state: boolean;

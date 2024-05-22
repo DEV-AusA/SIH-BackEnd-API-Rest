@@ -46,4 +46,13 @@ export class UpdateExpenceDto {
   @IsOptional()
   @IsString()
   description: string;
+
+  /**
+   * Interes de expensa en porcentaje.
+   * @description Debe ser un número Entero.
+   * @example 5
+   */
+  @IsOptional()
+  @IsNumber()
+  interests: number;
 }
