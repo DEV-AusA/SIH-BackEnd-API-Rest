@@ -32,8 +32,23 @@ export class UsersController {
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  getUsers(@Query('page') page: number = 1, @Query('limit') limit: number = 3) {
-    return this.usersService.getUsers(Number(page), Number(limit));
+  getUsers(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.usersService.getUsersProps(Number(page), Number(limit));
+  }
+
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 404,
+    description: 'No se encontraron usuarios de Seguridad',
+  })
+  @Get('security')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  getUsersSecurity() {
+    return this.usersService.getUsersSecurity();
   }
 
   @ApiBearerAuth()
