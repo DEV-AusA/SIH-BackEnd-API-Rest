@@ -38,7 +38,12 @@ export class AuthController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Ya existe un usuario registrado con ese email.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Ya existe un usuario registrado con ese email.',
+      },
+    },
   })
   @Post('signup')
   signUpUser(@Body() createUserDto: CreateUserDto) {
@@ -70,7 +75,12 @@ export class AuthController {
   })
   @ApiResponse({
     status: 401,
-    description: 'Algun dato ingresado es incorrecto',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Algun dato ingresado es incorrecto',
+      },
+    },
   })
   @HttpCode(200)
   @Post('signin')
@@ -116,7 +126,12 @@ export class AuthController {
   })
   @ApiResponse({
     status: 400,
-    description: 'No se pudo iniciar sesion con Google',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'No se pudo iniciar sesion con Google',
+      },
+    },
   })
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)

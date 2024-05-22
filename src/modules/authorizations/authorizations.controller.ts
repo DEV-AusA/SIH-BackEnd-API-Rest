@@ -16,7 +16,7 @@ import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../helpers/roles.enum';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Authorizations')
 @Controller('authorizations')
@@ -24,6 +24,15 @@ export class AuthorizationsController {
   constructor(private readonly authorizationsService: AuthorizationsService) {}
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'El tipo de autorizacion ingresado no es correcto',
+      },
+    },
+  })
   @Post(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -45,6 +54,15 @@ export class AuthorizationsController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 404,
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'No se encuentra una autorizacion con es numero ingresado.',
+      },
+    },
+  })
   @Get(':number')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -53,6 +71,24 @@ export class AuthorizationsController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        statusCode: 200,
+        message: `Autorización validada con exito`,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 408,
+    schema: {
+      example: {
+        statusCode: 408,
+        message: `El código de autorization ha expirado, por favor genere otro.`,
+      },
+    },
+  })
   @Put(':id')
   @Roles(Role.Admin, Role.Security, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -67,6 +103,16 @@ export class AuthorizationsController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        statusCode: 200,
+        message:
+          'Autorización numero ${authorization.number} eliminada con éxito.',
+      },
+    },
+  })
   @Delete(':id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)

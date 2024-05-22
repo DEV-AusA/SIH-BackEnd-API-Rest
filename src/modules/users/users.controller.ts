@@ -28,7 +28,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiBearerAuth()
-  @ApiResponse({ status: 404, description: 'No se encontraron usuarios' })
+  @ApiResponse({
+    status: 404,
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'No se encontraron usuarios',
+      },
+    },
+  })
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -37,10 +45,23 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({
     status: 401,
-    description: 'No se puede obtener datos de ese usuario',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'No se puede obtener datos de ese usuario',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Usuario no encontrado',
+      },
+    },
   })
   @Get(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
@@ -52,11 +73,21 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
-    description: 'Usuario actualizado correctamente',
+    schema: {
+      example: {
+        statusCode: 200,
+        message: 'Usuario actualizado correctamente',
+      },
+    },
   })
   @ApiResponse({
     status: 401,
-    description: 'No se puede actualizar este usuario',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'No se puede actualizar este usuario',
+      },
+    },
   })
   @Put('update/:id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
@@ -78,11 +109,21 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
-    description: 'Usuario de Google actualizado correctamente',
+    schema: {
+      example: {
+        statusCode: 200,
+        message: 'Usuario de Google actualizado correctamente',
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'No se puede actualizar este usuario',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'No se puede actualizar este usuario',
+      },
+    },
   })
   @Put('update/google/:id')
   @Roles(Role.Admin, Role.GoogleTemp, Role.SuperAdmin)
@@ -104,15 +145,30 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
-    description: 'El usuario fue dado de baja',
+    schema: {
+      example: {
+        statusCode: 200,
+        message: 'El usuario fue dado de baja',
+      },
+    },
   })
   @ApiResponse({
     status: 401,
-    description: 'No se puede dar de baja este usuario',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'No se puede dar de baja este usuario',
+      },
+    },
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuario no encontrado',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Usuario no encontrado',
+      },
+    },
   })
   @Put('unsubscribe/:id')
   @Roles(Role.Admin, Role.SuperAdmin)
