@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
@@ -16,6 +17,7 @@ export class CreatePropertyDto {
    */
   @IsNotEmpty()
   @IsNumber()
+  @Type(() => Number) // Transforma el valor a número
   readonly number: number;
 
   /**
