@@ -71,7 +71,11 @@ export class PropertiesService {
   }
 
   async findAllProperties() {
-    return await this.propertyRepository.find();
+    return await this.propertyRepository
+      .createQueryBuilder('property')
+      .leftJoinAndSelect('property.user', 'user')
+      .select(['property', 'user.name', 'user.lastName', 'user.state'])
+      .getMany();
   }
 
   async findOneById(id: string) {
