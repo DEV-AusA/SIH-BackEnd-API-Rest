@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Expense } from './entities/expense.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -25,7 +29,7 @@ export class ExpensesService {
   ) {}
 
   async createPay(createPayDto: CreatePayDto) {
-    //Expence
+    //recibe el id de la expensa y el monto,
     //comprobar expence
     const expenseValidate = await this.expenceRepository.findOne({
       where: { id: createPayDto.id },
@@ -37,11 +41,11 @@ export class ExpensesService {
         items: [
           {
             id: `${createPayDto.id}`,
-            title: 'Expensa',
+            title: `${expenseValidate.typeExpenses}`,
             quantity: 1,
             currency_id: 'ARS',
             unit_price: createPayDto.amount,
-            description: '',
+            description: `${expenseValidate.description}`,
             category_id: 'Pago por expensa',
           },
         ],
@@ -52,7 +56,7 @@ export class ExpensesService {
         },
       },
     });
-    return preference.init_point!;
+    return { urlMercadopago: preference.init_point! };
   }
 
   async statu(id: string) {
@@ -78,7 +82,9 @@ export class ExpensesService {
       expenceValidated.numberOperation = payment.id.toString();
 
       await this.expenceRepository.save(expenceValidated);
-      return true;
+      return {
+        message: 'La expensa ha sido pagada',
+      };
     } catch (error) {
       throw error;
     }
@@ -95,119 +101,145 @@ export class ExpensesService {
     const expencesProperties = await this.expenceRepository.find({
       relations: ['property', 'property.user'],
     });
+    if (!expencesProperties.length)
+      throw new NotFoundException('No hay expensas');
 
     return expencesProperties;
   }
 
   async getExpensesUserId(id: string) {
-    const expences = await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: id },
       relations: ['properties', 'properties.expences'],
     });
 
-    if (!expences) throw new NotFoundException('No se encontro Usuario');
+    if (!user) throw new NotFoundException('No se encontro Usuario');
     const propertysExpences = [];
-    for (const propertie of expences.properties) {
+    for (const propertie of user.properties) {
       propertysExpences.push(propertie);
     }
     if (!propertysExpences.length)
       throw new NotFoundException('No se encontro Propiedades');
+
     return propertysExpences;
   }
 
+  async getExpensePropertyId(id: string) {
+    const property = await this.propertyRepository.findOne({
+      where: { id: id },
+      relations: ['expences'],
+    });
+
+    if (!property) throw new NotFoundException('No se encontro Propiedades');
+    return property;
+  }
+
   async createAllExpenses(createExpenseDto: CreateExpenseDto) {
+    const dayLimit = 0;
     const userActive = await this.userRepository.find({
-      where: { state: true, validate: true },
+      where: { state: true, validate: true, rol: 'owner' },
     });
     if (!userActive.length) {
       throw new NotFoundException('No hay propietarios activos');
     }
-    const fechaActual = moment();
-    const anoAct = fechaActual.year();
-    const mesAct = fechaActual.month() + 1;
-    const lastExpense = await this.expenceRepository
-      .createQueryBuilder('expense')
-      .select('expense.dateGenerated')
-      .orderBy('expense.dateGenerated', 'DESC')
-      .getOne();
-    if (!lastExpense === false) {
-      const lastFtc = moment(lastExpense.dateGenerated);
 
-      const anoLast = lastFtc.year();
-      const mesLast = lastFtc.month() + 1;
+    const users = await this.userRepository.find({
+      where: { state: true, rol: 'owner' },
+      relations: ['properties', 'properties.expences'],
+    });
 
-      if (anoAct <= anoLast && mesAct === mesLast) {
-        throw new NotFoundException('Ya hay expensas para este mes');
-      }
-    }
-    const bandera = { state: true };
-    for (const user of userActive) {
-      //controla la creacion y incremento del ticket
+    if (!users.length) throw new NotFoundException('No se encontro Usuarios');
+    for (const user of users) {
       for (const propertie of user.properties) {
-        bandera.state = false;
-        const lastExpenseProperty = await this.expenceRepository.findOne({
-          where: { property: propertie },
-          order: { dateGenerated: 'DESC' },
-        });
-        const ticketInc = { num: 1 };
-        if (lastExpenseProperty?.ticket) {
-          const yearGenerated = moment(
-            lastExpenseProperty.dateGenerated,
-          ).year();
-          const yearAct = moment().year();
-          if (yearGenerated === yearAct) {
-            ticketInc.num = Number(lastExpenseProperty.ticket) + 1;
-          }
-        }
+        const lastExpenseTicket = await this.expenceRepository
+          .createQueryBuilder('expense')
+          .where('expense.property = :id', { id: propertie.id })
+          .orderBy('expense.dateGenerated', 'DESC')
+          .addOrderBy('expense.ticket', 'DESC')
+          .getOne();
+        const lastExpenseLimit = await this.expenceRepository
+          .createQueryBuilder('expense')
+          .where('expense.property = :id', { id: propertie.id })
+          .andWhere('expense.typeExpenses = :typeExpenses', {
+            typeExpenses: 'Expensa Mensual',
+          })
+          .orderBy('expense.dateGenerated', 'DESC')
+          .getOne();
+        // Controla los dias del dia limitet
+        const dateCurrent = moment('2024-06-01');
+
+        const dateGeneratedTicket = moment(lastExpenseTicket?.dateGenerated);
+        const dateGeneratedLimit = moment(lastExpenseLimit?.dateGenerated);
+        const differenceDays = Math.abs(
+          dateGeneratedLimit.diff(dateCurrent, 'days'),
+        );
+
+        if (differenceDays < (Number(lastExpenseLimit?.dayLimit) || dayLimit))
+          throw new NotAcceptableException(
+            `No se puede generar expensas, el limite de dias es de ${Number(lastExpenseLimit?.dayLimit) || dayLimit}, falta ${(Number(lastExpenseLimit?.dayLimit) || dayLimit) - differenceDays} dias`,
+          );
+        // Crear Expensa para cada propiedad
         const expence = this.expenceRepository.create({
           amount: createExpenseDto.amount,
           userProperty: user.id,
           property: propertie,
-          dateGenerated: new Date(),
-          ticket: ticketInc.num,
+          dateGenerated: new Date('2024-06-01'),
+          ticket:
+            dateCurrent.year() > dateGeneratedTicket?.year()
+              ? 1
+              : Number(lastExpenseTicket?.ticket) + 1 || 1,
           typeExpenses: 'Expensa Mensual',
-          description: 'Seguridad - Limpieza - Mantenimento',
+          description: createExpenseDto?.description
+            ? createExpenseDto.description
+            : 'Seguridad - Limpieza - Mantenimento',
+          dayLimit: createExpenseDto?.dayLimit || dayLimit,
         });
         await this.expenceRepository.save(expence);
       }
     }
-    if (bandera.state) {
-      throw new NotFoundException(
-        'No hay propiedades relacionadas con los Usuarios Activos',
-      );
-    }
-
     return {
       message: 'Expensas creadas para todos los propietarios',
     };
   }
-
-  async createExpense(createExpenseDto: CreateExpenseDto, id: string) {
+  async createExpense(createExpenseDto: CreateExpenseDto) {
     const property = await this.propertyRepository.findOne({
-      where: { id: id },
+      where: { id: createExpenseDto.id },
       relations: ['user'],
     });
     if (!property) throw new NotFoundException('La Propiedad no existe');
 
-    const lastExpenseProperty = await this.expenceRepository.findOne({
-      where: { property: property },
-      order: { dateGenerated: 'DESC' },
-    });
-    const ticketInc = { num: 1 };
-    if (lastExpenseProperty?.ticket) {
-      const yearGenerated = moment(lastExpenseProperty.dateGenerated).year();
-      const yearAct = moment().year();
-      if (yearGenerated === yearAct) {
-        ticketInc.num = Number(lastExpenseProperty.ticket) + 1;
-      }
-    }
+    const lastExpenseTicket = await this.expenceRepository
+      .createQueryBuilder('expense')
+      .where('expense.property = :id', { id: createExpenseDto.id })
+      .orderBy('expense.dateGenerated', 'DESC')
+      .addOrderBy('expense.ticket', 'DESC')
+      .getOne();
+
+    const dateCurrent = moment();
+
+    const dateGeneratedTicket = moment(lastExpenseTicket?.dateGenerated);
+    // const ticketInc = { num: 1 };
+    // if (lastExpenseProperty?.ticket) {
+    //   const yearGenerated = moment(lastExpenseProperty.dateGenerated).year();
+    //   const yearAct = moment().year();
+    //   if (yearGenerated === yearAct) {
+    //     ticketInc.num = Number(lastExpenseProperty.ticket) + 1;
+    //   }
+    // }
+
     const expence = this.expenceRepository.create({
       amount: createExpenseDto.amount,
       property: property,
       dateGenerated: new Date(),
       userProperty: property.user.id,
-      ticket: ticketInc.num,
-      typeExpenses: 'Expensa Extraordinaria',
+      ticket:
+        dateCurrent.year() === dateGeneratedTicket?.year()
+          ? Number(lastExpenseTicket?.ticket) + 1 || 1
+          : 1,
+      typeExpenses: 'Gastos Extraordinarios',
+      description: createExpenseDto.description
+        ? createExpenseDto.description
+        : 'Gastos Extras',
     });
     await this.expenceRepository.save(expence);
     return {
