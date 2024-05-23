@@ -74,6 +74,10 @@ export class AuthorizationsService {
   async findAllAuthorizations() {
     return await this.authorizationRepository.find();
   }
+  async findAllAuthorizationsByUser(id: string) {
+    await this.userService.findUserById(id);
+    return await this.authorizationRepository.find({ where: { user: id } });
+  }
 
   async findOneAuthorization(number: number) {
     const authorization = await this.authorizationRepository.findOneBy({
