@@ -29,11 +29,35 @@ export class UsersController {
 
   @ApiBearerAuth()
   @ApiResponse({
-    status: 404,
+    status: 401,
+    description: 'Error: Unauthorized',
     schema: {
       example: {
-        statusCode: 404,
+        message: 'No tienes permisos para el acceso a esa Ruta',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
         message: 'No se encontraron usuarios',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'Necesitas loguearte para acceder a esta seccion.',
+        error: 'Unauthorized',
+        statusCode: 401,
       },
     },
   })
@@ -47,15 +71,18 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 401,
+    description: 'Error: Unauthorized',
     schema: {
       example: {
-        statusCode: 401,
         message: 'No se puede obtener datos de ese usuario',
+        error: 'Unauthorized',
+        statusCode: 401,
       },
     },
   })
   @ApiResponse({
     status: 404,
+    description: 'Error: Not Found',
     schema: {
       example: {
         statusCode: 404,
@@ -75,17 +102,29 @@ export class UsersController {
     status: 200,
     schema: {
       example: {
-        statusCode: 200,
         message: 'Usuario actualizado correctamente',
       },
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 400,
+    description: 'Error: Bad Request',
     schema: {
       example: {
+        message: 'ID invalida para la operacion solicitada',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'No tienes permisos para el acceso a esa Ruta',
+        error: 'Unauthorized',
         statusCode: 401,
-        message: 'No se puede actualizar este usuario',
       },
     },
   })
@@ -111,17 +150,40 @@ export class UsersController {
     status: 200,
     schema: {
       example: {
-        statusCode: 200,
         message: 'Usuario de Google actualizado correctamente',
       },
     },
   })
   @ApiResponse({
     status: 400,
+    description: 'Error: Bad Request',
     schema: {
       example: {
+        message: 'Por favor actualiza el Apellido',
+        error: 'Bad Request',
         statusCode: 400,
-        message: 'No se puede actualizar este usuario',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'Por favor actualiza el número telefono celular',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'ID invalida para la operacion solicitada',
+        error: 'Bad Request',
+        statusCode: 400,
       },
     },
   })
@@ -147,22 +209,24 @@ export class UsersController {
     status: 200,
     schema: {
       example: {
-        statusCode: 200,
         message: 'El usuario fue dado de baja',
       },
     },
   })
   @ApiResponse({
     status: 401,
+    description: 'Error: Unauthorized',
     schema: {
       example: {
-        statusCode: 401,
         message: 'No se puede dar de baja este usuario',
+        error: 'Unauthorized',
+        statusCode: 401,
       },
     },
   })
   @ApiResponse({
     status: 404,
+    description: 'Error: Not Found',
     schema: {
       example: {
         statusCode: 404,

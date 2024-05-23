@@ -12,18 +12,18 @@ export class EmailController {
     status: 200,
     schema: {
       example: {
-        statusCode: 200,
-        message:
-          'Se envia el email de verificacion y despues de confirmado, se valida el usuario',
+        message: true,
       },
     },
   })
   @ApiResponse({
     status: 401,
+    description: 'Error: Unauthorized',
     schema: {
       example: {
-        statusCode: 401,
         message: 'Token de Email invalido o se encuentra vencido',
+        error: 'Unauthorized',
+        statusCode: 401,
       },
     },
   })

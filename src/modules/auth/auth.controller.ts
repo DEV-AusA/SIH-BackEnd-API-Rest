@@ -24,24 +24,18 @@ export class AuthController {
     status: 201,
     schema: {
       example: {
-        username: 'juanperez14',
-        password: 'Password123!',
-        name: 'Juan Pérez',
-        lastName: 'Juan Pérez',
-        document: 12345678,
-        phone: 1234567890,
-        cellphone: 1234567890,
-        email: 'usuario@example.com',
-        code: 'codigo de la vivienda proporcionado por el admin ',
+        message: 'Usuario creado correctamente',
       },
     },
   })
   @ApiResponse({
     status: 400,
+    description: 'Error: Bad Request',
     schema: {
       example: {
-        statusCode: 400,
         message: 'Ya existe un usuario registrado con ese email.',
+        error: 'Bad Request',
+        statusCode: 400,
       },
     },
   })
@@ -74,11 +68,23 @@ export class AuthController {
     },
   })
   @ApiResponse({
-    status: 401,
+    status: 400,
+    description: 'Error: Bad Request',
     schema: {
       example: {
-        statusCode: 401,
         message: 'Algun dato ingresado es incorrecto',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Cuenta Inactiva. Verifique su correo',
       },
     },
   })
@@ -126,10 +132,12 @@ export class AuthController {
   })
   @ApiResponse({
     status: 400,
+    description: 'Error: Bad Request',
     schema: {
       example: {
-        statusCode: 400,
         message: 'No se pudo iniciar sesion con Google',
+        error: 'Bad Request',
+        statusCode: 400,
       },
     },
   })

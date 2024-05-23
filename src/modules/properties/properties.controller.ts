@@ -32,20 +32,39 @@ export class PropertiesController {
 
   @ApiBearerAuth()
   @ApiResponse({
-    status: 400,
+    status: 200,
+    description: 'Created',
     schema: {
       example: {
-        statusCode: 400,
+        number: 111,
+        image:
+          'https://static.tokkobroker.com/pictures/54875686735059677368693141545969812663641450316300492212526170802494178142272.jpg',
+        address: '123 Main Streets',
+        ubication: 'https://maps.app.goo.gl/dosYom2qmP2Y3YBu7',
+        code: '3B9630',
+        id: 'dbc8dac2-d3ee-4d6f-a85c-624b7e3e3ecd',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
         message: 'Ya existe una propiedad con ese codigo de identificacion',
+        error: 'Bad Request',
+        statusCode: 400,
       },
     },
   })
   @ApiResponse({
     status: 409,
+    description: 'Error: Conflict',
     schema: {
       example: {
-        statusCode: 409,
         message: 'Ya existe una propiedad con ese numero de identificacion',
+        error: 'Conflict',
+        statusCode: 409,
       },
     },
   })
@@ -93,11 +112,27 @@ export class PropertiesController {
 
   @ApiBearerAuth()
   @ApiResponse({
-    status: 404,
+    status: 200,
     schema: {
       example: {
-        statusCode: 404,
+        id: 'b5aa7899-1c9f-4662-a0e8-fe5eee2069f1',
+        number: 100,
+        image:
+          'https://static.tokkobroker.com/pictures/54875686735059677368693141545969812663641450316300492212526170802494178142272.jpg',
+        address: 'Calle 1 - 10',
+        ubication: 'https://maps.app.goo.gl/dosYom2qmP2Y3YBu7',
+        code: '25BGD6',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
         message: 'No existe una propiedad con ese id',
+        error: 'Not Found',
+        statusCode: 404,
       },
     },
   })
@@ -113,7 +148,6 @@ export class PropertiesController {
     status: 200,
     schema: {
       example: {
-        statusCode: 200,
         message:
           'Datos de la propiedad ${propUpdated.number} actualizados correctamente',
       },
@@ -141,7 +175,6 @@ export class PropertiesController {
     status: 200,
     schema: {
       example: {
-        statusCode: 200,
         message: 'Propiedad ${deleteProperty.number} eliminada con exito',
       },
     },
