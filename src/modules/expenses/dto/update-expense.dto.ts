@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsPositive, IsString } from 'class-validator';
 import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateExpenceDto {
@@ -9,6 +9,7 @@ export class UpdateExpenceDto {
    */
   @IsOptional()
   @IsNumber()
+  @IsPositive()
   amount: number;
 
   /**
