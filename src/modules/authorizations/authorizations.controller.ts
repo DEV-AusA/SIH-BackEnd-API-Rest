@@ -55,7 +55,7 @@ export class AuthorizationsController {
 
   @ApiBearerAuth()
   @Get(':number')
-  @Roles(Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
   findOneAuthorization(@Param('number') id: string) {
     return this.authorizationsService.findOneAuthorization(Number(id));
