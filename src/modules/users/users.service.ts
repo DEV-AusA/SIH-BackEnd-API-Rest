@@ -33,12 +33,8 @@ export class UsersService {
     private readonly filesCloudinaryService: FilesCloudinaryService,
   ) {}
 
-  async getUsers(page: number, limit: number) {
-    const start = (page - 1) * limit;
-    const end = start + limit;
+  async getUsers() {
     const users = await this.userService.find({
-      skip: start,
-      take: end,
       where: { rol: Not(Role.SuperAdmin) },
       select: [
         'id',

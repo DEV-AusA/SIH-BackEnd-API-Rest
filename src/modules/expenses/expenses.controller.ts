@@ -8,15 +8,18 @@ import {
   Put,
   Req,
   Res,
-  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { Request, Response } from 'express';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { CreatePayDto } from './dto/create-pay.dto';
-import { IsNotEmpty } from 'class-validator';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/helpers/roles.enum';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @ApiTags('Expensas')
 @Controller('expenses')
@@ -25,28 +28,32 @@ export class ExpensesController {
 
   @Post('createPay')
   createPay(@Body() createPayDto: CreatePayDto) {
-    // const url = await this.expensesService.createAllExpenses();
-    // res.redirect(url);
     return this.expensesService.createPay(createPayDto);
   }
 
   @Post('state')
   async statu(@Req() request: Request) {
-    const resul = this.expensesService.statu(request.body.data.id);
-    return resul;
+    return this.expensesService.statu(request.body.data.id);
   }
 
+  @Get('properties')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  getExpensesProperties() {
+    return this.expensesService.getExpensesProperties();
+  }
+
+  @Get()
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get()
   getExpenses() {
     return this.expensesService.getExpenses();
   }
 
-  @Get('properties')
-  getExpensesProperties() {
-    return this.expensesService.getExpensesProperties();
-  }
-
   @Get('generatePdf/:id')
+  // @Roles(Role.Admin, Role.SuperAdmin, Role.Owner, Role.Security)
+  // @UseGuards(AuthGuard, RolesGuard)
   async generatePdf(
     @Param('id', ParseUUIDPipe) id: string,
     @Res() res: Response,
@@ -64,26 +71,37 @@ export class ExpensesController {
     res.end(pdfBuffer);
   }
 
-  @Get(':id')
-  getExpencesUserId(@Param('id', ParseUUIDPipe) id: string) {
+  @Get('user/:id')
+  @Roles(Role.Admin, Role.SuperAdmin, Role.Owner, Role.Security)
+  @UseGuards(AuthGuard, RolesGuard)
+  getExpenseUserId(@Param('id', ParseUUIDPipe) id: string) {
+    return this.expensesService.getExpensesUserId(id);
+  }
+
+  @Get('property/:id')
+  @Roles(Role.Admin, Role.SuperAdmin, Role.Owner, Role.Security)
+  @UseGuards(AuthGuard, RolesGuard)
+  getExpensePropertyId(@Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.getExpensesUserId(id);
   }
 
   @Post('createAllExpenses')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   createAllExpenses(@Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.createAllExpenses(createExpenseDto);
   }
 
-  @Post('createExpense/:id')
-  @UseInterceptors(IsNotEmpty)
-  createExpense(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() createExpenseDto: CreateExpenseDto,
-  ) {
-    return this.expensesService.createExpense(createExpenseDto, id);
+  @Post('createExpense')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  createExpense(@Body() createExpenseDto: CreateExpenseDto) {
+    return this.expensesService.createExpense(createExpenseDto);
   }
 
   @Put('updateExpence/:id')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   updateExpence(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateExpenceDto: UpdateExpenceDto,
