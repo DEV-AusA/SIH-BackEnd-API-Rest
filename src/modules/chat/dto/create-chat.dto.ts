@@ -3,7 +3,7 @@ import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 export class CreateChatDto {
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  userIdFrom: string;
 
   @IsString()
   @IsNotEmpty()
@@ -16,4 +16,12 @@ export class CreateChatDto {
   @IsDate()
   @IsNotEmpty()
   messageDate: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  roomIdChat: string;
+
+  @IsDate()
+  @IsNotEmpty()
+  userIdTo: string;
 }

@@ -26,7 +26,7 @@ export class ChatGateway {
 
   async onModuleInit() {
     this.server.on('connection', async (socket: Socket) => {
-      const { id, name, token } = socket.handshake.auth;
+      const { id, name, token, date } = socket.handshake.auth;
 
       if (!id || !name || !token) {
         socket.emit(
@@ -65,7 +65,7 @@ export class ChatGateway {
         this.updateConnectedUsers();
 
         this.chatService.onClientConnected({ id: socket.id, name: name });
-        this.server.emit('user-connect', id);
+        this.server.emit('user-connect', id, date);
         this.server.emit('on-clients-changed', this.chatService.getClients());
 
         socket.on('disconnect', () => {
@@ -96,27 +96,44 @@ export class ChatGateway {
     @MessageBody() dataMessage: MessageData,
     @ConnectedSocket() client: Socket,
   ) {
-    const { roomId, message } = dataMessage;
-    const { id, name, date } = client.handshake.auth;
+    const { userIdFrom, name, roomId, message, userIdTo, imageTo } =
+      dataMessage;
+
+    const { date } = client.handshake.auth;
+
     if (!message) return;
 
     const chat: CreateChatDto = {
-      userId: id,
+      userIdFrom,
       name,
       message,
-      messageDate: date,
+      messageDate: new Date(),
+      roomIdChat: roomId,
+      userIdTo,
     };
     await this.chatService.createChat(chat);
 
     if (roomId && message) {
-      this.server
-        .to(roomId)
-        .emit('on-message', { userId: id, name, message, roomIdChat: roomId });
+      this.server.to(roomId).emit('on-message', {
+        userIdFrom,
+        name,
+        message,
+        roomIdChat: roomId,
+      });
+
+      this.server.emit('message-to', {
+        userIdFrom,
+        name,
+        message,
+        userIdTo,
+        imageTo,
+        lastLogin: date,
+      });
     }
   }
 
   @SubscribeMessage('join-room')
-  handleJoinRoom(
+  async handleJoinRoom(
     @MessageBody() roomId: string,
     @ConnectedSocket() client: Socket,
   ) {
@@ -131,5 +148,7 @@ export class ChatGateway {
       `Hay ${usersInRoom.length} usuarios conectados en la sala ${roomId}: `,
       usersInRoom,
     );
+    const previousMessages = await this.chatService.getMessagesByRoomId(roomId);
+    client.emit('previous-messages', previousMessages);
   }
 }

@@ -38,6 +38,7 @@ export class ChatService {
     //retornar el listado de clientes conectados [Clien, Client, Client]
     const personal = await this.userRepository.find({
       where: { rol: 'security' },
+      select: ['id', 'name', 'image', 'lastLogin'],
     });
 
     return personal;
@@ -47,14 +48,21 @@ export class ChatService {
     const excludedRoles = ['security', 'admin', 'superadmin'];
     const users = await this.userRepository.find({
       where: { rol: Not(In(excludedRoles)) },
-      select: ['id', 'name'],
+      select: ['id', 'name', 'image', 'lastLogin'],
     });
 
     return users;
   }
 
-  async createChat(createChatDto: CreateChatDto) {
+  async createChat(createChatDto: CreateChatDto): Promise<Chat> {
     const chat = await this.chatRepository.create(createChatDto);
     return await this.chatRepository.save(chat);
+  }
+
+  async getMessagesByRoomId(roomId: string): Promise<Chat[]> {
+    return this.chatRepository.find({
+      where: { roomIdChat: roomId },
+      order: { messageDate: 'ASC' },
+    });
   }
 }

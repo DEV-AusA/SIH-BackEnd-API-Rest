@@ -24,7 +24,8 @@
     "lastName": "Ausa",
     "document": 50123459,
     "cellphone": 1122334457,
-    "email": "nicolasausa@gmail.com"
+    "email": "nicolasausa@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433735/hombre5_h0av8v.jpg"
   },
   {
     "username": "leo830",
@@ -33,7 +34,68 @@
     "lastName": "Ausa",
     "document": 50123460,
     "cellphone": 1122334458,
-    "email": "leonardoausa@gmail.com"
+    "email": "leonardoausa@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433737/hombre1_nz2jml.jpg"
+  },
+  {
+    "username": "martin45",
+    "password": "Prueba123.",
+    "name": "Ernesto",
+    "lastName": "Perez",
+    "document": 50234561,
+    "cellphone": 1198765432,
+    "email": "martin.perez@example.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433737/hombre3_pmw7sl.jpg"
+  },
+  {
+    "username": "juana76",
+    "password": "Prueba123.",
+    "name": "Juana",
+    "lastName": "Rodriguez",
+    "document": 50345672,
+    "cellphone": 1134567890,
+    "email": "juana.rodriguez@example.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433532/mujer1_cniyuj.jpg"
+  },
+  {
+    "username": "sara99",
+    "password": "Prueba123.",
+    "name": "Sara",
+    "lastName": "Lopez",
+    "document": 50456783,
+    "cellphone": 1176543210,
+    "email": "sara.lopez@example.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433533/mujer2_jwrdsk.jpg"
+  },
+  {
+    "username": "diego34",
+    "password": "Prueba123.",
+    "name": "Diego",
+    "lastName": "Martinez",
+    "document": 50567894,
+    "cellphone": 1156781234,
+    "email": "diego.martinez@example.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433737/hombre2_gtimzz.jpg"
+  },
+  {
+    "username": "maria22",
+    "password": "Prueba123.",
+    "name": "María",
+    "lastName": "Garcia",
+    "document": 50678905,
+    "cellphone": 1145678901,
+    "email": "maria.garcia@example.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433534/mujer3_his5xr.jpg"
+  },
+  {
+    "username": "luis50",
+    "password": "Prueba123.",
+    "name": "Luis",
+    "lastName": "Hernandez",
+    "document": 50789016,
+    "cellphone": 1167890123,
+    "email": "luis.hernandez@example.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433738/hombre4_juiesn.jpg"
   },
   {
     "username": "manuadmin",
@@ -58,41 +120,45 @@
   {
     "username": "security1",
     "password": "Prueba123.",
-    "name": "Security1",
-    "lastName": "Tester 1",
+    "name": "Pedro",
+    "lastName": "Fernandez",
     "document": 50123463,
     "cellphone": 1122334458,
     "email": "security1@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716434577/sec3_ymxjbj.jpg",
     "rol": "security"
   },
   {
     "username": "security2",
     "password": "Prueba123.",
-    "name": "Security2",
-    "lastName": "Tester 2",
+    "name": "Hernan",
+    "lastName": "Caceres",
     "document": 50123464,
     "cellphone": 1122334458,
     "email": "security2@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716051539/PS_mourp3.jpg",
     "rol": "security"
   },
   {
     "username": "security3",
     "password": "Prueba123.",
-    "name": "Security3",
-    "lastName": "Tester 3",
+    "name": "Daiana",
+    "lastName": "Silva",
     "document": 50123465,
     "cellphone": 1122334458,
     "email": "security3@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433107/mujer_1_ckbf8u.jpg",
     "rol": "security"
   },
   {
     "username": "security4",
     "password": "Prueba123.",
-    "name": "Security4",
-    "lastName": "Tester 4",
+    "name": "Luna",
+    "lastName": "Vasquez",
     "document": 50123466,
     "cellphone": 1122334458,
     "email": "security4@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433107/mujer_2_ztjwyv.jpg",
     "rol": "security"
   },
   {
