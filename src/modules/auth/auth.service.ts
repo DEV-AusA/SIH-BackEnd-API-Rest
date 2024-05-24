@@ -101,6 +101,13 @@ export class AuthService {
     if (!passwordValidate)
       throw new BadRequestException('Algun dato ingresado es incorrecto');
 
+    await this.userRepository.update(
+      {
+        id: userValidated.id,
+      },
+      { lastLogin: new Date() },
+    );
+
     const payload = {
       id: userValidated.id,
       email: userValidated.email,
