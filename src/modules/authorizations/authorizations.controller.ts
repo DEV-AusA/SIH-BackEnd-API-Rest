@@ -54,11 +54,11 @@ export class AuthorizationsController {
   }
 
   @ApiBearerAuth()
-  @Get(':number')
+  @Get(':code')
   @Roles(Role.Admin, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
-  findOneAuthorization(@Param('number') id: string) {
-    return this.authorizationsService.findOneAuthorization(Number(id));
+  findOneAuthorization(@Param('code') code: string) {
+    return this.authorizationsService.findOneAuthorization(code);
   }
 
   @ApiBearerAuth()
@@ -79,7 +79,7 @@ export class AuthorizationsController {
   @Delete(':id')
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  deleteAuthorization(@Param('id', ParseUUIDPipe) id: string, number: number) {
-    return this.authorizationsService.deleteAuthorization(id, number);
+  deleteAuthorization(@Param('id', ParseUUIDPipe) id: string, code: string) {
+    return this.authorizationsService.deleteAuthorization(id, code);
   }
 }

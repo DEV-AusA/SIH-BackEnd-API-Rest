@@ -34,7 +34,7 @@ export class Authorization {
   })
   shipmentNumber: string;
 
-  @Column({ name: 'access_code', type: 'integer', nullable: false })
+  @Column({ name: 'access_code', type: 'varchar', nullable: false })
   accessCode: string;
 
   @Column({ name: 'expiration_time', type: 'timestamp' })
