@@ -135,7 +135,7 @@ export class ExpensesService {
   }
 
   async createAllExpenses(createExpenseDto: CreateExpenseDto) {
-    const dayLimit = 0;
+    const dayLimit = 30;
     const userActive = await this.userRepository.find({
       where: { state: true, validate: true, rol: 'owner' },
     });
