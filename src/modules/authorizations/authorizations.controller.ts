@@ -36,12 +36,21 @@ export class AuthorizationsController {
       createAuthorizationDto,
     );
   }
+
   @ApiBearerAuth()
   @Get()
-  @Roles(Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.Security, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
   findAll() {
     return this.authorizationsService.findAllAuthorizations();
+  }
+
+  @ApiBearerAuth()
+  @Get('user/:id')
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  findAllByUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.authorizationsService.findAllAuthorizationsByUser(id);
   }
 
   @ApiBearerAuth()
