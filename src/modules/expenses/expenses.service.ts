@@ -169,15 +169,16 @@ export class ExpensesService {
         const dateCurrent = moment();
 
         const dateGeneratedTicket = moment(lastExpenseTicket?.dateGenerated);
-        const dateGeneratedLimit = moment(lastExpenseLimit?.dateGenerated);
-        const differenceDays = Math.abs(
-          dateGeneratedLimit.diff(dateCurrent, 'days'),
-        );
-
-        if (differenceDays < (Number(lastExpenseLimit?.dayLimit) || dayLimit))
-          throw new NotAcceptableException(
-            `No se puede generar expensas, el limite de dias es de ${Number(lastExpenseLimit?.dayLimit) || dayLimit}, falta ${(Number(lastExpenseLimit?.dayLimit) || dayLimit) - differenceDays} dias`,
+        if (lastExpenseLimit?.dateGenerated) {
+          const dateGeneratedLimit = moment(lastExpenseLimit?.dateGenerated);
+          const differenceDays = Math.abs(
+            dateGeneratedLimit.diff(dateCurrent, 'days'),
           );
+          if (differenceDays < (Number(lastExpenseLimit?.dayLimit) || dayLimit))
+            throw new NotAcceptableException(
+              `No se puede generar expensas, el limite de dias es de ${Number(lastExpenseLimit?.dayLimit) || dayLimit}, falta ${(Number(lastExpenseLimit?.dayLimit) || dayLimit) - differenceDays} dias`,
+            );
+        }
         // Crear Expensa para cada propiedad
         const expence = this.expenceRepository.create({
           amount: createExpenseDto.amount,
