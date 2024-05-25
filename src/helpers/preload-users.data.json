@@ -118,6 +118,17 @@
     "rol": "admin"
   },
   {
+    "username": "cesaradmin",
+    "password": "Admin123.",
+    "name": "Cesar",
+    "lastName": "Ausa Admin",
+    "document": 50123789,
+    "cellphone": 1138065126,
+    "email": "cesaradmin@gmail.com",
+    "image": "https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1715645473/ausa_copia_vyssd0.jpg",
+    "rol": "admin"
+  },
+  {
     "username": "security1",
     "password": "Prueba123.",
     "name": "Pedro",
