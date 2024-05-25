@@ -50,7 +50,7 @@ export class AuthService {
     });
     if (username)
       throw new BadRequestException(
-        `Ya existe un usuario registrado con ese username.`,
+        `Ya existe un usuario registrado con ese nombre de usuario.`,
       );
 
     const propLinked = await this.propertyRepository.findOne({
