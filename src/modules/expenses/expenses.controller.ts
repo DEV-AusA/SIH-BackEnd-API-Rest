@@ -23,11 +23,22 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
   @ApiResponse({
-    status: 404,
+    status: 200,
     schema: {
       example: {
-        statusCode: 404,
+        urlMercadopago:
+          'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1810727269-591cff37-155c-4fd6-a9e5-b47e6ca8088e',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
         message: 'La expensa no existe',
+        error: 'Not Found',
+        statusCode: 404,
       },
     },
   })
@@ -37,23 +48,240 @@ export class ExpensesController {
     // res.redirect(url);
     return this.expensesService.createPay(createPayDto);
   }
-
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        state: true,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'La expensa ya esta pagada',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'Pago de expensa rechazado',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Post('state')
   async statu(@Req() request: Request) {
     const resul = this.expensesService.statu(request.body.data.id);
     return resul;
   }
-
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: [
+        {
+          id: '38f6cb56-b1af-4881-8d6c-54ef212d2bcc',
+          ticket: 1,
+          typeExpenses: 'Expensa Mensual',
+          numberOperation: null,
+          userProperty: 'b91b3364-28f7-424f-8e11-d1a819649213',
+          description: 'Seguridad - Limpieza - Mantenimento',
+          amount: '2000.00',
+          dateGenerated: '2024-05-25',
+          datePaid: null,
+          dayLimit: 30,
+          interests: null,
+          state: false,
+        },
+        {
+          id: '9de940dd-ebe3-49ec-bdf9-99a8cb24a189',
+          ticket: 1,
+          typeExpenses: 'Expensa Mensual',
+          numberOperation: null,
+          userProperty: '54eee50c-aaa6-4aa0-ba76-d5664755ac91',
+          description: 'Seguridad - Limpieza - Mantenimento',
+          amount: '2000.00',
+          dateGenerated: '2024-05-25',
+          datePaid: null,
+          dayLimit: 30,
+          interests: null,
+          state: false,
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No hay expensas',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get()
   getExpenses() {
     return this.expensesService.getExpenses();
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: [
+        {
+          id: 'fd289ed6-f03e-4e1c-a97e-fb7c511385c3',
+          ticket: 1,
+          typeExpenses: 'Expensa Mensual',
+          numberOperation: null,
+          userProperty: 'eb968a88-82dc-4efc-bee5-408a62c9430f',
+          description: 'Seguridad - Limpieza - Mantenimento',
+          amount: '2000.00',
+          dateGenerated: '2024-05-25',
+          datePaid: null,
+          dayLimit: 30,
+          interests: null,
+          state: false,
+          property: {
+            id: '1b2ba4ff-b231-4a07-9f45-a846a0ffe363',
+            number: 100,
+            image:
+              'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600',
+            address: 'Calle 1 10',
+            code: '68C99A',
+            user: {
+              id: 'eb968a88-82dc-4efc-bee5-408a62c9430f',
+              username: 'Caitlyn_Kub',
+              password:
+                '$2b$10$1SpkNKb4P9CrseT88EkziO/jwOIw4RU4qvav7XlRam9dFy0lmumeC',
+              name: 'Beulah',
+              lastName: 'Schmeler',
+              document: 53189591,
+              image:
+                'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/413.jpg',
+              phone: null,
+              cellphone: '7595067024',
+              email: 'Lura.Kunze60@gmail.com',
+              googleAccount: false,
+              validate: true,
+              state: true,
+              rol: 'owner',
+              lastLogin: '2024-05-25T15:07:25.293Z',
+              adminModify: null,
+              properties: [
+                {
+                  id: '1b2ba4ff-b231-4a07-9f45-a846a0ffe363',
+                  number: 100,
+                  image:
+                    'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  address: 'Calle 1 10',
+                  code: '68C99A',
+                },
+              ],
+            },
+          },
+        },
+        {
+          id: '0c08fe0d-f56e-4e22-9568-d45177be0d8b',
+          ticket: 1,
+          typeExpenses: 'Expensa Mensual',
+          numberOperation: null,
+          userProperty: 'eefbe0ba-45f7-4157-8703-c053527cbd8d',
+          description: 'Seguridad - Limpieza - Mantenimento',
+          amount: '2000.00',
+          dateGenerated: '2024-05-25',
+          datePaid: null,
+          dayLimit: 30,
+          interests: null,
+          state: false,
+          property: {
+            id: '1b630923-49ab-42e7-80fa-1e95ada6c9b9',
+            number: 101,
+            image:
+              'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600',
+            address: 'Calle 1 11',
+            code: '8D4G4F',
+            user: {
+              id: 'eefbe0ba-45f7-4157-8703-c053527cbd8d',
+              username: 'martin45',
+              password:
+                '$2b$10$YHe0i6cf59Z9Zccs5qhdq.eo7PSjmj7L66oR4PPxXEC/quX09HaMG',
+              name: 'Ernesto',
+              lastName: 'Perez',
+              document: 50234561,
+              image:
+                'https://res.cloudinary.com/dcqdilhek/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1716433737/hombre3_pmw7sl.jpg',
+              phone: null,
+              cellphone: '1198765432',
+              email: 'martin.perez@example.com',
+              googleAccount: false,
+              validate: true,
+              state: true,
+              rol: 'owner',
+              lastLogin: '2024-05-25T15:07:23.664Z',
+              adminModify: null,
+              properties: [
+                {
+                  id: '1b630923-49ab-42e7-80fa-1e95ada6c9b9',
+                  number: 101,
+                  image:
+                    'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  address: 'Calle 1 11',
+                  code: '8D4G4F',
+                },
+              ],
+            },
+          },
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No hay expensas',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get('properties')
   getExpensesProperties() {
     return this.expensesService.getExpensesProperties();
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example:
+        '<Buffer 25 50 44 46 2d 31 2e 33 0a 25 ff ff ff ff 0a 39 20 30 20 6f 62 6a 0a 3c 3c 0a 2f 50 72 65 64 69 63 74 6f 72 20 31 35 0a 2f 43 6f 6c 6f 72 73 20 33 0a ... 28071 more bytes>',
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'La expensa no existe',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get('generatePdf/:id')
   async generatePdf(
     @Param('id', ParseUUIDPipe) id: string,
@@ -72,16 +300,133 @@ export class ExpensesController {
     res.end(pdfBuffer);
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: [
+        {
+          id: '1b2ba4ff-b231-4a07-9f45-a846a0ffe363',
+          number: 100,
+          image:
+            'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600',
+          address: 'Calle 1 10',
+          code: '68C99A',
+          expences: [
+            {
+              id: 'fd289ed6-f03e-4e1c-a97e-fb7c511385c3',
+              ticket: 1,
+              typeExpenses: 'Expensa Mensual',
+              numberOperation: null,
+              userProperty: 'eb968a88-82dc-4efc-bee5-408a62c9430f',
+              description: 'Seguridad - Limpieza - Mantenimento',
+              amount: '2000.00',
+              dateGenerated: '2024-05-25',
+              datePaid: null,
+              dayLimit: 30,
+              interests: null,
+              state: false,
+            },
+          ],
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No se encontro Usuarios',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No se encontro Propiedades',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get(':id')
   getExpencesUserId(@Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.getExpensesUserId(id);
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: {
+        message: 'Expensas creadas para todos los propietarios',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No hay propietarios activos',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No se encontro Usuarios',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 406,
+    description: 'Error: Not Acceptable',
+    schema: {
+      example: {
+        message:
+          'No se puede generar expensas, el limite de dias es de 30, faltan 25 dias',
+        error: 'Not Acceptable',
+        statusCode: 406,
+      },
+    },
+  })
   @Post('createAllExpenses')
   createAllExpenses(@Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.createAllExpenses(createExpenseDto);
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: {
+        message: 'Expensa creada',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'La Propiedad no existe',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Post('createExpense/:id')
   @UseInterceptors(IsNotEmpty)
   createExpense(
@@ -91,6 +436,26 @@ export class ExpensesController {
     return this.expensesService.createExpense(createExpenseDto, id);
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: {
+        message: 'Expensa actualizada',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'La expensa no existe',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Put('updateExpence/:id')
   updateExpence(
     @Param('id', ParseUUIDPipe) id: string,
