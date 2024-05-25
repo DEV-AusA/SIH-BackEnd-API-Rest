@@ -26,6 +26,7 @@
     "migration:show": "npm run typeorm -- -d ./config/typeorm.config.ts migration:show"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@google/generative-ai": "^0.6.0",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
