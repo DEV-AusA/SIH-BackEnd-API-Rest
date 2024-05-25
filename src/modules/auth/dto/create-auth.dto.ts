@@ -99,6 +99,11 @@ export class CreateUserDto {
   @IsEmail()
   readonly email: string;
 
+  /**
+   * Código de vivienda proporcionado por el admin.
+   * @description Debe ser una cadena no vacía con longitud de 7 caracteres.
+   * @example 'F5B38KU (codigo de vivienda proporcionad por el admin)'
+   */
   @IsOptional()
   @IsString()
   readonly code: string;

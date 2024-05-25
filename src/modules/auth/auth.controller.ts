@@ -24,21 +24,20 @@ export class AuthController {
     status: 201,
     schema: {
       example: {
-        username: 'juanperez14',
-        password: 'Password123!',
-        name: 'Juan Pérez',
-        lastName: 'Juan Pérez',
-        document: 12345678,
-        phone: 1234567890,
-        cellphone: 1234567890,
-        email: 'usuario@example.com',
-        code: 'codigo de la vivienda proporcionado por el admin ',
+        message: 'Usuario creado correctamente',
       },
     },
   })
   @ApiResponse({
     status: 400,
-    description: 'Ya existe un usuario registrado con ese email.',
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'Ya existe un usuario registrado con ese email.',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
   })
   @Post('signup')
   signUpUser(@Body() createUserDto: CreateUserDto) {
@@ -69,8 +68,25 @@ export class AuthController {
     },
   })
   @ApiResponse({
-    status: 401,
-    description: 'Algun dato ingresado es incorrecto',
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'Algun dato ingresado es incorrecto',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Cuenta Inactiva. Verifique su correo',
+      },
+    },
   })
   @HttpCode(200)
   @Post('signin')
@@ -116,7 +132,14 @@ export class AuthController {
   })
   @ApiResponse({
     status: 400,
-    description: 'No se pudo iniciar sesion con Google',
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'No se pudo iniciar sesion con Google',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
   })
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
