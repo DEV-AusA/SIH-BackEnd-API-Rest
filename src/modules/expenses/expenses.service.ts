@@ -166,7 +166,7 @@ export class ExpensesService {
           .orderBy('expense.dateGenerated', 'DESC')
           .getOne();
         // Controla los dias del dia limitet
-        const dateCurrent = moment('2024-06-01');
+        const dateCurrent = moment();
 
         const dateGeneratedTicket = moment(lastExpenseTicket?.dateGenerated);
         const dateGeneratedLimit = moment(lastExpenseLimit?.dateGenerated);
@@ -183,7 +183,7 @@ export class ExpensesService {
           amount: createExpenseDto.amount,
           userProperty: user.id,
           property: propertie,
-          dateGenerated: new Date('2024-06-01'),
+          dateGenerated: new Date(),
           ticket:
             dateCurrent.year() > dateGeneratedTicket?.year()
               ? 1
