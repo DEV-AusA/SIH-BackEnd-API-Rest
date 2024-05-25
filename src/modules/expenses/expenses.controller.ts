@@ -82,7 +82,7 @@ export class ExpensesController {
   @Roles(Role.Admin, Role.SuperAdmin, Role.Owner, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
   getExpensePropertyId(@Param('id', ParseUUIDPipe) id: string) {
-    return this.expensesService.getExpensesUserId(id);
+    return this.expensesService.getExpensePropertyId(id);
   }
 
   @Post('createAllExpenses')
