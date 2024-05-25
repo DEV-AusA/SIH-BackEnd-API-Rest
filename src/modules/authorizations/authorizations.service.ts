@@ -81,7 +81,7 @@ export class AuthorizationsService {
     });
     if (!authorization)
       throw new NotFoundException(
-        'No se encuentra una autorizacion con es numero ingresado.',
+        'No se encuentra una autorizacion con ese numero ingresado.',
       );
     return authorization;
   }
