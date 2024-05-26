@@ -17,6 +17,6 @@ export class IsEightDigits implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return `document must be longer than or equal to 8 digits`;
+    return `El número de documento ingresado debe contener 8 dígitos`;
   }
 }

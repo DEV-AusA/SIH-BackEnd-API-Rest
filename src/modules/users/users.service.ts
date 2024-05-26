@@ -239,11 +239,11 @@ export class UsersService {
       const userModified = await queryRunner.manager.save(user);
       await queryRunner.manager.save(userModified);
       await queryRunner.commitTransaction();
-      const registerOkMessage = {
+      const userUpdatedOkMessage = {
         message: `Usuario actualizado correctamente`,
       };
 
-      return registerOkMessage;
+      return userUpdatedOkMessage;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

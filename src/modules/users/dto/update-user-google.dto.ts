@@ -2,6 +2,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   Matches,
   MaxLength,
@@ -9,6 +10,7 @@ import {
   Validate,
 } from 'class-validator';
 import { IsEightDigits } from '../../../decorators/digit-count.decorator';
+import { IsPositiveOrZero } from '../../../decorators/is-positive-or-zero.decorator';
 
 export class UpdateUserGoogleDto {
   /**
@@ -67,6 +69,7 @@ export class UpdateUserGoogleDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   @Validate(IsEightDigits) // custom decorator
   readonly document: number;
 
@@ -77,6 +80,7 @@ export class UpdateUserGoogleDto {
    */
   @IsOptional()
   @IsNumber()
+  @Validate(IsPositiveOrZero) // custom decorator exclusivo para este campo
   readonly phone?: number;
 
   /**
@@ -86,6 +90,7 @@ export class UpdateUserGoogleDto {
    */
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   readonly cellphone: number;
 
   @IsNotEmpty()
