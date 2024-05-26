@@ -70,7 +70,7 @@ export class UsersController {
     description: 'No se puede actualizar este usuario',
   })
   @Put('update/:id')
-  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
   @UseInterceptors(
     UserIdInterceptor,

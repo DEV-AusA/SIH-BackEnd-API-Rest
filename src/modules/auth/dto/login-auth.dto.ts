@@ -32,6 +32,8 @@ export class LoginUserDto {
   @IsString()
   @MinLength(8)
   @MaxLength(15)
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,15}$/)
+  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,15}$/, {
+    message: `Algun dato ingresado es incorrecto`,
+  })
   password: string;
 }

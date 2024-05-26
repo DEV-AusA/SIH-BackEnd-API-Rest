@@ -155,6 +155,10 @@ export class SeedService implements OnModuleInit {
       cellphone: faker.number.int(10000000000),
       email: faker.internet.email(),
       image: faker.image.avatar(),
+      createdAt: faker.date.between({
+        from: '2024-01-01T00:00:00.000Z',
+        to: '2024-05-31T00:00:00.000Z',
+      }),
     };
   }
 
