@@ -307,6 +307,7 @@ export class ExpensesController {
     });
     res.end(pdfBuffer);
   }
+
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -354,6 +355,7 @@ export class ExpensesController {
   getExpensePropertyId(@Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.getExpensePropertyId(id);
   }
+
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -413,13 +415,6 @@ export class ExpensesController {
   @UseGuards(AuthGuard, RolesGuard)
   getExpenseUserId(@Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.getExpensesUserId(id);
-  }
-  
-  @Get('property/:id')
-  @Roles(Role.Admin, Role.SuperAdmin, Role.Owner, Role.Security)
-  @UseGuards(AuthGuard, RolesGuard)
-  getExpensePropertyId(@Param('id', ParseUUIDPipe) id: string) {
-    return this.expensesService.getExpensePropertyId(id);
   }
 
   @ApiResponse({
