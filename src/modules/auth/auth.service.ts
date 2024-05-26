@@ -97,7 +97,6 @@ export class AuthService {
       userLogin.password,
       userValidated.password,
     );
-    console.log(passwordValidate);
     if (!passwordValidate)
       throw new BadRequestException('Algun dato ingresado es incorrecto');
 

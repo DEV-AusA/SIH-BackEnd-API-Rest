@@ -99,7 +99,7 @@ export class ChatGateway {
     const { userIdFrom, name, roomId, message, userIdTo, imageTo } =
       dataMessage;
 
-    const { date } = client.handshake.auth;
+    const { date, lastName } = client.handshake.auth;
 
     if (!message) return;
 
@@ -124,6 +124,7 @@ export class ChatGateway {
       this.server.emit('message-to', {
         userIdFrom,
         name,
+        lastName,
         message,
         userIdTo,
         imageTo,
