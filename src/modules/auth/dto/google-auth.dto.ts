@@ -7,6 +7,7 @@ import {
   IsDate,
   MinLength,
   MaxLength,
+  IsPositive,
 } from 'class-validator';
 
 export class GoogleUserInfoDto {
@@ -38,6 +39,7 @@ export class GoogleUserInfoDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   document: number;
 
   @IsNotEmpty()
@@ -46,6 +48,7 @@ export class GoogleUserInfoDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   cellphone: number;
 
   @IsNotEmpty()

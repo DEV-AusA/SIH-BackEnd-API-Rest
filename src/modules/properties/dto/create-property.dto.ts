@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   Matches,
   MaxLength,
@@ -17,6 +18,7 @@ export class CreatePropertyDto {
    */
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   @Type(() => Number) // Transforma el valor a número
   readonly number: number;
 
