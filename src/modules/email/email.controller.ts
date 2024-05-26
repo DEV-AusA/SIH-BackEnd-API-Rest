@@ -10,16 +10,31 @@ export class EmailController {
 
   @ApiResponse({
     status: 200,
-    description:
-      'Se envia el email de verificacion y despues de confirmado, se valida el usuario',
+    schema: {
+      example: {
+        message: true,
+      },
+    },
   })
   @ApiResponse({
     status: 401,
-    description: 'Token de Email invalido o se encuentra vencido',
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'Token de Email invalido o se encuentra vencido',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
   })
   @ApiResponse({
     status: 404,
-    description: 'El usuario con ese mail no existe',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'El usuario con ese mail no existe',
+      },
+    },
   })
   @Get('validate/:id')
   async verifyEmail(@Param('id') id: string, @Res() res: Response) {

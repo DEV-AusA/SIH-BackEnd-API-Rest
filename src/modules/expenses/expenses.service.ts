@@ -130,7 +130,7 @@ export class ExpensesService {
       relations: ['expences'],
     });
 
-    if (!property) throw new NotFoundException('No se encontro Propiedades');
+    if (!property) throw new NotFoundException('No se encontro Propiedad');
     return property;
   }
 
