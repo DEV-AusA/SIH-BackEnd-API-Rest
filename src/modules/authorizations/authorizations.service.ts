@@ -86,11 +86,7 @@ export class AuthorizationsService {
     });
     if (!authorization)
       throw new NotFoundException(
-<<<<<<< HEAD
         'No se encuentra una autorizacion con el código ingresado.',
-=======
-        'No se encuentra una autorizacion con ese numero ingresado.',
->>>>>>> feature/validate-google
       );
     return authorization;
   }

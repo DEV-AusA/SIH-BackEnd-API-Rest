@@ -119,10 +119,6 @@ export class AuthorizationsController {
   }
 
   @ApiBearerAuth()
-<<<<<<< HEAD
-  @Get('user/:id')
-  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
-=======
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -154,9 +150,8 @@ export class AuthorizationsController {
       },
     },
   })
-  @Get(':number')
-  @Roles(Role.Admin, Role.SuperAdmin)
->>>>>>> feature/validate-google
+  @Get('user/:id')
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
   findAllByUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.authorizationsService.findAllAuthorizationsByUser(id);
