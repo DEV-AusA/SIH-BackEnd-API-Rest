@@ -66,7 +66,6 @@ export class User {
   @Column({
     name: 'created_at',
     type: 'timestamp',
-    select: false,
     default: new Date(),
     nullable: false,
   })

@@ -5,7 +5,6 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
-  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -64,11 +63,8 @@ export class UsersController {
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  getUsers(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-  ) {
-    return this.usersService.getUsersProps(Number(page), Number(limit));
+  getUsers() {
+    return this.usersService.getUsersProps();
   }
 
   @ApiBearerAuth()
@@ -144,7 +140,7 @@ export class UsersController {
     },
   })
   @Put('update/:id')
-  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
   @UseInterceptors(
     UserIdInterceptor,

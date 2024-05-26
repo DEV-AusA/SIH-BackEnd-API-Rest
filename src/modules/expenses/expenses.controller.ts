@@ -414,6 +414,13 @@ export class ExpensesController {
   getExpenseUserId(@Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.getExpensesUserId(id);
   }
+  
+  @Get('property/:id')
+  @Roles(Role.Admin, Role.SuperAdmin, Role.Owner, Role.Security)
+  @UseGuards(AuthGuard, RolesGuard)
+  getExpensePropertyId(@Param('id', ParseUUIDPipe) id: string) {
+    return this.expensesService.getExpensePropertyId(id);
+  }
 
   @ApiResponse({
     status: 200,
