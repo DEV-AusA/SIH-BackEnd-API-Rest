@@ -35,8 +35,9 @@ export class AuthorizationsService {
         'El tipo de autorizacion ingresado no es correcto',
       );
 
-    await this.userService.findUserById(id);
+    const userData = await this.userService.findUserById(id);
 
+    //generaqdor de codigos aletatorio
     const accessCode = otpGenerator.generate(4, {
       digits: true,
       lowerCaseAlphabets: false,
@@ -62,7 +63,18 @@ export class AuthorizationsService {
 
       await queryRunner.commitTransaction();
 
-      return authorizationSaved;
+      const { number, address } = userData.properties[0];
+      const { name, lastName } = userData;
+
+      const autorizationComplete = {
+        ...authorizationSaved,
+        nameProp: name,
+        lastNameProp: lastName,
+        numberProp: number,
+        addressProp: address,
+      };
+
+      return autorizationComplete;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

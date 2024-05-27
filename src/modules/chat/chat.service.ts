@@ -38,7 +38,7 @@ export class ChatService {
     //retornar el listado de clientes conectados [Clien, Client, Client]
     const personal = await this.userRepository.find({
       where: { rol: 'security' },
-      select: ['id', 'name', 'image', 'lastLogin'],
+      select: ['id', 'name', 'lastName', 'image', 'lastLogin'],
     });
 
     return personal;
@@ -48,7 +48,7 @@ export class ChatService {
     const excludedRoles = ['security', 'admin', 'superadmin'];
     const users = await this.userRepository.find({
       where: { rol: Not(In(excludedRoles)) },
-      select: ['id', 'name', 'image', 'lastLogin'],
+      select: ['id', 'name', 'lastName', 'image', 'lastLogin'],
     });
 
     return users;
