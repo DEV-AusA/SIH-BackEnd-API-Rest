@@ -5,7 +5,6 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
-  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -28,15 +27,44 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiBearerAuth()
-  @ApiResponse({ status: 404, description: 'No se encontraron usuarios' })
+  @ApiResponse({
+    status: 401,
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'No tienes permisos para el acceso a esa Ruta',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No se encontraron usuarios',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'Necesitas loguearte para acceder a esta seccion.',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  })
   @Get()
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(AuthGuard, RolesGuard)
-  getUsers(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-  ) {
-    return this.usersService.getUsersProps(Number(page), Number(limit));
+  getUsers() {
+    return this.usersService.getUsersProps();
   }
 
   @ApiBearerAuth()
@@ -52,10 +80,26 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({
     status: 401,
-    description: 'No se puede obtener datos de ese usuario',
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'No se puede obtener datos de ese usuario',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Usuario no encontrado',
+      },
+    },
   })
   @Get(':id')
   @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
@@ -67,14 +111,36 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
-    description: 'Usuario actualizado correctamente',
+    schema: {
+      example: {
+        message: 'Usuario actualizado correctamente',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'ID invalida para la operacion solicitada',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
   })
   @ApiResponse({
     status: 401,
-    description: 'No se puede actualizar este usuario',
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'No tienes permisos para el acceso a esa Ruta',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
   })
   @Put('update/:id')
-  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.Owner, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
   @UseInterceptors(
     UserIdInterceptor,
@@ -93,11 +159,44 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
-    description: 'Usuario de Google actualizado correctamente',
+    schema: {
+      example: {
+        message: 'Usuario de Google actualizado correctamente',
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'No se puede actualizar este usuario',
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'Por favor actualiza el Apellido',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'Por favor actualiza el número telefono celular',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Error: Bad Request',
+    schema: {
+      example: {
+        message: 'ID invalida para la operacion solicitada',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
   })
   @Put('update/google/:id')
   @Roles(Role.Admin, Role.GoogleTemp, Role.SuperAdmin)
@@ -119,15 +218,32 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
-    description: 'El usuario fue dado de baja',
+    schema: {
+      example: {
+        message: 'El usuario fue dado de baja',
+      },
+    },
   })
   @ApiResponse({
     status: 401,
-    description: 'No se puede dar de baja este usuario',
+    description: 'Error: Unauthorized',
+    schema: {
+      example: {
+        message: 'No se puede dar de baja este usuario',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
   })
   @ApiResponse({
     status: 404,
-    description: 'Usuario no encontrado',
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Usuario no encontrado',
+      },
+    },
   })
   @Put('unsubscribe/:id')
   @Roles(Role.Admin, Role.SuperAdmin)

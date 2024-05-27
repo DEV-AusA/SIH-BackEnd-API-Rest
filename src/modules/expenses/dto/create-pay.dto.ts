@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsUUID } from 'class-validator';
 
 export class CreatePayDto {
   /**
@@ -8,6 +8,7 @@ export class CreatePayDto {
    * **/
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   amount: number;
 
   /**

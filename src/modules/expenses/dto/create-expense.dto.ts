@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsPositive, IsString, IsUUID } from 'class-validator';
 import { IsOptional } from 'class-validator';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
@@ -10,6 +10,7 @@ export class CreateExpenseDto {
    * **/
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   amount: number;
 
   /**

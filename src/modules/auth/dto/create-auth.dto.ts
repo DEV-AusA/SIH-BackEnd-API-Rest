@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   Matches,
   MaxLength,
@@ -10,6 +11,7 @@ import {
   Validate,
 } from 'class-validator';
 import { IsEightDigits } from '../../../decorators/digit-count.decorator';
+import { IsPositiveOrZero } from '../../../decorators/is-positive-or-zero.decorator';
 
 export class CreateUserDto {
   /**
@@ -68,6 +70,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   @Validate(IsEightDigits) // custom decorator
   readonly document: number;
 
@@ -76,8 +79,9 @@ export class CreateUserDto {
    * @description Debe ser un número no vacío.
    * @example 1234567890
    */
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
+  @Validate(IsPositiveOrZero) // custom decorator exclusivo para este campo
   readonly phone?: number;
 
   /**
@@ -87,6 +91,7 @@ export class CreateUserDto {
    */
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   readonly cellphone: number;
 
   /**
@@ -97,8 +102,16 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
+  @Matches(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+    message: 'Caracteres inválidos en el correo electrónico',
+  })
   readonly email: string;
 
+  /**
+   * Código de vivienda proporcionado por el admin.
+   * @description Debe ser una cadena no vacía con longitud de 7 caracteres.
+   * @example 'F5B38KU (codigo de vivienda proporcionad por el admin)'
+   */
   @IsOptional()
   @IsString()
   readonly code: string;

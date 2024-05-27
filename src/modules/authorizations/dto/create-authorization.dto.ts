@@ -2,6 +2,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   Matches,
   MaxLength,
@@ -32,7 +33,7 @@ export class CreateAuthorizationDto {
   @IsString()
   @MinLength(3)
   @MaxLength(50)
-  @Matches(/^[a-zA-Z ]+$/)
+  @Matches(/^[a-zA-Z0-9 ]+$/)
   readonly name?: string;
 
   /**
@@ -42,6 +43,7 @@ export class CreateAuthorizationDto {
    */
   @IsOptional()
   @IsNumber()
+  @IsPositive()
   @Validate(IsEightDigits) // custom decorator
   readonly document?: number;
 
@@ -52,5 +54,6 @@ export class CreateAuthorizationDto {
    */
   @IsOptional()
   @IsString()
+  @Matches(/^[a-zA-Z0-9]+$/)
   readonly shipmentNumber?: string;
 }
