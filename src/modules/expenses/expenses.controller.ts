@@ -19,12 +19,13 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/helpers/roles.enum';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Expensas')
 @Controller('expenses')
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     schema: {
@@ -49,6 +50,7 @@ export class ExpensesController {
   createPay(@Body() createPayDto: CreatePayDto) {
     return this.expensesService.createPay(createPayDto);
   }
+
   @ApiResponse({
     status: 200,
     schema: {
@@ -84,9 +86,7 @@ export class ExpensesController {
     return this.expensesService.statu(request.body.data.id);
   }
 
-  @Get()
-  @Roles(Role.Admin, Role.SuperAdmin)
-  @UseGuards(AuthGuard, RolesGuard)
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -135,10 +135,13 @@ export class ExpensesController {
     },
   })
   @Get()
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
   getExpenses() {
     return this.expensesService.getExpenses();
   }
 
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -308,6 +311,7 @@ export class ExpensesController {
     res.end(pdfBuffer);
   }
 
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -356,6 +360,7 @@ export class ExpensesController {
     return this.expensesService.getExpensePropertyId(id);
   }
 
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -417,6 +422,7 @@ export class ExpensesController {
     return this.expensesService.getExpensesUserId(id);
   }
 
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -467,6 +473,7 @@ export class ExpensesController {
     return this.expensesService.createAllExpenses(createExpenseDto);
   }
 
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',
@@ -493,6 +500,8 @@ export class ExpensesController {
   createExpense(@Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.createExpense(createExpenseDto);
   }
+
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'OK',

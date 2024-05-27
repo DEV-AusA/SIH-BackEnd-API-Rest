@@ -123,20 +123,22 @@ export class AuthorizationsController {
     status: 200,
     description: 'OK',
     schema: {
-      example: {
-        id: '4806c5ee-11d0-4604-a335-90357ace955c',
-        number: 1,
-        user: '2a8cb7d7-881f-479e-bd3b-1e844d5be2f2',
-        type: 'guest',
-        name: 'Fernando Perez',
-        document: 50345678,
-        shipmentNumber: '5678',
-        accessCode: 9992,
-        expirationTime: '2024-05-23T05:52:37.017Z',
-        dateGenerated: '2024-05-23T03:52:37.018Z',
-        guardId: null,
-        dateUsed: null,
-      },
+      example: [
+        {
+          id: '848b9b28-6403-4011-b658-d9a44c511ae6',
+          number: 1,
+          user: 'ce9b2f6a-a4b2-48a9-a566-4655068f309d',
+          type: 'guest',
+          name: 'Fernando Perez',
+          document: 50345678,
+          shipmentNumber: '5678',
+          accessCode: '9956',
+          expirationTime: '2024-05-26T19:04:51.760Z',
+          dateGenerated: '2024-05-26T17:04:51.761Z',
+          guardId: null,
+          dateUsed: null,
+        },
+      ],
     },
   })
   @ApiResponse({
@@ -144,7 +146,7 @@ export class AuthorizationsController {
     description: 'Not Found',
     schema: {
       example: {
-        message: 'No se encuentra una autorizacion con ese numero ingresado.',
+        message: 'No se encuentra una autorizacion con el código ingresado.',
         error: 'Not Found',
         statusCode: 404,
       },
