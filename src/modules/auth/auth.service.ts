@@ -113,7 +113,7 @@ export class AuthService {
       rol: userValidated.rol,
     };
     const token = this.jwtService.sign(payload);
-    return {
+    const userLoginData = {
       token: token,
       user: {
         id: userValidated.id,
@@ -127,8 +127,10 @@ export class AuthService {
         email: userValidated.email,
         rol: userValidated.rol,
         lastLogin: userValidated.lastLogin,
+        properties: userValidated.properties,
       },
     };
+    return userLoginData;
   }
 
   async validateUser(userData: GoogleUserInfoDto) {
