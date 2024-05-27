@@ -96,11 +96,26 @@ export class AuthorizationsService {
     const authorization = await this.authorizationRepository.findOneBy({
       accessCode: code,
     });
+
     if (!authorization)
       throw new NotFoundException(
         'No se encuentra una autorizacion con el código ingresado.',
       );
-    return authorization;
+
+    const userData = await this.userService.findUserById(authorization.user);
+
+    const { number, address } = userData.properties[0];
+    const { name, lastName } = userData;
+
+    const authorizationComplete = {
+      ...authorization,
+      nameProp: name,
+      lastNameProp: lastName,
+      numberProp: number,
+      addressProp: address,
+    };
+
+    return authorizationComplete;
   }
 
   // only security rol
