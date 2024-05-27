@@ -33,14 +33,18 @@ export class AuthorizationsController {
         type: 'guest',
         name: 'Fernando Perez',
         document: 50345678,
-        shipmentNumber: '5678',
-        accessCode: '5622',
+        shipmentNumber: null,
+        accessCode: '5678',
         expirationTime: '2024-05-23T05:32:19.022Z',
         dateGenerated: '2024-05-23T03:32:19.023Z',
         guardId: null,
         dateUsed: null,
         id: '778b058a-8062-4782-8ac9-7c2572541c9c',
         number: 1,
+        nameProp: 'Leonardo',
+        lastNameProp: 'Ausa',
+        numberProp: 158,
+        addressProp: 'Calle 6 143',
       },
     },
   })
@@ -53,14 +57,18 @@ export class AuthorizationsController {
         type: 'delivery',
         name: 'Amazon',
         document: 50345587,
-        shipmentNumber: '3247',
-        accessCode: '4828',
+        shipmentNumber: '4828',
+        accessCode: '2348',
         expirationTime: '2024-05-23T05:34:53.763Z',
         dateGenerated: '2024-05-23T03:34:53.764Z',
         guardId: null,
         dateUsed: null,
         id: '315fa4ad-aa39-42f4-bf04-ff0eeb555036',
         number: 1,
+        nameProp: 'Leonardo',
+        lastNameProp: 'Ausa',
+        numberProp: 158,
+        addressProp: 'Calle 6 143',
       },
     },
   })
@@ -72,6 +80,17 @@ export class AuthorizationsController {
         message: 'El tipo de autorizacion ingresado no es correcto',
         error: 'Bad Request',
         statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Error: Not Found',
+    schema: {
+      example: {
+        message: 'No tienes ninguna propiedad vinculada a tu cuenta',
+        error: 'Not Found',
+        statusCode: 404,
       },
     },
   })
@@ -160,6 +179,41 @@ export class AuthorizationsController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      example: {
+        id: 'a392a02f-26a8-4af8-b6c4-49743c411449',
+        number: 1,
+        user: '0245667f-edc2-439c-a249-bf14687e4ebc',
+        type: 'delivery',
+        name: 'Fernando Perez',
+        document: null,
+        shipmentNumber: '4828',
+        accessCode: '2218',
+        expirationTime: '2024-05-28T01:15:29.933Z',
+        dateGenerated: '2024-05-27T23:15:29.934Z',
+        guardId: null,
+        dateUsed: null,
+        nameProp: 'Leonardo',
+        lastNameProp: 'Ausa',
+        numberProp: 160,
+        addressProp: 'Calle 0 41',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not Found',
+    schema: {
+      example: {
+        message: 'No se encuentra una autorizacion con el código ingresado.',
+        error: 'Not Found',
+        statusCode: 404,
+      },
+    },
+  })
   @Get(':code')
   @Roles(Role.Admin, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
