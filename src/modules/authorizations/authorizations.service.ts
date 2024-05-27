@@ -37,6 +37,11 @@ export class AuthorizationsService {
 
     const userData = await this.userService.findUserById(id);
 
+    if (!userData.properties[0])
+      throw new NotFoundException(
+        'No tienes ninguna propiedad vinculada a tu cuenta',
+      );
+
     //generaqdor de codigos aletatorio
     const accessCode = otpGenerator.generate(4, {
       digits: true,

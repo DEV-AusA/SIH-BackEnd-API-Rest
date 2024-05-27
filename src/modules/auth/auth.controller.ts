@@ -63,6 +63,16 @@ export class AuthController {
           email: 'usuario@example.com',
           rol: 'owner',
           lastLogin: '2024-05-18T01:33:25.027Z',
+          properties: [
+            {
+              id: 'a5a0b0c0-5b0b-4a0b-8a0b-1a0b8a0b8a0b',
+              number: 109,
+              image:
+                'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600',
+              address: 'Calle 9 10',
+              code: 'CDAH3E',
+            },
+          ],
         },
       },
     },
