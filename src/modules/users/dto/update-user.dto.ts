@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -31,6 +32,7 @@ export class UpdateUserDto {
    * @description Debe ser una cadena no vacía con longitud entre 2 y 30 caracteres.
    * @example 'Juan Pérez'
    */
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
@@ -43,6 +45,7 @@ export class UpdateUserDto {
    * @description Debe ser una cadena no vacía con longitud entre 2 y 30 caracteres.
    * @example 'Juan Pérez'
    */
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
@@ -55,7 +58,7 @@ export class UpdateUserDto {
    * @description Debe ser un número no vacío.
    * @example 12345678
    */
-
+  @IsOptional()
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
@@ -77,6 +80,7 @@ export class UpdateUserDto {
    * @description Debe ser un número no vacío.
    * @example 1234567890
    */
+  @IsOptional()
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
@@ -87,6 +91,7 @@ export class UpdateUserDto {
    * @description Debe ser una cadena no vacía con formato de email válido.
    * @example 'usuario@example.com'
    */
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   @IsEmail()
@@ -94,4 +99,8 @@ export class UpdateUserDto {
     message: 'Caracteres inválidos en el correo electrónico',
   })
   readonly email: string;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly state: boolean;
 }
