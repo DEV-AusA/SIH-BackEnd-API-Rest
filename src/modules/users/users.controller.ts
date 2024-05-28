@@ -61,7 +61,7 @@ export class UsersController {
     },
   })
   @Get()
-  @Roles(Role.Admin, Role.SuperAdmin)
+  @Roles(Role.Admin, Role.SuperAdmin, Role.Security)
   @UseGuards(AuthGuard, RolesGuard)
   getUsers() {
     return this.usersService.getUsersProps();

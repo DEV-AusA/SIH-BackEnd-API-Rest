@@ -18,6 +18,7 @@ import { AuthorizationsModule } from './modules/authorizations/authorizations.mo
 import { ChatModule } from './modules/chat/chat.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { EstablishmentModule } from './modules/establishment/establishment.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'), // chat
     }),
+    EstablishmentModule,
   ],
   controllers: [],
   providers: [DataLoaderService],
