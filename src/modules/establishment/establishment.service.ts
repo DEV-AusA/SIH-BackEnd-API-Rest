@@ -26,8 +26,8 @@ export class EstablishmentService {
 
   async findAll() {
     const establishments = await this.establishmentRepository.find();
-    if (!establishments)
-      throw new NotFoundException('No se encontraron establecimientos');
+    if (!establishments.length)
+      throw new NotFoundException('No se encontro establecimiento');
     return establishments;
   }
 
@@ -49,7 +49,7 @@ export class EstablishmentService {
     try {
       const updateEstablishment = await queryRunner.manager.preload(
         Establishment,
-        { id, ...updateEstablishmentDto },
+        { id: id, ...updateEstablishmentDto },
       );
       const userModified = await queryRunner.manager.save(updateEstablishment);
       await queryRunner.manager.save(userModified);

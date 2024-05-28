@@ -8,13 +8,22 @@ export class Establishment {
   @Column({ type: 'text', nullable: true })
   description: string;
 
+  @Column({ type: 'text', nullable: true })
+  news: string;
+
+  @Column({ name: 'start_date', type: 'date', nullable: true })
+  startDate: Date;
+
+  @Column({ name: 'finish_date', type: 'timestamp', nullable: true })
+  finishDate: Date;
+
   @Column({ type: 'varchar', nullable: true })
   location: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   address: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   email: string;
 
   @Column({ type: 'bigint', nullable: true })

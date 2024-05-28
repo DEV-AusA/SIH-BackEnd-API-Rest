@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -13,13 +14,53 @@ import {
 import { IsPositiveOrZero } from 'src/decorators/is-positive-or-zero.decorator';
 
 export class CreateEstablishmentDto {
+  /**
+   * Descripción del Establesimiento.
+   * @description Debe ser una cadena string.
+   * @example 'Establesimiento de prueba'
+   */
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   description: string;
 
+  /**
+   * Noticias del Establesimiento.
+   * @description Debe ser una cadena string.
+   * @example 'La semana proxima es el fin... de esta semana'
+   */
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
+  news: string;
+
+  /**
+   * Ubicación de google maps del Establesimiento.
+   * @description Debe ser una cadena string.
+   * @example '???.??.??'
+   */
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
   location: string;
+
+  /**
+   * Fecha de inicio de una noticia o evento del Establesimiento.
+   * @description Debe ser una fecha.
+   * @example '2022-01-01'
+   */
+  @IsOptional()
+  @IsDate()
+  startDate: Date;
+
+  /**
+   * Fecha de fin de una noticia o evento del Establesimiento.
+   * @description Debe ser una fecha.
+   * @example '2022-01-01'
+   */
+  @IsOptional()
+  // @IsDate()
+  finishDate: Date;
 
   /**
    * Direccion del Establesimiento.
