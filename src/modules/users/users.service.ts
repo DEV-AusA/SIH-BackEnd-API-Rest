@@ -203,6 +203,14 @@ export class UsersService {
     if (!userExists) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }
+
+    const dniExists = await this.userService.findOneBy({
+      document: updateUserDto.document,
+    });
+    if (updateUserDto?.document) {
+      if (dniExists && userExists.document !== updateUserDto.document)
+        throw new NotFoundException('El DNI ya existe');
+    }
     if (userExists.rol === 'superadmin')
       throw new UnauthorizedException('No se puede modificar ese usuario');
 
