@@ -28,7 +28,8 @@ export class SeedController {
   exejutePreloadData() {
     const dataProps = this.seedService.preloadDataProperties();
     const dataUsers = this.seedService.preloadDataProperties();
+    const DataEstablishments = this.seedService.preloadDataEstablishments();
 
-    return { dataProps, dataUsers };
+    return { dataProps, dataUsers, DataEstablishments };
   }
 }

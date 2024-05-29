@@ -1,4 +1,4 @@
-import { IsPositive, IsString } from 'class-validator';
+import { IsDateString, IsPositive, IsString } from 'class-validator';
 import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateExpenceDto {
@@ -27,8 +27,8 @@ export class UpdateExpenceDto {
    * @example '2022-01-01'
    */
   @IsOptional()
-  // @IsDate()
-  dateGenerated: Date;
+  @IsDateString()
+  dateGenerated: string;
 
   /**
    * Estado de la expensa si esta pagada o no.
