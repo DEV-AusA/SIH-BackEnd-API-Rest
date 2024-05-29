@@ -12,13 +12,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../auth/dto/create-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
-import { emailBody } from '../../utils/email-format';
+import { emailNewRegister } from '../../utils/email-new-register';
 import { config as dotenvConfig } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import { Property } from '../properties/entities/property.entity';
 import { FilesCloudinaryService } from '../files-cloudinary/files-cloudinary.service';
 import { Role } from '../../helpers/roles.enum';
 import { UpdateUserGoogleDto } from './dto/update-user-google.dto';
+import { emailUserDisable } from '../../utils/email-user-disable';
 
 dotenvConfig({ path: '.env' });
 
@@ -268,7 +269,13 @@ export class UsersService {
     if (userExists.rol === 'superadmin')
       throw new UnauthorizedException('No se puede dar de baja ese usuario');
     userExists.state = false;
-    await this.userService.save(userExists);
+    const userDisabled = await this.userService.save(userExists);
+
+    await this.emailService.sendNewEmail({
+      to: userDisabled.email,
+      subject: 'Alerta de cuenta - Secure Ingress Home',
+      text: emailUserDisable(`${userDisabled.name} ${userDisabled.lastName}`),
+    });
     return { message: 'El usuario fue dado de baja' };
   }
   async searchEmail(email: string) {
@@ -326,7 +333,10 @@ export class UsersService {
       await this.emailService.sendNewEmail({
         to: userData.email,
         subject: 'Bienvenido a SIH - Secure Ingress Home',
-        text: emailBody(`${newUser.name} ${newUser.lastName}`, urlValidate),
+        text: emailNewRegister(
+          `${newUser.name} ${newUser.lastName}`,
+          urlValidate,
+        ),
       });
 
       await queryRunner.commitTransaction();

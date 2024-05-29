@@ -15,6 +15,8 @@ import { CreatePayDto } from './dto/create-pay.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenceDto } from './dto/update-expense.dto';
 import { PdfInvoiceHelper } from 'src/helpers/pdf-invoice.helper';
+import { EmailService } from '../email/email.service';
+import { emailUserPayment } from '../../utils/email-user-payment';
 
 @Injectable()
 export class ExpensesService {
@@ -25,6 +27,7 @@ export class ExpensesService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
+    private readonly emailService: EmailService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -50,9 +53,9 @@ export class ExpensesService {
           },
         ],
         back_urls: {
-          success: 'https://secureingresshome.vercel.app/acciones/expensas',
-          failure: 'https://secureingresshome.vercel.app/acciones/expensas',
-          pending: 'https://secureingresshome.vercel.app/acciones/expensas',
+          success: `${process.env.FRONT_HOST_NAME}/acciones/expensas`,
+          failure: `${process.env.FRONT_HOST_NAME}/acciones/expensas`,
+          pending: `${process.env.FRONT_HOST_NAME}/acciones/expensas`,
         },
       },
     });
@@ -81,7 +84,17 @@ export class ExpensesService {
       expenceValidated.datePaid = new Date();
       expenceValidated.numberOperation = payment.id.toString();
 
-      await this.expenceRepository.save(expenceValidated);
+      const paidExpense = await this.expenceRepository.save(expenceValidated);
+      const user = await this.userRepository.findOneBy({
+        id: paidExpense.userProperty,
+      });
+
+      await this.emailService.sendNewEmail({
+        to: user.email,
+        subject: 'Confirmacion de tu pago - Secure Ingress Home',
+        text: emailUserPayment(`${user.name} ${user.lastName}`),
+      });
+
       return {
         message: 'La expensa ha sido pagada',
       };
