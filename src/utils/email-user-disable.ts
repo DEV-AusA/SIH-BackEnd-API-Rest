@@ -1,4 +1,5 @@
-export const emailBody = (name: string, link: string) => {
+export const emailUserDisable = (toName: string) => {
+  const linkWebDeploy = process.env.FRONT_HOST_NAME;
   const email = `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="es">
@@ -93,7 +94,7 @@ export const emailBody = (name: string, link: string) => {
                         <td align="center" valign="top" style="padding:0;Margin:0;width:520px">
                         <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                             <tr>
-                            <td align="center" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="https://sih.com" style="mso-line-height-rule:exactly;text-decoration:underline;color:#2D3142;font-size:14px"><img src="https://ehpbxyt.stripocdn.email/content/guids/CABINET_bcbf32838e875f8b61c1ef90aa3a3efc6271d6985b67830691e1b887c657ecad/images/sih_icono_vQv.png" alt="" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none" title="Logo" class="adapt-img" width="265"></a></td>
+                            <td align="center" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href=${linkWebDeploy} style="mso-line-height-rule:exactly;text-decoration:underline;color:#2D3142;font-size:14px"><img src="https://ehpbxyt.stripocdn.email/content/guids/CABINET_bcbf32838e875f8b61c1ef90aa3a3efc6271d6985b67830691e1b887c657ecad/images/sih_icono_vQv.png" alt="" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none" title="Logo" class="adapt-img" width="265"></a></td>
                             </tr>
                         </table></td>
                         </tr>
@@ -126,7 +127,8 @@ export const emailBody = (name: string, link: string) => {
                         <td align="center" valign="top" style="padding:0;Margin:0;width:520px">
                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#fafafa" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:separate;border-spacing:0px;background-color:#fafafa;border-radius:10px" role="presentation">
                             <tr>
-                            <td align="left" style="padding:20px;Margin:0"><h3 style="Margin:0;font-family:Imprima, Arial, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:28px;font-style:normal;font-weight:bold;line-height:34px;color:#2D3142">Bienvenido, ${name}</h3><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px"><br></p><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Estás recibiendo este mensaje porque recientemente te registraste para obtener una cuenta en SIH. &nbsp;Confirme su cuenta haciendo clic en el botón a continuación.&nbsp;</p><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Este paso agrega seguridad adicional a su cuenta al verificar que es el propietario de este correo electrónico.</p></td>
+                            <td align="left" style="padding:20px;Margin:0"><h3 style="Margin:0;font-family:Imprima, Arial, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:28px;font-style:normal;font-weight:bold;line-height:34px;color:#2D3142">
+                            Hola ${toName}</h3><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px"><br>Lamentamos verte partir, pero queremos confirmarte que tu solicitud de baja ha sido procesada con éxito.</p><br><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">A partir de este momento, tu cuenta en SIH ha sido desactivada y ya no recibirás comunicaciones de nuestra parte.&nbsp;Si esta decisión fue tomada por error o si cambias de opinión en el futuro, siempre puedes volver a unirte a nosotros. Solo tienes que visitar nuestra página web y crear una nueva cuenta.&nbsp;</p><br><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Nos gustaría agradecerte por haber sido parte de nuestra comunidad y esperamos tener la oportunidad de servirte nuevamente.&nbsp;</p><br><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Si tienes alguna pregunta o necesitas asistencia adicional, no dudes en ponerte en contacto con nuestro equipo de soporte a través de secureingresshome@gmail.com</p></td>
                             </tr>
                         </table></td>
                         </tr>
@@ -139,25 +141,7 @@ export const emailBody = (name: string, link: string) => {
                 <tr>
                 <td align="center" style="padding:0;Margin:0">
                 <table bgcolor="#efefef" class="es-content-body" align="center" cellpadding="0" cellspacing="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#EFEFEF;width:600px">
-                    <tr>
-                    <td align="left" style="Margin:0;padding-right:40px;padding-left:40px;padding-top:30px;padding-bottom:40px">
-                    <table cellpadding="0" cellspacing="0" width="100%" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                        <tr>
-                        <td align="center" valign="top" style="padding:0;Margin:0;width:520px">
-                        <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                            <tr>
-                            <td align="center" style="padding:0;Margin:0"><!--[if mso]><a href="" target="_blank" hidden>
-            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="" 
-                        style="height:51px; v-text-anchor:middle; width:293px" arcsize="50%" stroke="f"  fillcolor="#384b59">
-                <w:anchorlock></w:anchorlock>
-                <center style='color:#ffffff; font-family:Imprima, Arial, sans-serif; font-size:18px; font-weight:700; line-height:18px;  mso-text-raise:1px'>Confirmar Email</center>
-            </v:roundrect></a>
-        <![endif]--><!--[if !mso]><!-- --><span class="es-button-border msohide" style="border-style:solid;border-color:#2CB543;background:#384b59;border-width:0px;display:block;border-radius:30px;width:auto;mso-hide:all;mso-border-alt:10px"><a href=${link} class="es-button msohide" target="_blank" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#FFFFFF;font-size:22px;padding:15px 20px 15px 20px;display:block;background:#384b59;border-radius:30px;font-family:Imprima, Arial, sans-serif;font-weight:bold;font-style:normal;line-height:26px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #384b59;mso-hide:all;padding-left:5px;padding-right:5px;border-color:#7630f3">Confirmar Cuenta</a></span><!--<![endif]--></td>
-                            </tr>
-                        </table></td>
-                        </tr>
-                    </table></td>
-                    </tr>
+                    <br>
                     <tr>
                     <td align="left" style="padding:0;Margin:0;padding-right:40px;padding-left:40px">
                     <table cellpadding="0" cellspacing="0" width="100%" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
@@ -165,7 +149,7 @@ export const emailBody = (name: string, link: string) => {
                         <td align="center" valign="top" style="padding:0;Margin:0;width:520px">
                         <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                             <tr>
-                            <td align="left" style="padding:0;Margin:0"><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Muchas gracias,<br><br><strong>Secure Ingress Home</strong></p></td>
+                            <td align="left" style="padding:0;Margin:0"><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">¡Te deseamos lo mejor!<br><br><strong>Secure Ingress Home</strong></p></td>
                             </tr>
                             <tr>
                             <td align="center" style="padding:0;Margin:0;padding-bottom:20px;padding-top:40px;font-size:0">
@@ -208,7 +192,7 @@ export const emailBody = (name: string, link: string) => {
                             <td align="center" valign="top" style="padding:0;Margin:0;width:453px">
                             <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                 <tr>
-                                <td align="left" style="padding:0;Margin:0"><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Este enlace caduca en 24 horas. Si tienes preguntas, estamos aquí para ayudarte.</p></td>
+                                <td align="left" style="padding:0;Margin:0"><p style="Margin:0;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;letter-spacing:0;color:#2D3142;font-size:18px">Si tienes preguntas, estamos aquí para ayudarte.</p></td>
                                 </tr>
                             </table></td>
                             </tr>
