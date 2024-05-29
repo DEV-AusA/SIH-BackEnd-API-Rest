@@ -17,6 +17,11 @@ export class EstablishmentController {
     return this.establishmentService.findAll();
   }
 
+  @Put('update')
+  updateUnique(@Body() updateEstablishmentDto: UpdateEstablishmentDto) {
+    return this.establishmentService.updateUnique(updateEstablishmentDto);
+  }
+
   @Put('update/:id')
   update(
     @Body() updateEstablishmentDto: UpdateEstablishmentDto,

@@ -5,6 +5,9 @@ export class Establishment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ type: 'integer', nullable: false, unique: true })
+  establishment: number;
+
   @Column({ type: 'text', nullable: true })
   description: string;
 

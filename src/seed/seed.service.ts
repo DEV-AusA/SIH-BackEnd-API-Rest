@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import * as propertiesData from '../helpers/preload-properties-data.json';
 import * as usersData from '../helpers/preload-users.data.json';
 import * as imagesPropsData from '../helpers/preload-images-data.json';
+import * as establishmentsData from '../helpers/preload-establishment-data.json';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePropertyDto } from '../modules/properties/dto/create-property.dto';
@@ -10,6 +11,7 @@ import { User } from '../modules/users/entities/user.entity';
 import { customAlphabet } from 'nanoid';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
+import { Establishment } from '../modules/establishment/entities/establishment.entity';
 
 @Injectable()
 export class SeedService implements OnModuleInit {
@@ -18,14 +20,49 @@ export class SeedService implements OnModuleInit {
     private readonly propertyRepository: Repository<Property>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Establishment)
+    private readonly establishmentRepository: Repository<Establishment>,
   ) {}
 
   async onModuleInit() {
     //preload on start
     await this.preloadDataUsers();
     await this.preloadDataProperties();
+    await this.preloadDataEstablishments();
   }
 
+  private async executeSeedEstablishments() {
+    try {
+      const establisFinded = await this.establishmentRepository.findOneBy({
+        establishment: establishmentsData.establishment,
+      });
+      if (!establisFinded) {
+        const newEstablishment =
+          await this.establishmentRepository.create(establishmentsData);
+
+        await this.establishmentRepository.save(newEstablishment);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  async preloadDataEstablishments() {
+    try {
+      await this.executeSeedEstablishments();
+
+      Logger.log(
+        'Seed de Establecimiento cargado correctamente',
+        'PreloadData-SIH Secure Ingress Home',
+      );
+      const message = {
+        message: 'Seed de Establecimiento cargado correctamente',
+      };
+
+      return message;
+    } catch (error) {
+      throw error;
+    }
+  }
   private async executeSeedProperties() {
     const fakeProperties = faker.helpers.multiple(this.createRandomProperties, {
       count: 40,
