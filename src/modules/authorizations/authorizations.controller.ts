@@ -233,6 +233,7 @@ export class AuthorizationsController {
   })
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         message: `El código de autorization ha expirado, por favor genere otro.`,

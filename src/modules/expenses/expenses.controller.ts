@@ -28,6 +28,7 @@ export class ExpensesController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         urlMercadopago:
@@ -53,6 +54,7 @@ export class ExpensesController {
 
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         state: true,
