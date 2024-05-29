@@ -28,6 +28,7 @@ export class EstablishmentService {
     const establishments = await this.establishmentRepository.find();
     if (!establishments.length)
       throw new NotFoundException('No se encontro establecimiento');
+    console.log(new Date());
     return establishments;
   }
 
@@ -66,6 +67,33 @@ export class EstablishmentService {
     }
   }
 
+  async updateUnique(updateEstablishmentDto: UpdateEstablishmentDto) {
+    const establishmentValidate = await this.establishmentRepository.find();
+    if (!establishmentValidate.length)
+      throw new NotFoundException('No se encontro establecimiento');
+    const queryRunner = await this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const updateEstablishment = await queryRunner.manager.preload(
+        Establishment,
+        { id: establishmentValidate[0].id, ...updateEstablishmentDto },
+      );
+      const userModified = await queryRunner.manager.save(updateEstablishment);
+      await queryRunner.manager.save(userModified);
+      await queryRunner.commitTransaction();
+
+      return {
+        message: 'Establecimiento actualizado',
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
   remove(id: number) {
     return `This action removes a #${id} establishment`;
   }

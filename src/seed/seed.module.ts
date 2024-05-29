@@ -8,9 +8,10 @@ import { PropertiesService } from '../modules/properties/properties.service';
 import { UsersService } from '../modules/users/users.service';
 import { EmailService } from '../modules/email/email.service';
 import { FilesCloudinaryService } from '../modules/files-cloudinary/files-cloudinary.service';
+import { Establishment } from '../modules/establishment/entities/establishment.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Property])],
+  imports: [TypeOrmModule.forFeature([User, Property, Establishment])],
   controllers: [SeedController],
   providers: [
     SeedService,

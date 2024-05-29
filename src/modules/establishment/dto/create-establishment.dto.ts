@@ -1,5 +1,5 @@
 import {
-  IsDate,
+  IsDateString,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -22,7 +22,7 @@ export class CreateEstablishmentDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  description: string;
+  readonly description: string;
 
   /**
    * Noticias del Establesimiento.
@@ -32,7 +32,7 @@ export class CreateEstablishmentDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  news: string;
+  readonly news: string;
 
   /**
    * Ubicación de google maps del Establesimiento.
@@ -42,7 +42,7 @@ export class CreateEstablishmentDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  location: string;
+  readonly location: string;
 
   /**
    * Fecha de inicio de una noticia o evento del Establesimiento.
@@ -50,8 +50,8 @@ export class CreateEstablishmentDto {
    * @example '2022-01-01'
    */
   @IsOptional()
-  @IsDate()
-  startDate: Date;
+  @IsDateString()
+  readonly startDate: string;
 
   /**
    * Fecha de fin de una noticia o evento del Establesimiento.
@@ -59,8 +59,8 @@ export class CreateEstablishmentDto {
    * @example '2022-01-01'
    */
   @IsOptional()
-  // @IsDate()
-  finishDate: Date;
+  @IsDateString()
+  readonly finishDate: string;
 
   /**
    * Direccion del Establesimiento.
