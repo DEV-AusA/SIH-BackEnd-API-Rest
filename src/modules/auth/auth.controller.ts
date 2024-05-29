@@ -22,6 +22,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiResponse({
     status: 201,
+    description: 'Created',
     schema: {
       example: {
         message: 'Usuario creado correctamente',
@@ -46,6 +47,7 @@ export class AuthController {
 
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         token:
@@ -117,7 +119,7 @@ export class AuthController {
 
   @ApiResponse({
     status: 200,
-    description: 'Esta es la data que regresa en el login con Google',
+    description: 'OK -Esta es la data que regresa en el login con Google',
     schema: {
       example: {
         token:
