@@ -19,7 +19,7 @@ function generateTableRow(
   doc
     .fontSize(10)
     .text(item, 52, y)
-    .text(description, 150, y)
+    .text(description, 160, y)
     .text(unitCost, 295, y, { width: 90, align: 'right' })
     .text(discount, 370, y, { width: 90, align: 'right' })
     .text(lineTotal, 0, y, { align: 'right' });
@@ -75,6 +75,7 @@ export class PdfInvoiceHelper {
         .text(`${expence.property.user.email}`, 50, 169);
 
       const dateAct = moment().format('YYYY-MM-DD HH:mm:ss');
+      console.log(expence);
       doc
         .fontSize(12)
         .font('Helvetica-Bold')
@@ -82,7 +83,7 @@ export class PdfInvoiceHelper {
         .fontSize(10)
         .font('Helvetica')
         .text(
-          `Fecha de pago: ${expence.paymentDate ? expence.paymentDate : 'No Pagado'}`,
+          `Fecha de pago: ${expence.datePaid ? expence.datePaid : 'No Pagado'}`,
           50,
           158,
           {
