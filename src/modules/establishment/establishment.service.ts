@@ -28,7 +28,6 @@ export class EstablishmentService {
     const establishments = await this.establishmentRepository.find();
     if (!establishments.length)
       throw new NotFoundException('No se encontro establecimiento');
-    console.log(new Date());
     return establishments;
   }
 

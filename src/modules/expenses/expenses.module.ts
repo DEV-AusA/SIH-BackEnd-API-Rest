@@ -8,11 +8,7 @@ import { Property } from '../properties/entities/property.entity';
 import { EmailService } from '../email/email.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Expense]),
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([Property]),
-  ],
+  imports: [TypeOrmModule.forFeature([Expense, User, Property])],
   controllers: [ExpensesController],
   providers: [ExpensesService, EmailService],
 })

@@ -71,7 +71,7 @@ export class User {
   })
   createdAt: Date;
 
-  @Column({ name: 'last_login', nullable: false })
+  @Column({ name: 'last_login', type: 'timestamp', nullable: false })
   lastLogin: Date;
 
   @Column({ name: 'admin_modify', type: 'uuid', nullable: true })
