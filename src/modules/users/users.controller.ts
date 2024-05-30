@@ -353,4 +353,10 @@ export class UsersController {
   unsubscribeUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.unsubscribeUser(id);
   }
+  @Put('subscribe/:id')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard, RolesGuard)
+  subscribeUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.subscribeUser(id);
+  }
 }

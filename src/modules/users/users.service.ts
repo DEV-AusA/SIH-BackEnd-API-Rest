@@ -278,6 +278,19 @@ export class UsersService {
     });
     return { message: 'El usuario fue dado de baja' };
   }
+
+  async subscribeUser(id: string) {
+    const userExists = await this.userService.findOneBy({ id: id });
+    if (!userExists) {
+      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+    }
+    if (userExists.rol === 'superadmin')
+      throw new UnauthorizedException('No se puede dar de Alta ese usuario');
+    userExists.state = true;
+    await this.userService.save(userExists);
+
+    return { message: 'El usuario fue dado de Alta' };
+  }
   async searchEmail(email: string) {
     return await this.userService.findOne({ where: { email: email } });
   }
@@ -314,27 +327,36 @@ export class UsersService {
     await queryRunner.startTransaction();
 
     try {
-      const newUser = await queryRunner.manager.create(User, userData);
-      const newUserSaved = await queryRunner.manager.save(newUser);
+      let newUserSaved: User;
+      if (createUserDto.code === 'SIHSECURITY') {
+        const newUser = await queryRunner.manager.create(User, {
+          ...userData,
+          rol: 'security',
+        });
+        newUserSaved = await queryRunner.manager.save(newUser);
+      } else {
+        const newUser = await queryRunner.manager.create(User, userData);
+        newUserSaved = await queryRunner.manager.save(newUser);
 
-      const propFinded = await queryRunner.manager.findOneBy(Property, {
-        code: userData.code,
-      });
-      if (!propFinded)
-        throw new NotFoundException(
-          'No existe una propiedad con ese Numero de identificacion.',
-        );
-      const propReg = await queryRunner.manager.preload(Property, {
-        id: propFinded.id,
-        user: newUserSaved,
-      });
-      await queryRunner.manager.save(propReg);
+        const propFinded = await queryRunner.manager.findOneBy(Property, {
+          code: userData.code,
+        });
+        if (!propFinded)
+          throw new NotFoundException(
+            'No existe una propiedad con ese Numero de identificacion.',
+          );
+        const propReg = await queryRunner.manager.preload(Property, {
+          id: propFinded.id,
+          user: newUserSaved,
+        });
+        await queryRunner.manager.save(propReg);
+      }
 
       await this.emailService.sendNewEmail({
         to: userData.email,
         subject: 'Bienvenido a SIH - Secure Ingress Home',
         text: emailNewRegister(
-          `${newUser.name} ${newUser.lastName}`,
+          `${newUserSaved.name} ${newUserSaved.lastName}`,
           urlValidate,
         ),
       });
