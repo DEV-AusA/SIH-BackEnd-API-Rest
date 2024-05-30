@@ -87,6 +87,7 @@ export class PropertiesController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: [
         {
@@ -122,6 +123,7 @@ export class PropertiesController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         id: 'b5aa7899-1c9f-4662-a0e8-fe5eee2069f1',
@@ -155,6 +157,7 @@ export class PropertiesController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         message:
@@ -182,6 +185,7 @@ export class PropertiesController {
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
+    description: 'OK',
     schema: {
       example: {
         message: 'Propiedad ${deleteProperty.number} eliminada con exito',
