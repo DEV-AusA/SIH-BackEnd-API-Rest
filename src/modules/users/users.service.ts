@@ -327,27 +327,36 @@ export class UsersService {
     await queryRunner.startTransaction();
 
     try {
-      const newUser = await queryRunner.manager.create(User, userData);
-      const newUserSaved = await queryRunner.manager.save(newUser);
+      let newUserSaved: User;
+      if (createUserDto.code === 'SIHSECURITY') {
+        const newUser = await queryRunner.manager.create(User, {
+          ...userData,
+          rol: 'security',
+        });
+        newUserSaved = await queryRunner.manager.save(newUser);
+      } else {
+        const newUser = await queryRunner.manager.create(User, userData);
+        newUserSaved = await queryRunner.manager.save(newUser);
 
-      const propFinded = await queryRunner.manager.findOneBy(Property, {
-        code: userData.code,
-      });
-      if (!propFinded)
-        throw new NotFoundException(
-          'No existe una propiedad con ese Numero de identificacion.',
-        );
-      const propReg = await queryRunner.manager.preload(Property, {
-        id: propFinded.id,
-        user: newUserSaved,
-      });
-      await queryRunner.manager.save(propReg);
+        const propFinded = await queryRunner.manager.findOneBy(Property, {
+          code: userData.code,
+        });
+        if (!propFinded)
+          throw new NotFoundException(
+            'No existe una propiedad con ese Numero de identificacion.',
+          );
+        const propReg = await queryRunner.manager.preload(Property, {
+          id: propFinded.id,
+          user: newUserSaved,
+        });
+        await queryRunner.manager.save(propReg);
+      }
 
       await this.emailService.sendNewEmail({
         to: userData.email,
         subject: 'Bienvenido a SIH - Secure Ingress Home',
         text: emailNewRegister(
-          `${newUser.name} ${newUser.lastName}`,
+          `${newUserSaved.name} ${newUserSaved.lastName}`,
           urlValidate,
         ),
       });

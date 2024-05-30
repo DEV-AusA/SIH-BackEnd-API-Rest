@@ -15,7 +15,8 @@ export const mailerConfig: MailerOptions = {
     },
   },
   defaults: {
-    from: '"No responder" <no-reply@localhost>',
+    from: '"No responder" <secureingresshome@outlook.com>',
+    // from: '"No responder" <no-reply@localhost>',
   },
   preview: false,
   template: {

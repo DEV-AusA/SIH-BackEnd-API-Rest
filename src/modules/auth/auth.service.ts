@@ -53,23 +53,28 @@ export class AuthService {
         `Ya existe un usuario registrado con ese nombre de usuario.`,
       );
 
-    const propLinked = await this.propertyRepository.findOne({
-      where: {
-        code: createUserDto.code,
-      },
-      relations: ['user'],
-    });
-    if (!propLinked)
-      throw new NotFoundException(
-        'No existe una propiedad con ese codigo ingresado',
-      );
-    if (propLinked.user)
-      throw new ConflictException(
-        'El codigo de propiedad ya está vinculado a otro usuario',
-      );
+    if (createUserDto.code === 'SIHSECURITY') {
+      const registerOk = await this.userService.signUpUser(createUserDto);
+      return registerOk;
+    } else {
+      const propLinked = await this.propertyRepository.findOne({
+        where: {
+          code: createUserDto.code,
+        },
+        relations: ['user'],
+      });
+      if (!propLinked)
+        throw new NotFoundException(
+          'No existe una propiedad con ese codigo ingresado',
+        );
+      if (propLinked.user)
+        throw new ConflictException(
+          'El codigo de propiedad ya está vinculado a otro usuario',
+        );
 
-    const registerOk = await this.userService.signUpUser(createUserDto);
-    return registerOk;
+      const registerOk = await this.userService.signUpUser(createUserDto);
+      return registerOk;
+    }
   }
 
   async singInUser(userLogin: LoginUserDto) {
