@@ -278,6 +278,19 @@ export class UsersService {
     });
     return { message: 'El usuario fue dado de baja' };
   }
+
+  async subscribeUser(id: string) {
+    const userExists = await this.userService.findOneBy({ id: id });
+    if (!userExists) {
+      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+    }
+    if (userExists.rol === 'superadmin')
+      throw new UnauthorizedException('No se puede dar de Alta ese usuario');
+    userExists.state = true;
+    await this.userService.save(userExists);
+
+    return { message: 'El usuario fue dado de Alta' };
+  }
   async searchEmail(email: string) {
     return await this.userService.findOne({ where: { email: email } });
   }
