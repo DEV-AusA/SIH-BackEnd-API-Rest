@@ -16,6 +16,8 @@ import { GoogleUserInfoDto } from './dto/google-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Property } from '../properties/entities/property.entity';
+import { EmailService } from '../email/email.service';
+import { emailNewRegister } from '../../utils/email-new-register';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +28,7 @@ export class AuthService {
     private readonly propertyRepository: Repository<Property>,
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) {}
 
   async signUpUser(createUserDto: CreateUserDto) {
@@ -153,5 +156,26 @@ export class AuthService {
       });
       return this.userRepository.save(newUser);
     }
+  }
+
+  async recoveryPassword(email: string) {
+    const user = await this.userService.findUserByEmail(email);
+
+    const emialPayload = {
+      email: user.email,
+      // rol: 'owner',
+    };
+    const tokenRecovery = this.jwtService.sign(emialPayload, {
+      expiresIn: '24h',
+    });
+    const urlValidate = `${process.env.BACK_HOST_NAME}/email/recovery/${tokenRecovery}`;
+
+    await this.emailService.sendNewEmail({
+      to: user.email,
+      subject: 'Recupero de contraseña - Secure Ingress Home',
+      text: emailNewRegister(`${user.name} ${user.lastName}`, urlValidate),
+    });
+
+    return user;
   }
 }

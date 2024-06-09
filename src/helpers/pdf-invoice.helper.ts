@@ -54,9 +54,9 @@ export class PdfInvoiceHelper {
         .fontSize(10)
         .text('0387-000000', 205, 90, { align: 'right' })
         .fontSize(10)
-        .text('sih.corp@gmail.com', 205, 100, { align: 'right' })
+        .text('secureingresshome@gmail.com', 205, 100, { align: 'right' })
         .fontSize(10)
-        .text('www.sih.cor.ar', 205, 110, { align: 'right' })
+        .text('www.sih.com.ar', 205, 110, { align: 'right' })
         .moveDown();
 
       // Linena Separadora =>

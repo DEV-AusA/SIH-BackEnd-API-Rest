@@ -305,6 +305,15 @@ export class UsersService {
     return user;
   }
 
+  async findUserByEmail(email: string) {
+    const user = await this.userService.findOne({ where: { email: email } });
+    if (!user)
+      throw new NotFoundException(
+        'No existe un usuario registrado con ese correo',
+      );
+    return user;
+  }
+
   async signUpUser(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10); // 10 nivel hash
     const userData = {

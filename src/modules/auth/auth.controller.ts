@@ -7,6 +7,7 @@ import {
   UseGuards,
   Res,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-auth.dto';
@@ -161,5 +162,10 @@ export class AuthController {
       `${process.env.FRONT_HOST_NAME}/api/google?state=${encodedData}`,
     );
     return 'Redirigiendo';
+  }
+
+  @Post('signin/recovery/:email')
+  signInUserRecovery(@Param('email') email: string) {
+    return this.authService.recoveryPassword(email);
   }
 }

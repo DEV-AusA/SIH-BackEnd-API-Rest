@@ -1,0 +1,28 @@
+name: deploy aws test
+
+on:
+  push:
+    branches:
+      - "aws"
+
+persmissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout Repo
+        uses: actions/checkout@v4
+      -
+        name: Connect to AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-session-name: awssyncsession
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      -
+        name: Sync Bucket
+        run: aws s3 sync ./files/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete

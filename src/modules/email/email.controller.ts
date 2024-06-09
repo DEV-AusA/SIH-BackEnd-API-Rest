@@ -41,4 +41,14 @@ export class EmailController {
     await this.emailService.verifyEmail(id);
     return res.redirect(`${process.env.FRONT_HOST_NAME}/ingreso`);
   }
+
+  @Get('recovery')
+  async verifyRecovery(@Param('token') token: string, @Res() res: Response) {
+    const tokenRecovery = await this.emailService.verifyEmailRecovery(token);
+    const encodedData = encodeURIComponent(JSON.stringify(tokenRecovery));
+
+    return res.redirect(
+      `${process.env.FRONT_HOST_NAME}/ingreso/recupero?recovery=${encodedData}`,
+    );
+  }
 }

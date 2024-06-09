@@ -30,7 +30,7 @@ export class EmailService {
       });
 
       if (!userFinded)
-        throw new NotFoundException('El usuario con ese mail no existe');
+        throw new NotFoundException('El usuario con ese correo no existe');
       const user = await this.userRepository.preload({
         ...userFinded,
         validate: true,
@@ -43,6 +43,15 @@ export class EmailService {
         `Token de Email invalido o se encuentra vencido`,
       );
     }
+  }
+  async verifyEmailRecovery(token: string) {
+    const secret = process.env.JWT_SECRET;
+    const payload = this.jwtService.verify(token, { secret });
+
+    await this.userRepository.findOneBy({
+      email: payload.email,
+    });
+    return token;
   }
 
   async sendNewEmail(createEmailDto: CreateEmailDto) {
